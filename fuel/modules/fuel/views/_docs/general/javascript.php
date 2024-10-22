@@ -1,5 +1,5 @@
 <h1>Javascript</h1>
-<p>FUEL CMS provides several ways for you to insert javascript functionality for various aspects of the CMS. <a href="http://jquery.com" target="_blank">jQuery</a> 
+<p>FUEL CMS provides several ways for you to insert javascript functionality for various aspects of the CMS. <a href="http://jquery.com" target="_blank">jQuery</a>
 is automatically loaded as are most of the <a href="http://jqueryui.com" target="_blank">jQuery UI</a> libraries for you to take advantage of.
 A list of all the javascript files loaded in the admin by default can be found on the <a href="<?=user_guide_url('installation/configuration')?>">configuration</a> page.
 The following are topics which discuss adding javascript to FUEL CMS:
@@ -65,7 +65,7 @@ $this->form_builder->render();
 <p>Lastly, any string value not beginning with "&lt;script" or ending in ".js" will be treated as a javascript function name that will be called upon rendering of the form.</p>
 
 <h3>Custom Field</h3>
-<p>One of the most powerful new features of FUEL 1.0 is the addition of custom form fields with <a href="<?=user_guide_url('libraries/form_builder')?>">Form_builder</a>. A custom field is a combination of custom 
+<p>One of the most powerful new features of FUEL 1.0 is the addition of custom form fields with <a href="<?=user_guide_url('libraries/form_builder')?>">Form_builder</a>. A custom field is a combination of custom
 has 2 main parts. The first being a method or function that renders the field type. FUEL comes with several built in custom field types which are rendered using the <span class="file">fuel/modules/fuel/libraries/Fuel_custom_fields.php</span> file.
 The second component is a configuration that associates the field type to that method or function and any javascript files and/or functions
 needed for the field. This configuration is done in the <span class="file">fuel/modules/fuel/config/custom_fields.php</span> file and can be done for your specific field types in the <span class="file">fuel/application/config/custom_fields.php</span> file.</p>
@@ -82,13 +82,13 @@ needed for the field. This configuration is done in the <span class="file">fuel/
 <span class="file">fuel/modules/fuel/config/form_builder.php</span> file.</p>
 
 <h2 id="ajax">AJAX with Models</h2>
-<p>Sometimes you may want to use AJAX in your module's form. For example, you may have a list of cities that changes based on a state you select. 
+<p>Sometimes you may want to use AJAX in your module's form. For example, you may have a list of cities that changes based on a state you select.
 To do this you can setup a method on your model that is prefixed with 'ajax_' (e.g. ajax_cities_by_state). Then use the following URL in your AJAX requests:</p>
 <pre class="brush:php">
 // $states is previously defined
 $fields['state'] = array('label' => 'state', 'type' => 'select', 'options' => $states, 'first_option' => 'Select a state...', 'js' => '&lt;script&gt;
 $(function(){
-	$("#state").change(function(e){
+	$("#state").on('change',function(e){
 		$.get('.fuel_url('my_module/ajax/cities_by_state').', function(data){
 			$("#city").empty().append(data);
 		})
@@ -127,7 +127,7 @@ Additionally, you can access the controller object after the window has been com
 jqx.load('plugin', 'date');
 
 controller.MyModuleController = jqx.createController(fuel.controller.BaseFuelController, {
-	
+
 	init: function(initObj){
 		this._super(initObj);
 	},
@@ -139,15 +139,15 @@ controller.MyModuleController = jqx.createController(fuel.controller.BaseFuelCon
 	add_edit : function(){
 		this._super();
 	},
-	
+
 	myMethod : function(){
-		
+
 	}
 	....
 }
 </pre>
-<p>The above example would assume that you have a jQX Controller in your advanced modules <span class="file">fuel/{module}/assets/js/controller</span> folder named MyModuleController. 
-If the folder you wanted to save it in was <span class="file">fuel/{module}/assets/js/myfolder</span>, you would need to change the objects name to <dfn>myfolder.MyModuleController</dfn>. 
+<p>The above example would assume that you have a jQX Controller in your advanced modules <span class="file">fuel/{module}/assets/js/controller</span> folder named MyModuleController.
+If the folder you wanted to save it in was <span class="file">fuel/{module}/assets/js/myfolder</span>, you would need to change the objects name to <dfn>myfolder.MyModuleController</dfn>.
 Essentially, you can swap out the folder "/" with object ".".</p>
 
 <h3>Common Controller Methods</h3>
@@ -182,9 +182,7 @@ Essentially, you can swap out the folder "/" with object ".".</p>
 	<li><strong>jqx.config.localized:</strong> A JSON object of available localized strings</li>
 	<li><strong>jqx.config.editor:</strong> The text editor selected (either CKEditor or markItUp!)</li>
 	<li><strong>jqx.config.ckeditorConfig:</strong> CKEditor configuration values</li>
-</ul>  
+</ul>
 
 
 <p class="important">For more examples, look inside the fuel modules <kbd>js/fuel/controller</kbd> folder.</p>
-
-

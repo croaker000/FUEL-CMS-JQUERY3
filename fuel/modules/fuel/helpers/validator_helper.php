@@ -3,7 +3,7 @@
  * FUEL CMS
  * http://www.getfuelcms.com
  *
- * An open source Content Management System based on the 
+ * An open source Content Management System based on the
  * Codeigniter framework (http://codeigniter.com)
  *
  * @package		FUEL CMS
@@ -44,10 +44,10 @@ if (!function_exists('required'))
 		if (is_string($var))
 		{
 			$var = trim($var);
-			if ($var !== '')  
+			if ($var !== '')
 			{
 				return TRUE;
-			} 
+			}
 		}
 		else if (is_array($var))
 		{
@@ -77,7 +77,7 @@ if (!function_exists('regex'))
 	function regex($var, $regex)
 	{
 		return preg_match('#'.$regex.'#', $var);
-	} 
+	}
 }
 
 // --------------------------------------------------------------------
@@ -105,7 +105,7 @@ if (!function_exists('has_one_of_these'))
 			}
 		}
 		return FALSE;
-	} 
+	}
 }
 
 // --------------------------------------------------------------------
@@ -124,7 +124,7 @@ if ( ! function_exists('valid_email'))
 	{
         return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
-} 
+}
 
 // --------------------------------------------------------------------
 
@@ -142,7 +142,7 @@ if (!function_exists('min_num'))
 	{
 		if($var < $limit)
 		{
-			return FALSE;	
+			return FALSE;
 		}
 		return TRUE;
 	}
@@ -164,7 +164,7 @@ if (!function_exists('max_num'))
 	{
 		if($var > $limit)
 		{
-			return FALSE;	
+			return FALSE;
 		}
 		return TRUE;
 	}
@@ -287,7 +287,7 @@ if (!function_exists('valid_phone'))
 		{
 			return FALSE;
 		}
-		
+
 		return TRUE;
 	}
 }
@@ -306,11 +306,11 @@ if (!function_exists('is_equal_to'))
 	 */
 	function is_equal_to($val, $val2)
 	{
-		if($val == $val2) 
+		if($val == $val2)
 		{
 			return TRUE;
 		}
-		
+
 		return FALSE;
 	}
 }
@@ -329,11 +329,11 @@ if (!function_exists('is_not_equal_to'))
 	 */
 	function is_not_equal_to($val, $val2)
 	{
-		if($val != $val2) 
+		if($val != $val2)
 		{
 			return TRUE;
 		}
-		
+
 		return FALSE;
 	}
 }
@@ -378,7 +378,7 @@ if (!function_exists('is_not_one_of_these'))
 		{
 			return TRUE;
 		}
-		
+
 		return FALSE;
 	}
 }
@@ -397,7 +397,7 @@ if (!function_exists('is_of_file_type'))
 	 */
 	function is_of_file_type($fileName, $fileType)
 	{
-		if($fileType == 'zip') 
+		if($fileType == 'zip')
 		{
 			$fileType = 'application/zip';
 		}
@@ -408,7 +408,7 @@ if (!function_exists('is_of_file_type'))
 				return FALSE;
 			}
 		}
-		
+
 		return TRUE;
 	}
 }
@@ -429,7 +429,7 @@ if (!function_exists('valid_file_upload'))
 		if(empty($_FILES[$file_name]) OR $_FILES[$file_name]['error'] > 0)
 		{
 			return FALSE;
-		} 
+		}
 		else {
 			return TRUE;
 		}
@@ -451,11 +451,11 @@ if (!function_exists('is_safe_character'))
 	function is_safe_character($val, $allowed = array('_', '-'))
 	{
 		$newVal = str_replace($allowed, '', $val);
-		if(ctype_alnum($newVal)) 
+		if(ctype_alnum($newVal))
 		{
 			return TRUE;
 		}
-		
+
 		return FALSE;
 	}
 }
@@ -473,7 +473,7 @@ if (!function_exists('valid_date_time'))
 	 * @param	string	delimiter of date value given for testing
 	 * @return	boolean
 	 */
-	function valid_date_time($date, $format = "ymd", $delimiter = "-") 
+	function valid_date_time($date, $format = "ymd", $delimiter = "-")
 	{
 		return (valid_date($date, $format, $delimiter) && valid_time($date));
 	}
@@ -492,7 +492,7 @@ if (!function_exists('valid_date'))
 	 * @param	string	delimiter of date value given for testing
 	 * @return	boolean
 	 */
-	function valid_date($date, $format = "ymd", $delimiter = "-") 
+	function valid_date($date, $format = "ymd", $delimiter = "-")
 	{
 		list($d1, $d2, $d3) = sscanf($date, "%d".$delimiter."%d".$delimiter."%d");
 		if($format == "ymd")
@@ -514,11 +514,11 @@ if (!function_exists('valid_time'))
 	 * @param	string	date as string value
 	 * @return	boolean
 	 */
-	function valid_time($date) 
+	function valid_time($date)
 	{
 		$date = trim($date);
 		$dateArr = explode(" ", $date);
-		
+
 		if (isset($dateArr[1]))
 		{
 			$time = $dateArr[1];
@@ -528,7 +528,7 @@ if (!function_exists('valid_time'))
 				$hour = $timeArr[0];
 				$min = $timeArr[1];
 				$sec = $timeArr[2];
-				
+
 				if(!is_numeric($hour))
 				{
 					return FALSE;
@@ -541,7 +541,7 @@ if (!function_exists('valid_time'))
 				{
 					return FALSE;
 				}
-				
+
 				if($hour < 0 || $hour > 24)
 				{
 					return FALSE;
@@ -561,7 +561,7 @@ if (!function_exists('valid_time'))
 			}
 			return TRUE;
 		}
-		
+
 		return TRUE;
 	}
 }
@@ -614,7 +614,7 @@ if (!function_exists('is_after_date'))
 	{
 		$date1 = strtotime($date1);
 		$date2 = strtotime($date2);
-		if ($date1 < $date2) 
+		if ($date1 < $date2)
 		{
 			return FALSE;
 		}
@@ -638,7 +638,7 @@ if (!function_exists('is_before_date'))
 	{
 		$date1 = strtotime($date1);
 		$date2 = strtotime($date2);
-		if ($date1 > $date2) 
+		if ($date1 > $date2)
 		{
 			return FALSE;
 		}
@@ -664,7 +664,7 @@ if (!function_exists('is_between_dates'))
 		$val = strtotime($val);
 		$date1 = strtotime($date1);
 		$date2 = strtotime($date2);
-		if($val > $date1 && $val < $date2) 
+		if($val > $date1 && $val < $date2)
 		{
 			return TRUE;
 		}
@@ -717,7 +717,7 @@ if (!function_exists('display_errors_js'))
 	 * @param	mixed	collection of errors created by user
 	 * @return	string
 	 */
-	function display_errors_js($ERRORS = NULL) 
+	function display_errors_js($ERRORS = NULL)
 	{
 		if (empty($GLOBALS['__ERRORS_JS__']))
 		{
@@ -734,7 +734,7 @@ if (!function_exists('display_errors_js'))
 				$ERRORS = $GLOBALS[GLOBAL_ERRORS];
 			}
 		}
-			
+
 		if (count($ERRORS))
 		{
 			$msg = "msg = \"ERROR\\n\";";
@@ -759,7 +759,7 @@ if (!function_exists('display_errors_js'))
 			}
 			$str .= $msg;
 		}
-		
+
 		$str .= "\t
 			if (msg != \"\") {
 				alert(msg);
@@ -795,7 +795,7 @@ if (!function_exists('display_errors'))
 	{
 		$CI =& get_instance();
 		$CI->load->library('form');
-		
+
 		$error_class = (!empty($CI->form->error_highlight_cssclass)) ? $CI->form->error_highlight_cssclass : 'error_highlight';
 		$str = '';
 		if (!isset($ERRORS) && defined('GLOBAL_ERRORS'))
@@ -805,12 +805,12 @@ if (!function_exists('display_errors'))
 				$ERRORS = $GLOBALS[GLOBAL_ERRORS];
 			}
 		}
-		
+
 		if (!empty($ERRORS) AND is_string($ERRORS))
 		{
 			$ERRORS = (array) $ERRORS;
 		}
-		
+
 		if (is_array($ERRORS) AND count($ERRORS)) {
 			$str .= "<ul class=\"".$class."\">\n";
 			foreach($ERRORS as $key => $value)
@@ -834,7 +834,7 @@ if (!function_exists('display_errors'))
 		}
 		$str .= "<script type=\"text/javascript\">\n";
 		$str .= "// <![CDATA[\n";
-		$str .= "try { $(function(){ \$('.".$error_class." input:first').focus(); }); } catch(e){};\n";
+      $str .= "try { $(function(){ \$('.".$error_class." input:first').trigger('focus'); }); } catch(e){};\n";
 		$str .= "// ]]>\n";
 		$str .= "</script>\n";
 		return $str;
@@ -873,7 +873,7 @@ if (!function_exists('add_error'))
 	{
 		if(defined('GLOBAL_ERRORS'))
 		{
-			if(empty($key)) 
+			if(empty($key))
 			{
 				$key = count($GLOBALS[GLOBAL_ERRORS]);
 			}

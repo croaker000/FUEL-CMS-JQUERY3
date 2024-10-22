@@ -4,6 +4,10 @@
 * @author: Sokolov Yura aka funny_falcon
 * @version: 1.9.16 - 2013-09-11 GMT 9:00 PM
 *
+* FoM: 2024-10-19: JQMigrate from 1.x to 3.x (fixed isNumeric())
+* NB: Latest official version from https://github.com/BobKnothe/autoNumeric fails to run here
+* v1.9.16.1
+*
 * Created by Robert J. Knothe on 2010-10-25. Please report any bugs to https://github.com/BobKnothe/autoNumeric
 * Created by Sokolov Yura on 2010-11-07
 *
@@ -41,7 +45,7 @@
     function getElementSelection(that) {
         var position = {};
         if (that.selectionStart === undefined) {
-            that.focus();
+            that.trigger('focus');
             var select = document.selection.createRange();
             position.length = select.text.length;
             select.moveStart('character', -that.value.length);
@@ -59,7 +63,7 @@
      */
     function setElementSelection(that, start, end) {
         if (that.selectionStart === undefined) {
-            that.focus();
+            that.trigger('focus');
             var r = that.createTextRange();
             r.collapse(true);
             r.moveEnd('character', end);
@@ -951,11 +955,6 @@
                             holder.processed = true;
                             return true;
                         }
-                        /** The below streamed code / comment allows the "enter" keydown to throw a change() event */
-                        /** if (e.keyCode === 13 && holder.inVal !== $this.val()){
-                            $this.change();
-                            holder.inVal = $this.val();
-                        }*/
                         holder.init(e);
                         holder.settings.oEvent = 'keydown';
                         if (holder.skipAllways(e)) {
@@ -1062,7 +1061,7 @@
                             $this.val(groupedValue);
                         }
                         if (groupedValue !== holder.inVal) {
-                            $this.change();
+                            $this.trigger('change');
                             delete holder.inVal;
                         }
                         if (settingsClone.nBracket !== null && $this.autoNumeric('get') < 0) {
@@ -1124,7 +1123,10 @@
                     value = autoStrip(value, settings);
                 }
                 /** returns a empty string if the value being 'set' contains non-numeric characters and or more than decimal point (full stop) and will not be formatted */
-                if (!$.isNumeric(+value)) {
+                // if (!$.isNumeric(+value)) {
+                //     return '';
+                // }
+                if (!Number.isFinite(+value)) {  //https://coreui.io/blog/how-to-check-if-string-is-number-in-javascript/
                     return '';
                 }
                 value = checkValue(value);

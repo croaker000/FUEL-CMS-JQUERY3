@@ -1,17 +1,20 @@
 /**
  * Copyright (c) 2008 Kelvin Luck (http://www.kelvinluck.com/)
- * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  * .
  * $Id: jquery.datePicker.js 108 2011-11-17 21:19:57Z kelvin.luck@gmail.com $
+ *
+ * FoM: 2024-10-19: JQMigrate from 1.x to 3.x
+ * v108.1
  **/
 
 (function($){
-    
+
 	$.fn.extend({
 /**
  * Render a calendar table into any matched elements.
- * 
+ *
  * @param Object s (optional) Customize your calendars.
  * @option Number month The month to render (NOTE that months are zero based). Default is today's month.
  * @option Number year The year to render. Default is today's year.
@@ -31,7 +34,7 @@
  * {
  * if ($td.is('.current-month') && thisDate.getDay() == 4) {
  *		var d = thisDate.getDate();
- *		$td.bind(
+ *		$td.on(
  *			'click',
  *			function()
  *			{
@@ -43,7 +46,7 @@
  *	}
  * }
  * $('#calendar-me').renderCalendar({month:0, year:2007, renderCallback:testCallback});
- * 
+ *
  * @desc Renders a calendar displaying January 2007 into the element with an id of calendar-me. Every Thursday in the current month has a class of "thursday" applied to it, is clickable and shows an alert when clicked. Every Friday on the calendar has the number inside replaced with text.
  **/
 		renderCalendar  :   function(s)
@@ -54,7 +57,7 @@
 			};
 
 			s = $.extend({}, $.fn.datePicker.defaults, s);
-			
+
 			if (s.showHeader != $.dpConst.SHOW_HEADER_NONE) {
 				var headRow = $(dc('tr'));
 				for (var i=Date.firstDayOfWeek; i<Date.firstDayOfWeek+7; i++) {
@@ -65,7 +68,7 @@
 					);
 				}
 			};
-			
+
 			var calendarTable = $(dc('table'))
 									.attr(
 										{
@@ -74,7 +77,7 @@
 									)
 									.addClass('jCalendar')
 									.append(
-										(s.showHeader != $.dpConst.SHOW_HEADER_NONE ? 
+										(s.showHeader != $.dpConst.SHOW_HEADER_NONE ?
 											$(dc('thead'))
 												.append(headRow)
 											:
@@ -82,21 +85,21 @@
 										)
 									);
 			var tbody = $(dc('tbody'));
-			
+
 			var today = (new Date()).zeroTime();
 			today.setHours(12);
-			
+
 			var month = s.month == undefined ? today.getMonth() : s.month;
 			var year = s.year || today.getFullYear();
-			
+
 			var currentDate = (new Date(year, month, 1, 12, 0, 0));
-			
-			
+
+
 			var firstDayOffset = Date.firstDayOfWeek - currentDate.getDay() + 1;
 			if (firstDayOffset > 1) firstDayOffset -= 7;
 			var weeksToDraw = Math.ceil(( (-1*firstDayOffset+1) + currentDate.getDaysInMonth() ) /7);
 			currentDate.addDays(firstDayOffset-1);
-			
+
 			var doHover = function(firstDayInBounds)
 			{
 				return function()
@@ -133,7 +136,8 @@
 													(thisMonth && currentDate.getTime() == today.getTime() ? 'today ' : '')
 								)
 								.data('datePickerDate', currentDate.asString())
-								.hover(doHover(firstDayInBounds), unHover)
+                        .on('mousein',doHover(firstDayInBounds))
+                        .on('mouseout',unHover)
 							;
 					r.append(d);
 					if (s.renderCallback) {
@@ -147,7 +151,7 @@
 				tbody.append(r);
 			}
 			calendarTable.append(tbody);
-			
+
 			return this.each(
 				function()
 				{
@@ -162,7 +166,7 @@
  *
  * dateSelected(event, date, $td, status)
  * Triggered when a date is selected. event is a reference to the event, date is the Date selected, $td is a jquery object wrapped around the TD that was clicked on and status is whether the date was selected (true) or deselected (false)
- * 
+ *
  * dpClosed(event, selected)
  * Triggered when the date picker is closed. event is a reference to the event and selected is an Array containing Date objects.
  *
@@ -206,91 +210,74 @@
  * @desc See the projects homepage for many more complex examples...
  **/
 		datePicker : function(s)
-		{			
+		{
 			if (!$.event._dpCache) $.event._dpCache = [];
-			
+
 			// initialise the date picker controller with the relevant settings...
 			s = $.extend({}, $.fn.datePicker.defaults, s);
-			
+
 			return this.each(
 				function()
 				{
 					var $this = $(this);
 					var alreadyExists = true;
-					
+
 					if (!this._dpId) {
 						this._dpId = $.guid++;
 						$.event._dpCache[this._dpId] = new DatePicker(this);
 						alreadyExists = false;
 					}
-					
+
 					if (s.inline) {
 						s.createButton = false;
 						s.displayClose = false;
 						s.closeOnSelect = false;
 						$this.empty();
 					}
-					
+
 					var controller = $.event._dpCache[this._dpId];
-					
+
 					controller.init(s);
-					
+
 					if (!alreadyExists && s.createButton) {
 						// create it!
 						controller.button = $('<a href="#" class="dp-choose-date" title="' + $.dpText.TEXT_CHOOSE_DATE + '">' + $.dpText.TEXT_CHOOSE_DATE + '</a>')
-								.bind(
-									'click',
-									function()
-									{
-										$this.dpDisplay(this);
-										this.blur();
-										return false;
-									}
-								);
+							.on('click',function() {
+								$this.dpDisplay(this);
+                        this.trigger('blur');
+								return false;
+							});
 						$this.after(controller.button);
 					}
-					
+
 					if (!alreadyExists && $this.is(':text')) {
-						$this
-							.bind(
-								'dateSelected',
-								function(e, selectedDate, $td)
-								{
-									this.value = selectedDate.asString();
+						$this.on('dateSelected',function(e, selectedDate, $td){
+							this.value = selectedDate.asString();
+						})
+                  .on('change',function(){
+							if (this.value == '') {
+								controller.clearSelected();
+							} else {
+								var d = Date.fromString(this.value);
+								if (d) {
+									controller.setSelected(d, true, true);
 								}
-							).bind(
-								'change',
-								function()
-								{
-									if (this.value == '') {
-										controller.clearSelected();
-									} else {
-										var d = Date.fromString(this.value);
-										if (d) {
-											controller.setSelected(d, true, true);
-										}
-									}
-								}
-							);
+							}
+						});
 						if (s.clickInput) {
-							$this.bind(
-								'click',
-								function()
-								{
-									// The change event doesn't happen until the input loses focus so we need to manually trigger it...
-									$this.trigger('change');
-									$this.dpDisplay();
-								}
-							);
+							$this.on('click',function() {	// The change event doesn't happen until the input loses focus so we need to manually trigger it...
+								$this.trigger('change');
+								$this.dpDisplay();
+							});
 						}
 						var d = Date.fromString(this.value);
 						if (this.value != '' && d) {
 							controller.setSelected(d, true, true);
 						}
 					}
-					
+
 					$this.addClass('dp-applied');
-					
+
 				}
 			)
 		},
@@ -526,7 +513,7 @@
 			// TODO - implement this?
 		}
 	});
-	
+
 	// private internal function to cut down on the amount of code needed where we forward
 	// dp* methods on the jQuery object on to the relevant DatePicker controllers...
 	var _w = function(f, a1, a2, a3, a4)
@@ -541,11 +528,11 @@
 			}
 		);
 	};
-	
+
 	function DatePicker(ele)
 	{
 		this.ele = ele;
-		
+
 		// initial values...
 		this.displayedMonth		=	null;
 		this.displayedYear		=	null;
@@ -571,7 +558,7 @@
 	};
 	$.extend(
 		DatePicker.prototype,
-		{	
+		{
 			init : function(s)
 			{
 				this.setStartDate(s.startDate);
@@ -659,7 +646,7 @@
 				s.setDate(1);
 				var e = new Date(this.endDate.getTime());
 				e.setDate(1);
-				
+
 				var t;
 				if ((!m && !y) || (isNaN(m) && isNaN(y))) {
 					// no month or year passed - default to current month
@@ -734,12 +721,12 @@
 							{
 								$td.parent()[v ? 'addClass' : 'removeClass']('selectedWeek');
 							}
-							$td[v ? 'addClass' : 'removeClass']('selected'); 
+							$td[v ? 'addClass' : 'removeClass']('selected');
 						}
 					}
 				);
 				$('td', this.context).not('.selected')[this.selectMultiple &&  this.numSelected == this.numSelectable ? 'addClass' : 'removeClass']('unselectable');
-				
+
 				if (dispatchEvents)
 				{
 					var s = this.isSelected(d);
@@ -772,17 +759,17 @@
 			display : function(eleAlignTo)
 			{
 				if ($(this.ele).is('.dp-disabled')) return;
-				
+
 				eleAlignTo = eleAlignTo || this.ele;
 				var c = this;
 				var $ele = $(eleAlignTo);
 				var eleOffset = $ele.offset();
-				
+
 				var $createIn;
 				var attrs;
 				var attrsCalendarHolder;
 				var cssRules;
-				
+
 				if (c.inline) {
 					$createIn = $(this.ele);
 					attrs = {
@@ -803,12 +790,12 @@
 						'top'	:	eleOffset.top + c.verticalOffset,
 						'left'	:	eleOffset.left + c.horizontalOffset
 					};
-					
+
 					var _checkMouse = function(e)
 					{
 						var el = e.target;
 						var cal = $('#dp-popup')[0];
-						
+
 						while (true){
 							if (el == cal) {
 								return true;
@@ -821,10 +808,10 @@
 						}
 					};
 					this._checkMouse = _checkMouse;
-					
+
 					c._closeCalendar(true);
-					$(document).bind(
-						'keydown.datepicker', 
+               $(document).on(
+						'keydown.datepicker',
 						function(event)
 						{
 							if (event.keyCode == 27) {
@@ -833,7 +820,7 @@
 						}
 					);
 				}
-				
+
 				if (!c.rememberViewedMonth)
 				{
 					var selectedDate = this.getSelected()[0];
@@ -842,7 +829,7 @@
 						this.setDisplayedMonth(selectedDate.getMonth(), selectedDate.getFullYear(), false);
 					}
 				}
-				
+
 				$createIn
 					.append(
 						$('<div></div>')
@@ -854,68 +841,48 @@
 								$('<div class="dp-nav-prev"></div>')
 									.append(
 										$('<a class="dp-nav-prev-year" href="#" title="' + $.dpText.TEXT_PREV_YEAR + '">&lt;&lt;</a>')
-											.bind(
-												'click',
-												function()
-												{
-													return c._displayNewMonth.call(c, this, 0, -1);
-												}
-											),
+                                 .on('click',function(){
+												return c._displayNewMonth.call(c, this, 0, -1);
+											}),
 										$('<a class="dp-nav-prev-month" href="#" title="' + $.dpText.TEXT_PREV_MONTH + '">&lt;</a>')
-											.bind(
-												'click',
-												function()
-												{
-													return c._displayNewMonth.call(c, this, -1, 0);
-												}
-											)
+                                 .on('click',function(){
+												return c._displayNewMonth.call(c, this, -1, 0);
+											})
 									),
 								$('<div class="dp-nav-next"></div>')
 									.append(
 										$('<a class="dp-nav-next-year" href="#" title="' + $.dpText.TEXT_NEXT_YEAR + '">&gt;&gt;</a>')
-											.bind(
-												'click',
-												function()
-												{
-													return c._displayNewMonth.call(c, this, 0, 1);
-												}
-											),
+                                 .on('click',function(){
+												return c._displayNewMonth.call(c, this, 0, 1);
+											}),
 										$('<a class="dp-nav-next-month" href="#" title="' + $.dpText.TEXT_NEXT_MONTH + '">&gt;</a>')
-											.bind(
-												'click',
-												function()
-												{
-													return c._displayNewMonth.call(c, this, 1, 0);
-												}
-											)
+                                 .on('click',function(){
+												return c._displayNewMonth.call(c, this, 1, 0);
+											})
 									),
 								$('<div class="dp-calendar"></div>')
 							)
 							.bgIframe()
 						);
-					
+
 				var $pop = this.inline ? $('.dp-popup', this.context) : $('#dp-popup');
-				
+
 				if (this.showYearNavigation == false) {
 					$('.dp-nav-prev-year, .dp-nav-next-year', c.context).css('display', 'none');
 				}
 				if (this.displayClose) {
 					$pop.append(
 						$('<a href="#" id="dp-close">' + $.dpText.TEXT_CLOSE + '</a>')
-							.bind(
-								'click',
-								function()
-								{
-									c._closeCalendar();
-									return false;
-								}
-							)
+                     .on('click',function() {
+								c._closeCalendar();
+								return false;
+							})
 					);
 				}
 				c._renderCalendar();
 
 				$(this.ele).trigger('dpDisplayed', $pop);
-				
+
 				if (!c.inline) {
 					if (this.verticalPosition == $.dpConst.POS_BOTTOM) {
 						$pop.css('top', eleOffset.top + $ele.height() - $pop.height() + c.verticalOffset);
@@ -923,10 +890,9 @@
 					if (this.horizontalPosition == $.dpConst.POS_RIGHT) {
 						$pop.css('left', eleOffset.left + $ele.width() - $pop.width() + c.horizontalOffset);
 					}
-//					$('.selectee', this.context).focus();
-					$(document).bind('mousedown.datepicker', this._checkMouse);
+               $(document).on('mousedown.datepicker', this._checkMouse);
 				}
-				
+
 			},
 			setRenderCallback : function(a)
 			{
@@ -941,49 +907,44 @@
 				var d = new Date(thisDate.getTime());
 
 				// add our click handlers to deal with it when the days are clicked...
-				
-				$td.bind(
-					'click',
-					function()
-					{
-						var $this = $(this);
-						if (!$this.is('.disabled')) {
-							c.setSelected(d, !$this.is('.selected') || !c.selectMultiple, false, true);
-							if (c.closeOnSelect) {
-								// Focus the next input in the formâ€¦
-								if (c.settings.autoFocusNextInput) {
-									var ele = c.ele;
-									var found = false;
-									$(':input', ele.form).each(
-										function()
-										{
-											if (found) {
-												$(this).focus();
-												return false;
-											}
-											if (this == ele) {
-												found = true;
-											}
+
+            $td.on('click',function() {
+					var $this = $(this);
+					if (!$this.is('.disabled')) {
+						c.setSelected(d, !$this.is('.selected') || !c.selectMultiple, false, true);
+						if (c.closeOnSelect) {
+							// Focus the next input in the formâ€¦
+							if (c.settings.autoFocusNextInput) {
+								var ele = c.ele;
+								var found = false;
+								$(':input', ele.form).each(
+									function()
+									{
+										if (found) {
+                                 $(this).trigger('focus');
+											return false;
 										}
-									);
-								} else {
-									c.ele.focus();
-								}
-								c._closeCalendar();
+										if (this == ele) {
+											found = true;
+										}
+									}
+								);
+							} else {
+                        c.ele.trigger('focus');
 							}
+							c._closeCalendar();
 						}
 					}
-				);
+				});
 				if (c.isSelected(d)) {
 					$td.addClass('selected');
-					if (c.settings.selectWeek)
-					{
+					if (c.settings.selectWeek) {
 						$td.parent().addClass('selectedWeek');
 					}
 				} else  if (c.selectMultiple && c.numSelected == c.numSelectable) {
 					$td.addClass('unselectable');
 				}
-				
+
 			},
 			_applyRenderCallbacks : function()
 			{
@@ -1001,12 +962,12 @@
 			},
 			// ele is the clicked button - only proceed if it doesn't have the class disabled...
 			// m and y are -1, 0 or 1 depending which direction we want to go in...
-			_displayNewMonth : function(ele, m, y) 
+			_displayNewMonth : function(ele, m, y)
 			{
 				if (!$(ele).is('.disabled')) {
 					this.setDisplayedMonth(this.displayedMonth + m, this.displayedYear + y, true);
 				}
-				ele.blur();
+				ele.trigger('blur');
 				return false;
 			},
 			_rerenderCalendar : function()
@@ -1018,12 +979,12 @@
 			{
 				// set the title...
 				$('h2', this.context).html((new Date(this.displayedYear, this.displayedMonth, 1)).asString($.dpText.HEADER_FORMAT));
-				
+
 				// render the calendar...
 				$('.dp-calendar', this.context).renderCalendar(
 					$.extend(
 						{},
-						this.settings, 
+						this.settings,
 						{
 							month			: this.displayedMonth,
 							year			: this.displayedYear,
@@ -1032,7 +993,7 @@
 							hoverClass		: this.hoverClass
 						})
 				);
-				
+
 				// update the status of the control buttons and disable dates before startDate or after endDate...
 				// TODO: When should the year buttons be disabled? When you can't go forward a whole year from where you are or is that annoying?
 				if (this.displayedYear == this.startDate.getFullYear() && this.displayedMonth == this.startDate.getMonth()) {
@@ -1129,10 +1090,10 @@
 			{
 				if (!ele || ele == this.ele)
 				{
-					$(document).unbind('mousedown.datepicker');
-					$(document).unbind('keydown.datepicker');
+					$(document).off('mousedown.datepicker');
+					$(document).off('keydown.datepicker');
 					this._clearCalendar();
-					$('#dp-popup a').unbind();
+					$('#dp-popup a').off();
 					$('#dp-popup').empty().remove();
 					if (!programatic) {
 						$(this.ele).trigger('dpClosed', [this.getSelected()]);
@@ -1144,12 +1105,12 @@
 			_clearCalendar : function()
 			{
 				// TODO.
-				$('.dp-calendar td', this.context).unbind();
+            $('.dp-calendar td', this.context).off();
 				$('.dp-calendar', this.context).empty();
 			}
 		}
 	);
-	
+
 	// static constants
 	$.dpConst = {
 		SHOW_HEADER_NONE	:	0,
@@ -1157,16 +1118,16 @@
 		SHOW_HEADER_LONG	:	2,
 		POS_TOP				:	0,
 		POS_BOTTOM			:	1,
-		POS_LEFT			:	0,
+		POS_LEFT			   :	0,
 		POS_RIGHT			:	1,
 		DP_INTERNAL_FOCUS	:	'dpInternalFocusTrigger'
 	};
 	// localisable text
 	$.dpText = {
 		TEXT_PREV_YEAR		:	'Previous year',
-		TEXT_PREV_MONTH		:	'Previous month',
+		TEXT_PREV_MONTH	:	'Previous month',
 		TEXT_NEXT_YEAR		:	'Next year',
-		TEXT_NEXT_MONTH		:	'Next month',
+		TEXT_NEXT_MONTH	:	'Next month',
 		TEXT_CLOSE			:	'Close',
 		TEXT_CHOOSE_DATE	:	'Choose date',
 		HEADER_FORMAT		:	'mmmm yyyy'
@@ -1204,7 +1165,7 @@
 		if (ele._dpId) return $.event._dpCache[ele._dpId];
 		return false;
 	};
-	
+
 	// make it so that no error is thrown if bgIframe plugin isn't included (allows you to use conditional
 	// comments to only include bgIframe where it is needed in IE without breaking this plugin).
 	if ($.fn.bgIframe == undefined) {
@@ -1213,13 +1174,11 @@
 
 
 	// clean-up
-	$(window)
-		.bind('unload', function() {
-			var els = $.event._dpCache || [];
-			for (var i in els) {
-				$(els[i].ele)._dpDestroy();
-			}
-		});
-		
-	
+	$(window).on('unload', function() {
+		var els = $.event._dpCache || [];
+		for (var i in els) {
+			$(els[i].ele)._dpDestroy();
+		}
+	});
+
 })(jQuery);

@@ -3,9 +3,12 @@
  * Copyright (c) 2006-2011 Sam Collett (http://www.texotela.co.uk)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
- * 
+ *
+ * FoM: 2024-10-19: JQMigrate from 1.x to 3.x
+ * v1.3.1
+ *
  * Version 1.3
- * Demo: http://www.texotela.co.uk/code/jquery/numeric/
+ * Demo: http://www.texotela.co.uk/code/jquery/numeric/ [dead link]
  *
  */
 (function($) {
@@ -41,7 +44,7 @@ $.fn.numeric = function(config, callback)
 	// callback function
 	var callback = typeof callback == "function" ? callback : function(){};
 	// set data and methods
-	return this.data("numeric.decimal", decimal).data("numeric.negative", negative).data("numeric.callback", callback).keypress($.fn.numeric.keypress).keyup($.fn.numeric.keyup).blur($.fn.numeric.blur);
+   return this.data("numeric.decimal", decimal).data("numeric.negative", negative).data("numeric.callback", callback).on('keypress',$.fn.numeric.keypress).on('keyup',$.fn.numeric.keyup).on('blur',$.fn.numeric.blur);
 }
 
 $.fn.numeric.keypress = function(e)
@@ -146,7 +149,7 @@ $.fn.numeric.keyup = function(e)
 		// get decimal character and determine if negatives are allowed
 		var decimal = $.data(this, "numeric.decimal");
 		var negative = $.data(this, "numeric.negative");
-		
+
 		// prepend a 0 if necessary
 		if(decimal != "")
 		{
@@ -164,7 +167,7 @@ $.fn.numeric.keyup = function(e)
 			}
 			val = this.value;
 		}
-		
+
 		// if pasted in, only allow the following characters
 		var validChars = [0,1,2,3,4,5,6,7,8,9,'-',decimal];
 		// get length of the value (to loop through)
@@ -237,7 +240,7 @@ $.fn.numeric.blur = function()
 
 $.fn.removeNumeric = function()
 {
-	return this.data("numeric.decimal", null).data("numeric.negative", null).data("numeric.callback", null).unbind("keypress", $.fn.numeric.keypress).unbind("blur", $.fn.numeric.blur);
+	return this.data("numeric.decimal", null).data("numeric.negative", null).data("numeric.callback", null).off("keypress", $.fn.numeric.keypress).off("blur", $.fn.numeric.blur);
 }
 
 // Based on code from http://javascript.nwbox.com/cursor_position/ (Diego Perini <dperini@nwbox.com>)
@@ -274,11 +277,12 @@ $.fn.setSelection = function(o, p)
 			r.collapse(true);
 			r.moveStart('character', p[0]);
 			r.moveEnd('character', p[1]);
-			r.select();
+         //r.select();
+         r.trigger('select');
 		}
 		else if(o.setSelectionRange)
 		{
-			o.focus();
+         o.trigger('focus');
 			o.setSelectionRange(p[0], p[1]);
 		}
 	}

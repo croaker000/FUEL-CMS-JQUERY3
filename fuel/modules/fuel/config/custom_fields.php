@@ -19,7 +19,7 @@ $fields['multi'] = array(
 	'function' => 'multi',
 	'js_function' => 'fuel.fields.multi_field',
 	'represents' => 'array'
-);	
+);
 
 // Asset field
 $fields['asset'] = array(
@@ -198,7 +198,7 @@ $fields['select2'] = array(
 	'function'	=> 'select2',
 	'js' => array(
 		FUEL_FOLDER => array(
-			'jquery/plugins/select2.min',
+			'jquery/plugins/select2',
 		),
 	),
 	'js_exec_order' => 1,

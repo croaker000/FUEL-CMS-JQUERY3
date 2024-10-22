@@ -46,7 +46,7 @@ jqx.createController = function(parentObj, ctrlObj){
 	}
 	return parentObj.extend(ctrlObj);
 };
-	
+
 jqx.init = function(ctrlName, initObj, path){
 	if (ctrlName) {
 		jQuery.each(jqx.config.preload, function(i, n){
@@ -56,19 +56,19 @@ jqx.init = function(ctrlName, initObj, path){
 				jqx.includeObject(n);
 			}
 		});
-		
+
 		jqx.controllerInitObj = initObj;
-		
+
 		// set the jsPath value to the path to the controller so that we can include the object
 		var origJSPath = jqx.config.jsPath;
-		
+
 		if (path && path.length) {
 			jqx.config.controllerPath = path;
 			jqx.config.jsPath = jqx.config.controllerPath;
 		}
 		jqx.includeObject(ctrlName);
-		
-		// now change back jsPath back to what it was 
+
+		// now change back jsPath back to what it was
 		jqx.config.jsPath = origJSPath;
 
 		var readyCallback = function(){
@@ -85,10 +85,11 @@ jqx.init = function(ctrlName, initObj, path){
 			}
 			jqx.execStopTime = new Date().getTime();
 			jqx.debug(jqx.execStopTime - jqx.execStartTime);
-			
+
 		}
 		if (jqx.config.defaultIncludeMethod == 'default'){
-			jQuery(jqx_global).load(function(){
+         //jQuery(jqx_global).load(function(){
+         jQuery(jqx_global).on('load', function(){
 				readyCallback();
 			});
 		} else {
@@ -307,7 +308,7 @@ jqx.extendController = function(obj, initObj){
 	{
 		jQuery.extend(jqx_global[pageVar], obj);
 	}
-	
+
 };
 
 /******************************************************************

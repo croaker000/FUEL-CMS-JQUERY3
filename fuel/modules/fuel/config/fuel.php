@@ -3,7 +3,7 @@
  * FUEL CMS
  * http://www.getfuelcms.com
  *
- * An open source Content Management System based on the 
+ * An open source Content Management System based on the
  * Codeigniter framework (http://codeigniter.com)
  *
  * @package		FUEL CMS
@@ -41,7 +41,7 @@ $config['fuel_path'] = FUEL_FOLDER.'/';
 // Options are cms, views, auto... cms pulls views and variables from the database,
 // Views mode pulls views from the views folder and variables from the _variables folder.
 // The auto option will first check the database for a page and if it doesn't exist or is not published, it will then check for a corresponding view file.
-// Additionally, you can create an array value specifying the keys, 'pages', 'blocks' and 'navigation' to specify how those modules work individually 
+// Additionally, you can create an array value specifying the keys, 'pages', 'blocks' and 'navigation' to specify how those modules work individually
 // (e.g.  array('pages' => 'AUTO', 'blocks' => 'views', 'navigation' => 'cms');)
 $config['fuel_mode'] = 'views';
 
@@ -87,8 +87,8 @@ $config['main_layout'] = 'admin_main';
 
 // Keyboard shortcuts
 $config['keyboard_shortcuts'] = array(
-	'toggle_view' => 'Ctrl+Shift+m', 
-	'save' => 'Ctrl+Shift+s', 
+	'toggle_view' => 'Ctrl+Shift+m',
+	'save' => 'Ctrl+Shift+s',
 	'view' => 'Ctrl+Shift+p'
 );
 
@@ -110,7 +110,7 @@ $config['attach'] = array();
 
 /*
 |--------------------------------------------------------------------------
-| Language settings 
+| Language settings
 |--------------------------------------------------------------------------
 */
 
@@ -150,7 +150,7 @@ $config['language_default_option'] = NULL;
 
 /*
 |--------------------------------------------------------------------------
-| Asset settings 
+| Asset settings
 |--------------------------------------------------------------------------
 */
 
@@ -182,27 +182,26 @@ $config['assets_upload_max_height']  = '768';
 
 // Javascript files (mostly jquery plugins) to be included other then the controller js files
 $config['fuel_javascript'] = array(
-	
 	'fuel' => array(
-	'jquery/plugins/jquery-ui-1.8.17.custom.min',
+	'jquery/plugins/jquery-ui.min',
 	'jquery/plugins/jquery.easing',
 	'jquery/plugins/jquery.bgiframe',
 	'jquery/plugins/jquery.tooltip',
-	'jquery/plugins/jquery.scrollTo-min',
+	'jquery/plugins/jquery.scrollTo',
 	'jquery/plugins/jqModal',
 	'jquery/plugins/jquery.checksave',
 	'jquery/plugins/jquery.form',
 	'jquery/plugins/jquery.treeview',
 	'jquery/plugins/jquery.serialize',
-	'jquery/plugins/jquery.cookie',
+   'jquery/plugins/jquery.cookie',
 	'jquery/plugins/jquery.supercookie',
 	'jquery/plugins/jquery.hotkeys',
-	'jquery/plugins/jquery.cookie',
 	'jquery/plugins/jquery.simpletab.js',
 	'jquery/plugins/jquery.tablednd.js',
 	'jquery/plugins/jquery.placeholder',
 	'jquery/plugins/jquery.selso',
-	'jquery/plugins/jquery.disable.text.select.pack',
+   #'jquery/plugins/jquery.disable.text.select.pack',
+   'jquery/plugins/disable.text.select',
 	'jquery/plugins/jquery.supercomboselect',
 	'jquery/plugins/jquery.MultiFile',
 	'fuel/linked_field_formatters',
@@ -215,7 +214,7 @@ $config['fuel_javascript'] = array(
 	'jquery/plugins/chrome_pushstack_fix.js',
 	'jqx/plugins/util.js',
 	'fuel/global')
-	
+
 	// This is actually slower it appears now???
 	//'fuel' => 'fuel/fuel.min'
 );
@@ -234,7 +233,7 @@ $config['set_upload_file_perms'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
-| Security settings 
+| Security settings
 |--------------------------------------------------------------------------
 */
 
@@ -284,9 +283,9 @@ $config['auto_search_views'] = FALSE;
 // Functions that can be used for the sanitize_input value on a basic module.
 // The key of the array is what should be used when configuring your module
 $config['module_sanitize_funcs'] = array(
-	'xss' => 'xss_clean', 
-	'php' => 'encode_php_tags', 
-	'template' => 'php_to_template_syntax', 
+	'xss' => 'xss_clean',
+	'php' => 'encode_php_tags',
+	'template' => 'php_to_template_syntax',
 	'entities' => 'htmlentities',
 	'purify' => 'html_purifier',
 );
@@ -361,9 +360,9 @@ $config['max_page_params'] = 0;
 
 // A list of URI paths that will always pull from the view folder... can use :any, like routes
 // good to use if you are passing page parameters to your pages controlled in the admin and
-// you have a page you always want to pull from a view file 
-// (e.g. URI = company/press and you have a page of "company" in the admin with max page params set to 1 or more 
-// it would normally pull the company page if no company/press page existed in the admin and in this case 
+// you have a page you always want to pull from a view file
+// (e.g. URI = company/press and you have a page of "company" in the admin with max page params set to 1 or more
+// it would normally pull the company page if no company/press page existed in the admin and in this case
 // we want to pull the view file of company/press)
 $config['uri_view_overwrites'] = array();
 
@@ -443,7 +442,7 @@ $config['parser_delimiters'] = array(
 
 // Functions allowed by the parsing engine
 $config['parser_allowed_functions'] = array(
-	'strip_tags', 'date', 
+	'strip_tags', 'date',
 	'detect_lang','lang',
 	'js', 'css', 'swf', 'img_path', 'css_path', 'js_path', 'swf_path', 'pdf_path', 'media_path', 'cache_path', 'captcha_path', 'assets_path', 'docs_path', // assets specific
 	'fuel_block', 'fuel_model', 'fuel_nav', 'fuel_edit', 'fuel_set_var', 'fuel_var', 'fuel_var_append', 'fuel_form', 'fuel_page', // FUEL specific

@@ -13,7 +13,7 @@ class Build extends Fuel_base_controller {
 			exit('Cannot execute in production environment');
 		}
 	}
-	
+
 	function _remap($module, $segs = NULL)
 	{
 		$remote_ips = $this->fuel->config('webhook_remote_ip');
@@ -38,7 +38,7 @@ class Build extends Fuel_base_controller {
 		$valid_types = array('css', 'js');
 
 		if ( ! empty($type) AND in_array($type, $valid_types))
-		{	
+		{
 			$this->load->helper('file');
 
 			// get the folder name if it exists
@@ -91,25 +91,25 @@ class Build extends Fuel_base_controller {
 	function optimize_js()
 	{
 		$js = array(
-			'jquery/plugins/jquery-ui-1.8.17.custom.min',
+			'jquery/plugins/jquery-ui.min',
 			'jquery/plugins/jquery.easing',
 			'jquery/plugins/jquery.bgiframe',
 			'jquery/plugins/jquery.tooltip',
-			'jquery/plugins/jquery.scrollTo-min',
+			'jquery/plugins/jquery.scrollTo',
 			'jquery/plugins/jqModal',
 			'jquery/plugins/jquery.checksave',
 			'jquery/plugins/jquery.form',
 			'jquery/plugins/jquery.treeview',
 			'jquery/plugins/jquery.serialize',
-			'jquery/plugins/jquery.cookie',
+         'jquery/plugins/jquery.cookie',
 			'jquery/plugins/jquery.supercookie',
 			'jquery/plugins/jquery.hotkeys',
-			'jquery/plugins/jquery.cookie',
 			'jquery/plugins/jquery.simpletab.js',
 			'jquery/plugins/jquery.tablednd.js',
 			'jquery/plugins/jquery.placeholder',
 			'jquery/plugins/jquery.selso',
-			'jquery/plugins/jquery.disable.text.select.pack',
+         #'jquery/plugins/jquery.disable.text.select.pack',
+         'disable.text.select',
 			'jquery/plugins/jquery.supercomboselect',
 			'jquery/plugins/jquery.MultiFile',
 			'fuel/linked_field_formatters',
@@ -125,13 +125,13 @@ class Build extends Fuel_base_controller {
 		);
 
 		$js_inline = array(
-				'jquery/plugins/jquery.form', 
-				'jquery/plugins/jqModal', 
-				'jquery/plugins/jquery.serialize', 
-				'jquery/plugins/jquery.cookie', 
-				'jquery/plugins/jquery.supercookie', 
-				'jquery/plugins/jquery.ba-resize.min', 
-				'fuel/global', 
+				'jquery/plugins/jquery.form',
+				'jquery/plugins/jqModal',
+				'jquery/plugins/jquery.serialize',
+            'jquery/plugins/jquery.cookie',
+				'jquery/plugins/jquery.supercookie',
+            'jquery/plugins/jquery.ba-resize',  //?? needed?
+				'fuel/global',
 				'fuel/edit_mode'
 		);
 
@@ -152,11 +152,11 @@ class Build extends Fuel_base_controller {
 	{
 		$css = array(
 			'jqmodal',
-			'jquery.tooltip', 
+			'jquery.tooltip',
 			'jquery.treeview',
 			'jquery.supercomboselect',
 			'markitup',
-			'jquery-ui-1.8.17.custom',
+         'jquery-ui.min',
 			'fuel'
 		);
 

@@ -1,3 +1,4 @@
+/* FoM: 2024-10-18: Manually fixed $.isArray() depreication */
 (function ($) {
     var pushStackOrig, pushStackChrome;
 
@@ -8,9 +9,9 @@
 
         // Invoke the correct constructor directly when the bug manifests in Chrome.
         //var ret = this.constructor();
-        var ret = new jQuery.fn.init(); 
+        var ret = new jQuery.fn.init();
 
-        if ( jQuery.isArray( elems ) ) {
+        if ( Array.isArray( elems ) ) {
             push.apply( ret, elems );
 
         } else {
@@ -38,7 +39,7 @@
         try {
             ret = pushStackOrig.call(this, elems, name, selector);
             return ret;
-        } 
+        }
         catch (e) {
             if (e instanceof TypeError) {
                 if (!(ret instanceof jQuery.fn.init)) {

@@ -1,10 +1,10 @@
 	<div id="fuel_left_panel">
 		<div id="fuel_left_panel_inner">
-<?php 
+<?php
 	// // Get all modules
 	$modules = $this->fuel->modules->get();
 	$mods = $icons = array();
-	        
+
 	foreach($modules as $mod)
 	{
 		$info = $mod->info();
@@ -26,8 +26,8 @@
 			{
 				$segments = explode('/', $key);
 				$url = $key;
-				
-				// Check for a specific module's permission                                
+
+				// Check for a specific module's permission
 				$perm = $key;
 				if (isset($mods[$key]))
 				{
@@ -64,24 +64,24 @@
 					$icon = isset($icons[$key]) ? $icons[$key] :  "ico_".url_title(str_replace('/', '_', $key),'_', TRUE);
 					echo "><a href=\"".fuel_url($url)."\" class=\"ico ".$icon."\">".$val."</a></li>\n";
 					$header_written = TRUE;
-				} 
+				}
 			}
 		}
 		else
 		{
 			$header_written = FALSE;
 		}
-		
+
 		if  ($header_written)
 		{
 			echo "\t</ul>\n";
 			echo "</div>\n";
 		}
-		
+
 	}
 ?>
-				
-			<?php 
+
+			<?php
 				$user_data = $this->fuel->auth->user_data();
 				if (!empty($user_data['recent'])) : ?>
 			<div class="left_nav_section" id="leftnav_recent">

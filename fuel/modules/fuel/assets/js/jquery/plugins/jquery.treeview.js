@@ -1,20 +1,19 @@
 /*
- * Treeview 1.5pre - jQuery plugin to hide and show branches of a tree
- * 
+ * 1.4.2 mod
+ * ---
+ * Jquery 3.x fixes: [shorthand-deprecated-v3] JQMIGRATE: jQuery.fn.click() event shorthand is deprecated and [pre-on-methods] JQMIGRATE: jQuery.fn.unbind() is deprecated
+ *
+ * Treeview 1.4.2 - jQuery plugin to hide and show branches of a tree
+ *
  * http://bassistance.de/jquery-plugins/jquery-plugin-treeview/
- * http://docs.jquery.com/Plugins/Treeview
  *
- * Copyright (c) 2007 Jörn Zaefferer
- *
- * Dual licensed under the MIT and GPL licenses:
+ * Copyright Jörn Zaefferer
+ * Released under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
- *
- * Revision: $Id: jquery.treeview.js 5759 2008-07-01 07:50:28Z joern.zaefferer $
- *
  */
 
 ;(function($) {
+
 	// TODO rewrite as a widget, removing all the extra plugins
 	$.extend($.fn, {
 		swapClass: function(c1, c2) {
@@ -28,7 +27,7 @@
 		},
 		hoverClass: function(className) {
 			className = className || "hover";
-			return this.hover(function() {
+			return this.on('mouseenter mouseleave',function() {
 				$(this).addClass(className);
 			}, function() {
 				$(this).removeClass(className);
@@ -49,7 +48,7 @@
 			} else {
 				this.hide();
 				if (callback)
-					this.each(callback);				
+					this.each(callback);
 			}
 		},
 		prepareBranches: function(settings) {
@@ -64,23 +63,23 @@
 		},
 		applyClasses: function(settings, toggler) {
 			// TODO use event delegation
-			this.filter(":has(>ul):not(:has(>a))").find(">span").unbind("click.treeview").bind("click.treeview", function(event) {
+         this.filter(":has(>ul):not(:has(>a))").find(">span").off("click.treeview").on("click.treeview", function(event) {
 				// don't handle click events on children, eg. checkboxes
 				if ( this == event.target )
 					toggler.apply($(this).next());
 			}).add( $("a", this) ).hoverClass();
-			
+
 			if (!settings.prerendered) {
 				// handle closed ones first
 				this.filter(":has(>ul:hidden)")
 						.addClass(CLASSES.expandable)
 						.replaceClass(CLASSES.last, CLASSES.lastExpandable);
-						
+
 				// handle open ones
 				this.not(":has(>ul:hidden)")
 						.addClass(CLASSES.collapsable)
 						.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
-						
+
 	            // create hitarea if not present
 				var hitarea = this.find("div." + CLASSES.hitarea);
 				if (!hitarea.length)
@@ -91,28 +90,25 @@
 						classes += this + "-hitarea ";
 					});
 					$(this).addClass( classes );
-				})
+            });
 			}
-			
+
 			// apply event to hitarea
-			this.find("div." + CLASSES.hitarea).click( toggler );
+			this.find("div." + CLASSES.hitarea).on("click", toggler );
 		},
 		treeview: function(settings) {
-			
-			settings = $.extend({
-				cookieId: "treeview",
 
-				// CHANGED BY David McReynolds 9/10/2013 of Daylight Studio to use super cookie so that we only have one cookie used to save this state info
-				groupCookieId: "treeview"
+			settings = $.extend({
+				cookieId: "treeview"
 			}, settings);
-			
+
 			if ( settings.toggle ) {
 				var callback = settings.toggle;
 				settings.toggle = function() {
 					return callback.apply($(this).parent()[0], arguments);
 				};
 			}
-		
+
 			// factory for treecontroller
 			function treeController(tree, control) {
 				// factory for click handlers
@@ -128,13 +124,13 @@
 					};
 				}
 				// click on first element to collapse tree
-				$("a:eq(0)", control).click( handler(CLASSES.collapsable) );
+				$("a:eq(0)", control).on('click', handler(CLASSES.collapsable) );
 				// click on second to expand tree
-				$("a:eq(1)", control).click( handler(CLASSES.expandable) );
+				$("a:eq(1)", control).on('click', handler(CLASSES.expandable) );
 				// click on third to toggle tree
-				$("a:eq(2)", control).click( handler() ); 
+				$("a:eq(2)", control).on('click', handler() );
 			}
-		
+
 			// handle toggle event
 			function toggler() {
 				$(this)
@@ -166,7 +162,7 @@
 				}
 			}
 			this.data("toggler", toggler);
-			
+
 			function serialize() {
 				function binary(arg) {
 					return arg ? 1 : 0;
@@ -175,15 +171,11 @@
 				branches.each(function(i, e) {
 					data[i] = $(e).is(":has(>ul:visible)") ? 1 : 0;
 				});
-
-				// CHANGED BY David McReynolds 9/10/2013 of Daylight Studio to use super cookie so that we only have one cookie used to save this state info
-				$.supercookie(settings.groupCookieId, settings.cookieId, data.join(""), settings.cookieOptions );
+				$.cookie(settings.cookieId, data.join(""), settings.cookieOptions );
 			}
-			
-			function deserialize() {
 
-				// CHANGED BY David McReynolds 9/10/2013 of Daylight Studio to use super cookie so that we only have one cookie used to save this state info
-				var stored = $.supercookie(settings.groupCookieId, settings.cookieId);
+			function deserialize() {
+				var stored = $.cookie(settings.cookieId);
 				if ( stored ) {
 					var data = stored.split("");
 					branches.each(function(i, e) {
@@ -191,13 +183,13 @@
 					});
 				}
 			}
-			
+
 			// add treeview class to activate styles
 			this.addClass("treeview");
-			
+
 			// prepare branches and find all tree items with child lists
 			var branches = this.find("li").prepareBranches(settings);
-			
+
 			switch(settings.persist) {
 			case "cookie":
 				var toggleCallback = settings.toggle;
@@ -211,7 +203,7 @@
 				break;
 			case "location":
 				var current = this.find("a").filter(function() {
-					return this.href.toLowerCase() == location.href.toLowerCase();
+					return location.href.toLowerCase().indexOf(this.href.toLowerCase()) == 0;
 				});
 				if ( current.length ) {
 					// TODO update the open/closed classes
@@ -228,19 +220,19 @@
 				}
 				break;
 			}
-			
+
 			branches.applyClasses(settings, toggler);
-				
+
 			// if control option is set, create the treecontroller and show it
 			if ( settings.control ) {
 				treeController(this, settings.control);
 				$(settings.control).show();
 			}
-			
+
 			return this;
 		}
 	});
-	
+
 	// classes used by the plugin
 	// need to be styled via external stylesheet, see first example
 	$.treeview = {};
@@ -258,5 +250,5 @@
 		last: "last",
 		hitarea: "hitarea"
 	});
-	
+
 })(jQuery);

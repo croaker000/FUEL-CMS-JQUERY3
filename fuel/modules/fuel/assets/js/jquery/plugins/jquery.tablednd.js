@@ -5,7 +5,7 @@
  * Licensed like jQuery, see http://docs.jquery.com/License.
  *
  * Configuration options:
- * 
+ *
  * onDragStyle
  *     This is the style that is assigned to the row during drag. There are limitations to the styles that can be
  *     associated with a row (such as you can't assign a border--well you can, but it won't be
@@ -28,7 +28,7 @@
  *     Pass a function that will be called when the user starts dragging. The function takes 2 parameters: the
  *     table and the row which the user has started to drag.
  * onAllowDrop
- *     Pass a function that will be called as a row is over another row. If the function returns true, allow 
+ *     Pass a function that will be called as a row is over another row. If the function returns true, allow
  *     dropping on that row, otherwise not. The function takes 2 parameters: the dragged row and the row under
  *     the cursor. It returns a boolean: true allows the drop, false doesn't allow it.
  * scrollAmount
@@ -40,7 +40,7 @@
  *     specify this class, then you are responsible for setting cursor: move in the CSS and only these cells
  *     will have the drag behaviour. If you do not specify a dragHandle, then you get the old behaviour where
  *     the whole row is draggable.
- * 
+ *
  * Other ways to control behaviour:
  *
  * Add class="nodrop" to any rows for which you don't want to allow dropping, and class="nodrag" to any rows
@@ -52,7 +52,7 @@
  *
  * Other methods:
  *
- * $("...").tableDnDUpdate() 
+ * $("...").tableDnDUpdate()
  * Will update all the matching tables, that is it will reapply the mousedown method to the rows (or handle cells).
  * This is useful if you have updated the table rows using Ajax and you want to make the table draggable again.
  * The table maintains the original configuration (so you don't have to specify it again).
@@ -63,7 +63,7 @@
  *
  * Known problems:
  * - Auto-scoll has some problems with IE7  (it scrolls even when it shouldn't), work-around: set scrollAmount to 0
- * 
+ *
  * Version 0.2: 2008-02-20 First public version
  * Version 0.3: 2008-02-07 Added onDragStart option
  *                         Made the scroll amount configurable (default is 5 as before)
@@ -76,6 +76,7 @@
  *                         Improved the serialize method to use a default (and settable) regular expression.
  *                         Added tableDnDupate() and tableDnDSerialize() to be called when you are outside the table
  * 2011-03-12  Daylight Studio added try catch when outside of table so it won't throw errors
+ * 2024-10-18  FoM adjusted coding to ensure jquery 3.x deprications & compatibility
  */
 jQuery.tableDnD = {
     /** Keep hold of the current table being dragged */
@@ -112,8 +113,8 @@ jQuery.tableDnD = {
         // Now we need to capture the mouse up and mouse move event
         // We can use bind so that we don't interfere with other event handlers
         jQuery(document)
-            .bind('mousemove', jQuery.tableDnD.mousemove)
-            .bind('mouseup', jQuery.tableDnD.mouseup);
+            .on('mousemove', jQuery.tableDnD.mousemove)
+            .on('mouseup', jQuery.tableDnD.mouseup);
 
         // Don't break the chain
         return this;
@@ -242,7 +243,7 @@ jQuery.tableDnD = {
 	        }
 
 	    }
-		    
+
 		if (mousePos.y-yOffset < config.scrollAmount) {
 	    	window.scrollBy(0, -config.scrollAmount);
 	    } else {
@@ -271,13 +272,13 @@ jQuery.tableDnD = {
             if (currentRow) {
                 // TODO worry about what happens when there are multiple TBODIES
                 if (movingDown && jQuery.tableDnD.dragObject != currentRow) {
-	
+
 					// added by Daylight Studio 3/12/11
 					try{
                     	jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow.nextSibling);
 					} catch(e)
 					{
-						
+
 					}
                 } else if (! movingDown && jQuery.tableDnD.dragObject != currentRow) {
 
@@ -286,7 +287,7 @@ jQuery.tableDnD = {
 	                    jQuery.tableDnD.dragObject.parentNode.insertBefore(jQuery.tableDnD.dragObject, currentRow);
 					} catch(e)
 					{
-						
+
 					}
                 }
             }

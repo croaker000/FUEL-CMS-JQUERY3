@@ -1,7 +1,7 @@
 // jqx.load('plugin', 'date');
 
 fuel.controller.BlockController = jqx.createController(fuel.controller.BaseFuelController, {
-	
+
 	init: function(initObj){
 		this._super(initObj);
 	},
@@ -11,8 +11,8 @@ fuel.controller.BlockController = jqx.createController(fuel.controller.BaseFuelC
 		// call parent
 		//fuel.controller.BaseFuelController.prototype.add_edit.call(this);
 		this._super();
-		
-		$('#no_modal').click(function(){
+
+		$('#no_modal').on('click',function(){
 			var path = jqx.config.fuelPath + '/blocks/import_view_cancel';
 			var params = $('#form').serialize();
 			$.post(path, params, function(html){
@@ -23,8 +23,8 @@ fuel.controller.BlockController = jqx.createController(fuel.controller.BaseFuelC
 			$('.jqmWindow').jqm().jqmHide();
 			return false;
 		});
-		
-		$('#yes_modal').click(function(){
+
+		$('#yes_modal').on('click',function(){
 			var path = jqx.config.fuelPath + '/blocks/import_view/';
 			var params = $('#form').serialize();
 			$.post(path, params, function(html){
@@ -47,17 +47,17 @@ fuel.controller.BlockController = jqx.createController(fuel.controller.BaseFuelC
 					new jqx.Message('Error importing view file');
 				}
 			});
-			
+
 			//$('.jqmWindow').jqm().jqmHide(); // causes error because of multiple modals
 			$('.jqmOverlay').hide();
 			return false;
 		});
-		
+
 	},
-	
+
 	upload : function(){
 		this.notifications();
 //		this._initAddEditInline($('#form'));
 	}
-		
+
 });

@@ -8,7 +8,7 @@ dave@thedaylightstudio.com
 
 ;(function($){
 	jQuery.fn.repeatable = function(o) {
-		
+
 		var options = $.extend({
 			addButtonText : 'Add Another',
 			addButtonClass : 'add_another',
@@ -82,7 +82,7 @@ dave@thedaylightstudio.com
 					// for file uploads
 					newName = newName.replace(/([-_a-zA-Z0-9]+)_\d+_([-_a-zA-Z0-9]+)$/, '$1_' + i + '_$2');
 
-					// required for jquery 
+					// required for jquery
 					newName = newName.replace('[', '\[');
 					newName = newName.replace(']', '\]');
 					$(this).attr('name', newName);
@@ -95,9 +95,9 @@ dave@thedaylightstudio.com
 							});
 						}, 0);
 					}
-					
+
 				}
-				
+
 				if ($(this).is('label')){
 					parseAttribute(this, 'for');
 				} else {
@@ -113,7 +113,7 @@ dave@thedaylightstudio.com
 					}
 				}
 			})
-			
+
 			var $parentElem = $(elem).has(options.repeatableSelector + ' ' + options.repeatableSelector);
 
 			var parentIndex = null;
@@ -121,7 +121,7 @@ dave@thedaylightstudio.com
 				parentIndex = $parentElem.attr('data-index');
 			}
 
-			
+
 			// if children, then we need to reorganize them too but only touch the first digit since the second digit was already changed
 			if (depth == 0 && $childTemplates.length){
 				$childRepeatables.each(function(i){
@@ -133,11 +133,11 @@ dave@thedaylightstudio.com
 							newName = newName.replace(/([-_a-zA-Z0-9]+\[)\d+(\]\[[-_a-zA-Z0-9]+\]\[[-_a-zA-Z0-9]+\])/g, '$1' + parentIndex + '$2');
 
 							// for file uploads
-							newName = newName.replace(/([-_a-zA-Z0-9]+)_\d+_([-_a-zA-Z0-9]+_[-_a-zA-Z0-9]+)/g, '$1_' + parentIndex + '_$2');	
-							
+							newName = newName.replace(/([-_a-zA-Z0-9]+)_\d+_([-_a-zA-Z0-9]+_[-_a-zA-Z0-9]+)/g, '$1_' + parentIndex + '_$2');
+
 							// newName = newName.replace(/([-_a-zA-Z0-9]+\[)\d+(\][-_a-zA-Z0-9\[\]]+)$/, '$1' + parentIndex + '$2');
-							
-							// required for jquery 
+
+							// required for jquery
 							newName = newName.replace('[', '\[');
 							newName = newName.replace(']', '\]');
 							$(this).attr('name', newName);
@@ -162,7 +162,7 @@ dave@thedaylightstudio.com
 				})
 			}
 		}
-		
+
 		var createRemoveButton = function(elem){
 			if (!options.removeable) return;
 			$elem = $(elem);
@@ -186,7 +186,7 @@ dave@thedaylightstudio.com
 				var min = ($this.attr('data-min')) ? parseInt($this.attr('data-min')) : null;
 				if (options.warnBeforeDelete == false || confirm(options.warnBeforeDeleteMessage)){
 					$(this).closest(options.repeatableSelector).remove();
-					
+
 					var $children = $this.children(options.repeatableSelector);
 					if ($children.length < max){
 						$this.next().show();
@@ -194,15 +194,15 @@ dave@thedaylightstudio.com
 					// to reorder the indexes
 					reOrder($this);
 				}
-				
+
 				checkMin($this, min);
-				
+
 				$this.trigger('removed');
 				e.stopImmediatePropagation();
 				return false;
 			});
 		}
-		
+
 		var reOrder = function($elem){
 			$checked = $('input[type="radio"]', $elem).filter(':checked');
 
@@ -211,7 +211,7 @@ dave@thedaylightstudio.com
 				parseTemplate(this, i);
 			});
 		}
-		
+
 		var checkMax = function($elem, max){
 			if (max && $elem.children(options.repeatableSelector).length != 0 && $elem.children(options.repeatableSelector).length >= max){
 				$elem.next().hide();
@@ -222,7 +222,7 @@ dave@thedaylightstudio.com
 
 		var checkMin = function($elem, min){
 			$children = $elem.children(options.repeatableSelector);
-			
+
 			// must grab first in case they are nested
 			min = parseInt(min);
 			if (min && $children.length != 0 && $children.length <= min){
@@ -231,15 +231,15 @@ dave@thedaylightstudio.com
 				$children.find('.' + options.removeButtonClass + ':first').show();
 			}
 		}
-		
+
 		var cloneRepeatableNode = function($elem){
 			$clone = $elem.children(options.repeatableSelector + ':first').clone(false);
 			return $clone;
 		}
-		
+
 		var createCollapsingContent = function($elem){
 			if (options.allowCollapsingContent){
-				$($elem).find(options.sortableSelector).unbind('dblclick').dblclick(function(e){
+            $($elem).find(options.sortableSelector).off('dblclick').dblclick(function(e){
 					$parent = $(this).closest(options.repeatableSelector).parent();
 					var dblclick = ($parent.attr('data-dblclick')) ? $parent.attr('data-dblclick') : null;
 
@@ -253,18 +253,18 @@ dave@thedaylightstudio.com
 				})
 			}
 		}
-		
+
 		var createAddButton = function($elem){
-			
+
 			// clone a fresh copy and store it to be cloned later
 			$('.' + options.addButtonClass).each(function(i){
 				var $prev = $(this).prev();
 				var $clone = cloneRepeatableNode($prev);
 				$(this).data('clone', $clone);
 			});
-			
+
 		}
-		
+
 		$(document).on('click', '.' + options.addButtonClass, function(e){
 			e.preventDefault();
 			e.stopImmediatePropagation();
@@ -280,21 +280,21 @@ dave@thedaylightstudio.com
 			} else {
 				var $clone = $(e.currentTarget).data('clone');
 			}
-			
+
 			var $this = $(this).prev();
 			var $clonecopy = $clone.clone(false);
 
 			// add the noclone class so that it gets removed if nested
 			$clonecopy.addClass('noclone');
-			
-			
+
+
 			$clonecopy.find(options.contentSelector + ':first').show();
 			if (dblclick == 'accordian' || dblclick == 'accordion'){
 				$prev.find(options.contentSelector).hide();
 			}
 
 			createCollapsingContent($clonecopy);
-			
+
 			var $children = $this.children(options.repeatableSelector);
 
 			if (max && $children.length >= max){
@@ -313,13 +313,13 @@ dave@thedaylightstudio.com
 				if (parseInt($(this).data('orig_checked')) == 1){
 					$(this).prop('checked', true);
 				} else {
-					$(this).prop('checked', false);	
+					$(this).prop('checked', false);
 				}
-				
+
 			});
-				
+
 			$clonecopy.find('.noclone').remove();
-			
+
 			reOrder($this);
 
 			if (max && $children.length != 0 && $children.length >= (max -1)){
@@ -330,15 +330,15 @@ dave@thedaylightstudio.com
 
 		});
 
-		
+
 		var index = 0;
-		
+
 		return this.each(function(){
 			var $this = $(this);
-			
+
 			// simply return if it's already been instantiated
 			//if ($this.hasClass('__applied__')) return this;
-			
+
 			// parse the template
 			var $repeatables = $this.children(options.repeatableSelector);
 			if (!$this.is('.__applied__')){
@@ -347,7 +347,7 @@ dave@thedaylightstudio.com
 					createRemoveButton(this);
 				});
 			}
-				
+
 			// add button
 			$parent = $this.parent();
 			//$parent = $this.closest(options.repeatableParentSelector);
@@ -360,25 +360,25 @@ dave@thedaylightstudio.com
 			if (options.min){
 				$this.attr('data-min', options.min); // set it if it's not already
 			}
-			
+
 			if (options.dblClickBehavior){
 				$this.attr('data-dblclick', options.dblClickBehavior);
 			}
 
 			if (options.initDisplay && !$this.is('.__applied__')){
 				$this.attr('data-init_display', options.init_display);
-				
+
 				if ($repeatables.closest(options.contentSelector).length){
 					$toDisplay = $repeatables.find(options.contentSelector);
 				} else {
 					$toDisplay = $repeatables.find(options.contentSelector).not(options.contentSelector + ' ' + options.contentSelector);
 				}
-	
+
 				// hide all but the first
 				if (options.initDisplay == 'first'){
 					$toDisplay.not(':first').hide();
 				} else if (options.initDisplay == 'none' || options.initDisplay == 'closed'){
-					$toDisplay.hide();	
+					$toDisplay.hide();
 				}
 			}
 			if ($parent.find(options.addButtonClass).length == 0 && !$this.hasClass('__applied__')){
@@ -387,7 +387,7 @@ dave@thedaylightstudio.com
 			// add sorting
 			if (options.sortable){
 				$this.sortable({
-					cursor: 'move', 
+					cursor: 'move',
 					handle: options.sortableSelector,
 					start: function(event, ui) {
 						$this.trigger({type: 'sortStarted', clonedNode: $this});
@@ -398,17 +398,17 @@ dave@thedaylightstudio.com
 					}
 				});
 			}
-			
+
 			if (!$this.hasClass('__applied__')){
-				createAddButton($this);	
+				createAddButton($this);
 			}
-			
+
 
 			if ($this.attr('data-max')) checkMax($this, options.max);
 			if ($this.attr('data-min')) checkMin($this, options.min);
 
 			createCollapsingContent($this);
-			
+
 			index++;
 
 			// set this class so we can detect whether it's been cloned yet or not

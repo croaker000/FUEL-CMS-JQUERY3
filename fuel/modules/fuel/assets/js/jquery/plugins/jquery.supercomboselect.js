@@ -1,4 +1,9 @@
 // requires the jquery.fillin, the sortables jquery ui plugin and the selso sorting plugin and jquery.disable.text.select.pack
+/*
+ * FoM: 2024-10-19: JQMigrate from 1.x to 3.x
+ * v24.1
+ *
+ */
 
 (function($){
 	jQuery.fn.supercomboselect = function(settings){
@@ -112,8 +117,10 @@
 			/**********************************************************************
 			BIND EVENTS
 			**********************************************************************/
-			$('#' + leftID + ' li').die();
-			$('#' + rightID + ' li').die();
+			// $('#' + leftID + ' li').die();
+			// $('#' + rightID + ' li').die();
+         $('#' + leftID + ' li').off();
+         $('#' + rightID + ' li').off();
 
 			$(document).on('dblclick', '#' + leftID + ' li[class!="option_disabled"]', function(e){
 				addSelectedToRight();
@@ -159,11 +166,11 @@
 				isCtrlDown = false;
 			});
 
-			$('#' + settings.wrapperId + ' .csadd').click(function(){
+			$('#' + settings.wrapperId + ' .csadd').on('click',function(){
 				addSelectedToRight();
 			});
 
-			$('#' + settings.wrapperId + ' .csremove').click(function(){
+			$('#' + settings.wrapperId + ' .csremove').on('click',function(){
 				removeSelectedFromRight();
 			});
 
@@ -176,14 +183,14 @@
 
 			// if the object is sortable, then we need to create hidden fields instead and remove the mult-select form field to allow for ordering
 			if (settings.isSortable){
-				theForm.submit(function(){
+				theForm.on('submit',function(){
 					onFormSubmit();
 					return true;
 				});
 			}
 
 			// event for ajaxSubmit
-			theForm.bind('form-pre-serialize', function(){
+         theForm.on('form-pre-serialize', function(){
 				onFormSubmit();
 			});
 
@@ -203,7 +210,7 @@
 				searchBox = $('#' + leftID).parent().parent().find('.supercomboselect_search_text');
 				searchBox
 					.attr('placeholder', settings.defaultSearchBoxString)
-					.keyup(function(e){
+               .on('keyup',function(e) {
 						isShiftDown = false; // reset this to prevent issue with not being able to select
 						isCtrlDown = false;
 
@@ -252,14 +259,14 @@
 
 
 						return false;
-					}).keydown(function(e){
+               }).on('keydown',function(e){
 						// return character
 						if (e.keyCode == 13) {
-							$(e.currentTarget).blur();
+							$(e.currentTarget).trigger('blur');
 							return false;
 						}
 					});
-				searchBox.siblings('.supercomboselect_search_clear').click(function(e){
+				searchBox.siblings('.supercomboselect_search_clear').on('click',function(e){
 					e.preventDefault();
 					refreshLists();
 					searchBox.val('');
@@ -317,7 +324,7 @@
 						opt = '<li class="optgrp">' + $(this).parent().attr('label') + '</li>' + opt;
 					}
 
-					if ($(this).attr('selected')){
+               if ($(this).prop('selected')){
 						rightOpts.push(opt);
 					} else {
 						leftOpts.push(opt);
@@ -371,7 +378,7 @@
 				// reset search box area and refresh the list
 				if (searchBox && searchBox.val().length){
 					searchBox.val('');
-					searchBox.focus();
+               searchBox.trigger('focus');
 				}
 				refreshLists();
 			}
@@ -382,7 +389,8 @@
 				$selectedOpts.each(function(i){
 					if (customSelectedSorting) $(this).remove();
 					var opt = $(getOptionSourceRef(getIdNum(this)));
-					opt.removeAttr('selected', 'selected');
+               //opt.removeAttr('selected', 'selected');
+               opt.prop('selected',false);
 					selected.push(opt.attr('value'));
 				});
 
@@ -412,7 +420,7 @@
 
 				// unfocus this field so that meta key tags will send proper events
 				if (searchBox){
-					searchBox.blur();
+					searchBox.trigger('blur');
 				}
 
 			}

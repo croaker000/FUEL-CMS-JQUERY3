@@ -1,5 +1,5 @@
 fuel.controller.NavigationController = jqx.createController(fuel.controller.BaseFuelController, {
-	
+
 	init: function(initObj){
 		this._super(initObj);
 	},
@@ -9,13 +9,13 @@ fuel.controller.NavigationController = jqx.createController(fuel.controller.Base
 		fuel.controller.BaseFuelController.prototype.items.call(this);
 		//fuel.controller.BaseFuelController.prototype.items();
 		var _this = this;
-		
-		$('.ico_navigation_download').click(function(e){
+
+		$('.ico_navigation_download').on('click',function(e){
 			e.preventDefault();
-			$('#form').attr('action', $(this).attr('href')).attr('method', 'post').submit();
+			$('#form').attr('action', $(this).attr('href')).attr('method', 'post').trigger('submit');
 		})
 	},
-	
+
 	add_edit : function(){
 		// call parent
 		//fuel.controller.BaseFuelController.prototype.add_edit.call(this);
@@ -23,7 +23,7 @@ fuel.controller.NavigationController = jqx.createController(fuel.controller.Base
 		//this._super.
 		var origParentId = $('#parent_id').val();
 		var id = $('#id').val();
-		$('#group_id').change(function(e){
+		$('#group_id').on('change',function(e){
 			var parentId = ($('#parent_id').val() != '') ? $('#parent_id').val() : origParentId;
 			var path = jqx.config.fuelPath + '/navigation/parents/' + $('#group_id').val() + '/' + parentId + '/' + id;
 			$('#parent_id').parent().load(path, {}, function(){
@@ -32,12 +32,12 @@ fuel.controller.NavigationController = jqx.createController(fuel.controller.Base
 			});
 		});
 	},
-	
+
 	upload : function(){
 		this.notifications();
 		this._initToolTips();
 		//this._initAddEditInline($('#form'));
 	}
-	
-	
+
+
 });

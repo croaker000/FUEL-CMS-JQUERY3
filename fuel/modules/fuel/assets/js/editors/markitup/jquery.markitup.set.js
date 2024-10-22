@@ -23,12 +23,12 @@ function markitupLanguage(key)
 }
 
 var myMarkItUpSeparator = {separator:'---------------' };
-var myMarkItUpDefaultToolbar = { 	
+var myMarkItUpDefaultToolbar = {
 	b: {name:markitupLanguage('b'), key:'B', className:'bold', openWith:'(!(<strong>|!|<b>)!)', closeWith:'(!(</strong>|!|</b>)!)' },
 	i: {name:markitupLanguage('i'), key:'I', className:'italic', openWith:'(!(<em>|!|<i>)!)', closeWith:'(!(</em>|!|</i>)!)'  },
 	strike: {name:markitupLanguage('strike'), className:'stroke', key:'S', openWith:'<del>', closeWith:'</del>' },
 	separator1: myMarkItUpSeparator,
-	p: {name:markitupLanguage('p'), className:'p', key:'P', openWith:'<p>', closeWith:'</p>'}, 
+	p: {name:markitupLanguage('p'), className:'p', key:'P', openWith:'<p>', closeWith:'</p>'},
     h1: {name:markitupLanguage('h1'), className:'h1', key:'1', openWith:'<h1>', closeWith:'</h1>', placeHolder:markitupLanguage('placeholder_headings') },
     h2: {name:markitupLanguage('h2'), className:'h2', key:'2', openWith:'<h2>', closeWith:'</h2>', placeHolder:markitupLanguage('placeholder_headings') },
     h3: {name:markitupLanguage('h3'), className:'h3',key:'3', openWith:'<h3>', closeWith:'</h3>', placeHolder:markitupLanguage('placeholder_headings') },
@@ -41,27 +41,27 @@ var myMarkItUpDefaultToolbar = {
 	hr: {name:markitupLanguage('hr'), className:'hr', key:'', openWith:'<hr />'},
 	separator3: myMarkItUpSeparator,
 	/*{name:'Image', className:'image', key:'I', replaceWith:'<img src="{img_path}\[![Source:!:]!]\" alt="[![Alternative text]!]" />' },*/
-	img: {name:markitupLanguage('img'), className: 'image', key: 'I', replaceWith: 
-		function(marketItup){ 
-			myMarkItUpSettings.markItUpImageInsert(marketItup); 
+	img: {name:markitupLanguage('img'), className: 'image', key: 'I', replaceWith:
+		function(marketItup){
+			myMarkItUpSettings.markItUpImageInsert(marketItup);
 			return false;
 		}
 	},
 	/*{name:markitupLanguage('link'), className:'link', key:'L', openWith:'<a href="{site_url(\'[![' + markitupLanguage('link') + ':!:]!]\')}" target="[![' + markitupLanguage('target') + ':!:_self]!]">', closeWith:'</a>', placeHolder:markitupLanguage('placeholder_link')},*/
-	link: {name:markitupLanguage('link'), className: 'link', key: 'L', replaceWith: 
-		function(marketItup){ 
-			myMarkItUpSettings.markItUpLinkInsert(marketItup); 
+	link: {name:markitupLanguage('link'), className: 'link', key: 'L', replaceWith:
+		function(marketItup){
+			myMarkItUpSettings.markItUpLinkInsert(marketItup);
 			return false;
 		}
 	},
 	mailto: {name:markitupLanguage('mailto'), className:'mailto', key:'M', openWith:'{safe_mailto(', closeWith:')}', placeHolder:markitupLanguage('placeholder_email') },
 	php: {name:markitupLanguage('php'), className:'fuel_var', key:'', openWith:'{$[![' + markitupLanguage('php') + ':!:]!]', closeWith:'}', placeHolder:'' },
-	clean: {name:markitupLanguage('clean'), className:'clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } },		
+	clean: {name:markitupLanguage('clean'), className:'clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } },
 	separator4: myMarkItUpSeparator,
 	//{name:markitupLanguage('preview'), className:'preview',  call:'preview'},
-	fullscreen: {name: markitupLanguage('fullscreen'), className: 'maximize', key: 'F', replaceWith: 
-		function(marketItup){ 
-			myMarkItUpSettings.markItUpFullScreen(marketItup); 
+	fullscreen: {name: markitupLanguage('fullscreen'), className: 'maximize', key: 'F', replaceWith:
+		function(marketItup){
+			myMarkItUpSettings.markItUpFullScreen(marketItup);
 			return false;
 		}
 	}
@@ -84,28 +84,28 @@ var myMarkItUpMarkdownToolbar = {
 	hr: {name:markitupLanguage('hr'), className:'hr', key:'', openWith:'***'},
 	separator3: myMarkItUpSeparator,
 	/*{name:'Image', className:'image', key:'I', replaceWith:'<img src="{img_path}\[![Source:!:]!]\" alt="[![Alternative text]!]" />' },*/
-	img: {name:markitupLanguage('img'), className: 'image', key: 'I', replaceWith: 
-		function(marketItup){ 
-			myMarkItUpSettings.markItUpImageInsert(marketItup); 
+	img: {name:markitupLanguage('img'), className: 'image', key: 'I', replaceWith:
+		function(marketItup){
+			myMarkItUpSettings.markItUpImageInsert(marketItup);
 			return false;
 		}
 	},
 	/*{name:markitupLanguage('link'), className:'link', key:'L', openWith:'<a href="{site_url(\'[![' + markitupLanguage('link') + ':!:]!]\')}" target="[![' + markitupLanguage('target') + ':!:_self]!]">', closeWith:'</a>', placeHolder:markitupLanguage('placeholder_link')},*/
-	link: {name:markitupLanguage('link'), className: 'link', key: 'L', replaceWith: 
-		function(marketItup){ 
-			myMarkItUpSettings.markItUpLinkInsert(marketItup); 
+	link: {name:markitupLanguage('link'), className: 'link', key: 'L', replaceWith:
+		function(marketItup){
+			myMarkItUpSettings.markItUpLinkInsert(marketItup);
 			return false;
 		}
 	},
 
 	mailto: {name:markitupLanguage('mailto'), className:'mailto', key:'M', openWith:'{safe_mailto(', closeWith:')}', placeHolder:markitupLanguage('placeholder_email') },
 	php:{name:markitupLanguage('php'), className:'fuel_var', key:'', openWith:'{$[![' + markitupLanguage('php') + ':!:]!]', closeWith:'}', placeHolder:'' },
-	clean: {name:markitupLanguage('clean'), className:'clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } },		
+	clean: {name:markitupLanguage('clean'), className:'clean', replaceWith:function(markitup) { return markitup.selection.replace(/<(.*?)>/g, "") } },
 	separator4: myMarkItUpSeparator,
 	//{name:markitupLanguage('preview'), className:'preview',  call:'preview'},
-	fullscreen: {name: markitupLanguage('fullscreen'), className: 'maximize', key: 'F', replaceWith: 
-		function(marketItup){ 
-			myMarkItUpSettings.markItUpFullScreen(marketItup); 
+	fullscreen: {name: markitupLanguage('fullscreen'), className: 'maximize', key: 'F', replaceWith:
+		function(marketItup){
+			myMarkItUpSettings.markItUpFullScreen(marketItup);
 			return false;
 		}
 	}
@@ -148,7 +148,7 @@ myMarkItUpSettings.processConfig = function(config, set){
 			if (s == 'separator' || s == '-' || s == '|'){
 				config.markupSet[n] = myMarkItUpSeparator;
 			} else {
-				config.markupSet[n] = myMarkItUpSettings.sets[set].markupSet[s];	
+				config.markupSet[n] = myMarkItUpSettings.sets[set].markupSet[s];
 			}
 		}
 	}
@@ -158,23 +158,23 @@ myMarkItUpSettings.processConfig = function(config, set){
 
 myMarkItUpSettings.markdownTitle = function(markItUp, char) {
     heading = '';
-    n = $.trim(markItUp.selection||markItUp.placeHolder).length;
+    n = String.trim(markItUp.selection||markItUp.placeHolder).length;
     for(i = 0; i < n; i++) {
         heading += char;
     }
     return '\n'+heading+'\n';
 }
 myMarkItUpSettings.markItUpFullScreen = function (markItUp, display){
-	
+
 	var origTextarea = jQuery(markItUp.textarea);
 	var val = origTextarea.val();
 	var textarea = jQuery('#fullscreen');
 	var container = textarea.parents('.markItUp');
-	
+
 	var minimize = function(){
 		origTextarea.val(textarea.val());
-		textarea.unbind();
-		
+      textarea.off();
+
 		// TODO: fix markitup selection error
 		container.jqmHide();
 		container.parent().remove();
@@ -184,9 +184,9 @@ myMarkItUpSettings.markItUpFullScreen = function (markItUp, display){
 	if (textarea.size() == 0){
 		jQuery('body').append('<textarea id="fullscreen"></textarea>');
 		jQuery('#fullscreen').text(val);
-		
+
 		textarea = jQuery('#fullscreen');
-		
+
 		textarea.show();
 
 		//var fsSetting = myMarkItUpSettings.markupSet[myMarkItUpSettings.markupSet.length - 1];
@@ -214,7 +214,7 @@ myMarkItUpSettings.markItUpFullScreen = function (markItUp, display){
 
 		var previewOn = $.data(textarea, false);
 		var resizeHandlerBgImg = $('.markItUpResizeHandle', container).css('background');
-		
+
 		if (!myMarkItUpSettings.previewInWindow){
 			$('.preview', container).click(function(){
 				previewOn = ($.data(textarea)) ? false : true;
@@ -347,7 +347,7 @@ myMarkItUpSettings.displayAssetInsert = function (selected, attrs, callback){
 	var loaded = false;
 	var html = '<iframe src="' + url +'" id="asset_inline_iframe" class="inline_iframe" frameborder="0" scrolling="no" style="border: none; height: 500px; width: 850px;"></iframe>';
 	$modal = fuel.modalWindow(html, 'inline_edit_modal', true);
-	
+
 	$modal.find('iframe#asset_inline_iframe').bind('load', function(){
 		if (loaded) return;
 		// to prevent double loading issue
@@ -372,7 +372,7 @@ myMarkItUpSettings.displayAssetInsert = function (selected, attrs, callback){
 				var replace = '<img src="';
 				if (!isHTTP) replace +=  self.parserLeftDelimiter() + 'img_path(\'';
 				if (imgFolder && imgFolder.length){
-					replace += imgFolder + '/';	
+					replace += imgFolder + '/';
 				}
 				replace += selectedVal;
 
@@ -381,11 +381,11 @@ myMarkItUpSettings.displayAssetInsert = function (selected, attrs, callback){
 				if ($width.length && $width.val().length){
 					replace += ' width="' + $width.val() + '"';
 				}
-				
+
 				if ($height.length && $height.val().length){
 					replace += ' height="' + $height.val() + '"';
 				}
-				
+
 				if ($align.length && $align.val().length){
 					replace += ' align="' + $align.val() + '"';
 				}
@@ -399,7 +399,7 @@ myMarkItUpSettings.displayAssetInsert = function (selected, attrs, callback){
 				} else {
 					replace += ' alt=""';
 				}
-	
+
 				replace += ' />';
 
 				callback(replace);
@@ -468,12 +468,12 @@ myMarkItUpSettings.displayLinkEditWindow = function(selected, attrs, callback){
 	$modal = fuel.modalWindow(html, 'inline_edit_modal', true);
 
 	$modal.find('iframe#url_inline_iframe').bind('load', function(){
-		
+
 		// to prevent double loading issue
-		$(this).unbind();
+		$(this).off();
 
 		var iframeContext = this.contentDocument;
-		
+
 		jQuery('.cancel', iframeContext).add('.modal_close').click(function(){
 			$modal.jqmHide();
 			if ($(this).is('.save')){

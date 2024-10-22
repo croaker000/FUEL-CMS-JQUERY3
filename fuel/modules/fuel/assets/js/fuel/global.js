@@ -53,13 +53,13 @@ fuel.modalWindow = function(html, cssClass, autoResize, onLoadCallback, onCloseC
 	} else {
 		$('#' + modalId, $context).html('<div class="loader"></div><a href="#" class="modal_close jqmClose"></a><div class="modal_content"></div>');
 	}
-	
+
 
 	$context.append(modalHTML);
 	$modal = $('#' + modalId, $context);
 	$modal.attr('class', '__fuel__ __fuel_modal__ jqmWindow ' + cssClass)
 
-	// Hack to prevent the iframe from refreshing on close	
+	// Hack to prevent the iframe from refreshing on close
 	$(document).off('mousedown', '.modal_close');
 	$(document).on('mousedown', '.modal_close', function(e){
 		e.preventDefault();
@@ -71,21 +71,21 @@ fuel.modalWindow = function(html, cssClass, autoResize, onLoadCallback, onCloseC
 		$('#' + modalId, $context).hide();
 		$('.jqmOverlay', $context).remove();
 		if (onCloseCallback) onCloseCallback();
-	}	
-	
+	}
+
 	var modalWidth = $modal.outerWidth();
 	var centerWidth = -((modalWidth/2));
 	$modal.css('marginLeft', centerWidth + 'px');
 
-	
+
 	// show it first so we don't get the cancellation error in the console
-	
+
 	// set jqm window options
 	var jqmOpts = { onHide: modalOnHide, toTop:true };
 	if (onLoadCallback){
 		jqmOpts.onLoad = onLoadCallback;
 	}
-	
+
 	$modal.jqm(jqmOpts).jqmShow();
 	$modal.find('.modal_content').empty().append(html);
 	$modal.find('iframe').on('load', function(){
@@ -93,7 +93,7 @@ fuel.modalWindow = function(html, cssClass, autoResize, onLoadCallback, onCloseC
 		var iframe = this;
 		var contentDoc = iframe.contentDocument;
 
-		$('.cancel', contentDoc).add('.modal_close').click(function(e){
+		$('.cancel', contentDoc).add('.modal_close').on('click',function(e){
 			e.preventDefault();
 			$modal.jqmHide();
 		})
@@ -108,9 +108,9 @@ fuel.modalWindow = function(html, cssClass, autoResize, onLoadCallback, onCloseC
 					}
 			}, 250);
 		}
-		
+
 	})
-	
+
 	return $modal;
 }
 
@@ -120,7 +120,7 @@ fuel.closeModal = function(){
 	if ($modal.find('.modal_close').length){
 		$modal.find('.modal_close').trigger('mousedown');
 	} else {
-		$('#' + modalId).jqmHide();	
+		$('#' + modalId).jqmHide();
 	}
 }
 
@@ -146,8 +146,8 @@ fuel.isTop = function(){
 fuel.windowLevel = function(){
 	var level = 0;
 	var win = window;
-	while (win != top && win.parent != null){ 
-		level++; 
+	while (win != top && win.parent != null){
+		level++;
 		win = win.parent;
 	}
 	return level;
@@ -156,7 +156,7 @@ fuel.windowLevel = function(){
 fuel.calcHeight = function(context){
 	var height = 0;
 	if ($('#login', context).length){
-		var elems = '#login'; 
+		var elems = '#login';
 	} else {
 		var elems = '#fuel_main_top_panel, #fuel_actions, #fuel_notification, #fuel_main_content_inner, #list_container, .instructions, .modal_height';
 	}
@@ -191,8 +191,8 @@ fuel.cascadeIframeWindowSize = function(height){
 	//var win = window;
 	// console.log(win.document.title)
 	$('.inline_iframe', top.window.document).height(height);
-	
-	// do 
+
+	// do
 	// {
 	// 	level++;
 	// 	//height = fuel.calcHeight(win.document);
@@ -200,7 +200,7 @@ fuel.cascadeIframeWindowSize = function(height){
 	// 	$('.inline_iframe', win.document).height(height);
 	// 	win = win.parent;
 	// 	console.log(win.document.title)
-	// 
+	//
 	// } while (win != top && win.parent != null)
 //	return level;
 }

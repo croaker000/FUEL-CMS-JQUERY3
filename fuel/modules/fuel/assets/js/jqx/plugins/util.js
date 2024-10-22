@@ -1,5 +1,5 @@
 jQuery.fn.exists = function() {
-	return (this.size() > 0);
+   return (this.length > 0);
 };
 
 jQuery.fn.setClass = function(cssClass) {

@@ -6,7 +6,7 @@ IMPORT CSS HERE SO THAT REQUIRE.JS CAN OPTIMIZE IT
 @import url('jquery.treeview.css');
 @import url('jquery.supercomboselect.css');
 @import url('markitup.css');
-@import url('jquery-ui-1.8.17.custom.css');
+@import url('jquery-ui.min.css');
 
 
 * { margin: 0; padding: 0; outline-style: none; }
@@ -35,7 +35,7 @@ iframe { border: none; }
 
 
 /*----------------------------------------------------------------------------------------------------
-UI FORM FIELDS 
+UI FORM FIELDS
 Inspired by Zero Design http://www.getfuelcms.com/forums/discussion/470/updated-admin-ui/#Item_13
 ----------------------------------------------------------------------------------------------------*/
 ::-moz-focus-inner { border: 0; padding: 0; }
@@ -116,7 +116,7 @@ input[type="week"] {
   *padding-top: 2px;
   *padding-bottom: 1px;
   *height: auto;
-  
+
 -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
   -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
   -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
@@ -126,7 +126,7 @@ input[type="week"] {
   -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
   margin-right: 2px;
-  
+
 }
 
 select { height: 25px; line-height: 16px; max-width: 525px; }
@@ -215,8 +215,8 @@ textarea[disabled] {
   color: #888;
   cursor: default;
 }
-input[readonly], 
-textarea[readonly], 
+input[readonly],
+textarea[readonly],
 select[readonly] { background-color: transparent; border: none;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -273,7 +273,7 @@ input[type="file"] { border: 1px dashed #ccc; border-radius: 3px; padding: 10px;
     -webkit-box-shadow: inset 0 0 3px rgba(140,140,140,0.9);
 }
 /*----------------------------------------------------------------------------------------------------
-END FORM FIELDS 
+END FORM FIELDS
 Inspired by Zero Design http://www.getfuelcms.com/forums/discussion/470/updated-admin-ui/#Item_13
 ----------------------------------------------------------------------------------------------------*/
 
@@ -341,9 +341,9 @@ div.btn { border: 1px solid #ccc; float: left; list-style: none;  margin: 0;  pa
 .repeatable .remove { position: absolute; top: 13px; right: 15px; }
 .repeatable td>.remove { position: static; }
 .add_another { padding: 10px; float: left; }
-.repeatable.ui-sortable-helper { 
-  -moz-box-shadow: 1px 3px 5px 1px rgba(0,0,0,0.1); 
-  -webkit-box-shadow: 1px 3px 5px 1px rgba(0,0,0,0.1); 
+.repeatable.ui-sortable-helper {
+  -moz-box-shadow: 1px 3px 5px 1px rgba(0,0,0,0.1);
+  -webkit-box-shadow: 1px 3px 5px 1px rgba(0,0,0,0.1);
   box-shadow: 1px 3px 5px 1px rgba(0,0,0,0.1); }
 .repeatable_container.repeatable_container_condensed .repeatable { margin: 0; padding: 1px 5px; }
 .repeatable_container.repeatable_container_condensed .repeatable .grabber { float: left; }
@@ -359,9 +359,9 @@ div.btn { border: 1px solid #ccc; float: left; list-style: none;  margin: 0;  pa
 fieldset.tab { display: none; }
 fieldset.tab fieldset { display: block; }
 fieldset.collapsible legend { cursor: pointer; }
-  
+
 /******************************************************
-footer panel 
+footer panel
 ******************************************************/
 div#fuel_footer { font-size: 9px; position: absolute; left: 0px; bottom: 0px; right: 0px; text-align: center; color: #ccc; padding: 3px; height: 14px; }
 div#fuel_footer a { color: #fff; }
@@ -371,9 +371,9 @@ div#fuel_boilerplate { line-height: 12px; }
 div#fuel_body { }
 
 /******************************************************
-left panel 
+left panel
 ******************************************************/
-div#fuel_top { z-index: 2; line-height: 28px; height: 30px;  background-color: #393939; color: #fff; padding: 0 10px; color: #fff; text-shadow: #444 0px 1px 0px; 
+div#fuel_top { z-index: 2; line-height: 28px; height: 30px;  background-color: #393939; color: #fff; padding: 0 10px; color: #fff; text-shadow: #444 0px 1px 0px;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #5d5d5d), color-stop(1, #393939));
   background: -moz-linear-gradient(top center, #5d5d5d  0%, #393939 100%); }
 div#fuel_top a:hover { text-decoration: underline; }
@@ -381,9 +381,9 @@ h1#fuel_site_name { float: left; font-size: 18px; width: 172px; overflow: hidden
 h1#fuel_site_name a { color: #999; text-shadow: #111 0px -1px 0px; text-decoration: none; }
 h1#fuel_site_name a:hover { color: #aaa; text-decoration: none; }
 
-div#fuel_left_panel { z-index: 1; position: absolute; top: 30px; left: 0px; bottom: 0px; width: 200px; background-color: #333; overflow: auto; border-right: 1px solid #292929; overflow-x: hidden; 
-  -moz-box-shadow: inset -5px 5px 20px 5px #2f2f2f; 
-  -webkit-box-shadow: inset -5px 5px 20px 5px #2f2f2f; 
+div#fuel_left_panel { z-index: 1; position: absolute; top: 30px; left: 0px; bottom: 0px; width: 200px; background-color: #333; overflow: auto; border-right: 1px solid #292929; overflow-x: hidden;
+  -moz-box-shadow: inset -5px 5px 20px 5px #2f2f2f;
+  -webkit-box-shadow: inset -5px 5px 20px 5px #2f2f2f;
   box-shadow: inset -5px 5px 20px 5px #2f2f2f;
    }
 div#fuel_left_panel a { color: #999; text-decoration: none; text-shadow: #000 0px 1px 0px; display: block; overflow: hidden; text-overflow: ellipsis; width: 130px; }
@@ -450,7 +450,7 @@ h2.ico { margin-top: 5px; line-height: 21px !important; }
 
 
 /******************************************************
-main panel 
+main panel
 ******************************************************/
 div#fuel_main_panel { position: absolute; top: 0; left: 201px; right: 0px; bottom: 0px; background-color: #fff; -webkit-transition: all 0.2s cubic-bezier(0.445,0,0,1); -moz-transition: all 0.2s cubic-bezier(0.445,0,0,1); -ms-transition: all 0.2s cubic-bezier(0.445,0,0,1); -o-transition: all 0.2s cubic-bezier(0.445,0,0,1); transition: all 0.2s cubic-bezier(0.445,0,0,1); }
 #nav_toggle { opacity:0.9;}
@@ -488,7 +488,7 @@ div#fuel_main_top_panel li.active a { background: #e7e7e7 url(../images/tab.png)
 div#fuel_login_logout { position: absolute; top: 8px; right: 15px; font-size: 11px; color: #333; background-color: #e7e7e7; height: 21px;text-shadow: #fff 0px 1px 0px;  }
 
 div#fuel_actions { height: 46px; border-bottom: 1px solid #b6b6b6; position: relative; min-width: 680px;
-background: #eee; 
+background: #eee;
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0, whiteSmoke), color-stop(1, #cfd1cf));
 background: -moz-linear-gradient(top center, #f6f6f6 0%, #ddd 100%);
 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#dddddd');
@@ -520,7 +520,7 @@ div.dashboard_module { float: left; margin-right: 10px; margin-top: 10px; }
 div#filters { position: absolute; right: 15px; top: 12px; }
 a#multi_delete { display: block; }
 .adv_search { position: absolute; min-width: 360px; background: white; border: 1px solid #b6b6b6; z-index: 1000; left: -120px; padding: 10px 15px; display: none;
-  -moz-box-shadow: 1px 3px 5px 1px rgba(0,0,0,0.3); 
+  -moz-box-shadow: 1px 3px 5px 1px rgba(0,0,0,0.3);
   -webkit-box-shadow: 1px 3px 5px 1px rgba(0,0,0,0.3);
   box-shadow: 2px 2px 10px 1px rgba(0,0,0,0.3);
  }
@@ -533,8 +533,8 @@ a#multi_delete { display: block; }
 .search_input #adv-search-btn { position: absolute; right: 6px; top: 2px; padding-top: 5px; height: 10px; background-color: #fff; }
 
 #filters_container { position: relative; margin-bottom: 30px; }
-.filters { background: #eee; border-bottom: 1px solid #ccc; padding: 10px 15px; 
-  -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3); 
+.filters { background: #eee; border-bottom: 1px solid #ccc; padding: 10px 15px;
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
   -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
   box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.3);
  }
@@ -581,12 +581,12 @@ div#other_items select{  max-width: 250px;}
 div#action_btns { position: absolute; top: 9px; left: 15px; height: 29px; overflow: hidden; }
 div.buttonbar ul {  height: 27px; float: left; }
 div.buttonbar li, .btn, div.btn, .btn input, .btn .button { border-top: 1px solid #ccc; border-left: 1px solid #b9b9b9; border-bottom: 1px solid #b9b9b9; float: left;list-style: none;  margin: 0;
-  background: #e6e6e6 url(../images/btn.png) repeat-x; 
+  background: #e6e6e6 url(../images/btn.png) repeat-x;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #ddd));
   background: -moz-linear-gradient(top center, #fff 0%, #ddd 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#dddddd');
  }
-div.buttonbar li:hover, .btn:hover, div.btn:hover, .btn input:hover, .btn .button:hover { background-position: 0 -27px; 
+div.buttonbar li:hover, .btn:hover, div.btn:hover, .btn input:hover, .btn .button:hover { background-position: 0 -27px;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #eee));
   background: -moz-linear-gradient(top center, #fff 0%, #eee 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee');
@@ -594,7 +594,7 @@ div.buttonbar li:hover, .btn:hover, div.btn:hover, .btn input:hover, .btn .butto
 -webkit-box-shadow: inset 0 0 5px #ddd;
 box-shadow: inner 0 0 5px #ddd;
   }
-div.buttonbar li.active { background-position: 0 -54px; 
+div.buttonbar li.active { background-position: 0 -54px;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ddd), color-stop(1, #fff));
   background: -moz-linear-gradient(top center, #ddd 0%, #fff 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endColorstr='#ffffff');
@@ -630,7 +630,7 @@ div.notification .ico { line-height: 15px; }
 /* pagination */
 div#pagination { position: absolute; z-index: 1; right: 0px; top: -3px; text-align: right; padding-right: 25px; }
 div#pagination a { line-height: 21px; padding: 0 3px; border: 1px solid #ccc; background-color: #f9f9f9; }
-div#pagination a:hover { background-color: #fdfdfd; } 
+div#pagination a:hover { background-color: #fdfdfd; }
 div#pagination b { color: #fff; background-color: #4f7193; line-height: 21px; padding: 0 3px; border: 1px solid #ccc;  }
 
 /* module description */
@@ -666,8 +666,10 @@ span.publish_col { width: 100px; display: block; cursor: pointer !important; }
 
 /* form tables */
 .form { border: none; border-spacing: 0; display: table; } /* important to display as table so that the proper width can be determined with inline editing */
-.form td.label { padding: 6px 15px 0 0; font-weight: bold; vertical-align: top; /*white-space: nowrap; */}
-.form td.field { padding: 3px 0; white-space: nowrap; }
+/* .form td.label { padding: 6px 15px 0 0; font-weight: bold; vertical-align: top; }*/ /*white-space: nowrap; */
+.form td.label { padding: 6px 15px 0 0; font-weight: bold; vertical-align: top; white-space: nowrap;}
+/* .form td.field { padding: 3px 0; white-space: nowrap; } */
+.form td.field { padding: 3px 0; white-space: nowrap; width:100%;}
 .form td.required { padding-top: 10px; }
 .form .form td.required { display: none; }
 div.more_filters { padding-left: 10px; }
@@ -729,7 +731,7 @@ iframe#viewpage_iframe { border: none; width: 100%; height: 100%; }
 input#Save, input.submit { margin-top: 10px; width: 150px; text-align: center; }
 input#Cancel, input.cancel { margin-top: 10px; margin-right: 10px; width: 60px; text-align: center; }
 div#tooltip h3 { font-size: 11px; font-weight: normal; }
-a.btn_field { -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; line-height: 12px; border: 1px solid #ccc; padding: 3px 5px 3px 5px; 
+a.btn_field { -webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px; line-height: 12px; border: 1px solid #ccc; padding: 3px 5px 3px 5px;
   background: #eee url(../images/btn.png) repeat-x;
   }
 a.btn_field:hover { background-position: 0 -27px; }
@@ -760,9 +762,6 @@ div.perms_list label { font-weight: bold; }
 
 /* ckeditor */
 .cke_top { min-width: 565px !important; }
-.cke_button__fuellink_icon { background: url(../js/editors/ckeditor/skins/moono/icons.png) no-repeat 0 -528px !important; }
-.cke_button__fuelunlink_icon { background: url(../js/editors/ckeditor/skins/moono/icons.png) no-repeat 0 -552px !important; }
-.cke_button__fuelimage_icon { background: url(../js/editors/ckeditor/skins/moono/icons.png) no-repeat 0 -360px !important; }
 
 /* CI profiler */
 #codeigniter_profiler { position: absolute; bottom: 0; left: 200px; height: 300px; overflow: auto; }

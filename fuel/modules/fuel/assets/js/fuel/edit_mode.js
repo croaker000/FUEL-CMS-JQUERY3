@@ -27,25 +27,25 @@ if (fuel == undefined) var fuel = {};
 	var activeField;
 	var assetFolder;
 	var iconHeight = 16;
-	
+
 	var maxAdjustLoops = (fuel.maxAdjustLoops) ? fuel.maxAdjustLoops : 10;
-	
-	
+
+
 	// limit it to the most common for performance
 	var useAutoAdjust = (fuel.useAutoAdjust === false) ? false : true;
 	var resizeTags = (fuel.resizeTags) ? fuel.resizeTags : 'section,div,p,li';
 
 	jQuery.resize.delay = (fuel.resizeDelay) ? fuel.resizeDelay : 1000;
-	
+
 	function lang(key){
 		return __FUEL_LOCALIZED__[key];
 	}
-	
-	
+
+
 	$(document).ready(function(){
 
 		$('body').addClass('__fuel_inline__');
-		
+
 		function init(){
 
 			// disable the toolbar if it is being view from within the admin
@@ -55,28 +55,28 @@ if (fuel == undefined) var fuel = {};
 			}
 			initMarkers();
 			initFUELBar();
-			
+
 			// bind exposed global methods
 			fuel.refresh = function(){
 				refresh();
 			}
-			
+
 			fuel.modalWindow = function (html, cssClass, callback){
 				var modalId = '__FUEL_modal__';
 				if (!cssClass) cssClass = '';
 				var $context = $('body', top.window.document);
-				
+
 				var modalHtml = '<a href="#" class="modal_close jqmClose"></a><div class="modal_content"></div>';
 				if (!$('#' + modalId).length){
 					var modalHTML = '<div id="' + modalId + '" class="__fuel__ __fuel_modal__ jqmWindow ' + cssClass + '"><a href="#" class="modal_close jqmClose"></a><div class="modal_content"></div></div>';
 					$context.append(modalHTML);
 				}
-				
+
 				// add loading graphic
 				$('#' + modalId, $context).append('<div class="loader"></div>');
-				
 
-				// add overlay and hide iframe overlay 
+
+				// add overlay and hide iframe overlay
 				//$('.jqmOverlay', $context).hide();
 
 				$modal = $('#' + modalId, $context);
@@ -85,7 +85,7 @@ if (fuel == undefined) var fuel = {};
 
 					$('.jqmWindow .loader', $context).remove();
 					var iframe = this;
-					
+
 					var contentDoc = iframe.contentDocument;
 
 					var actionsHeight = $('#fuel_actions', contentDoc).length ? $('#fuel_actions', contentDoc).outerHeight(false) : 0;
@@ -94,7 +94,7 @@ if (fuel == undefined) var fuel = {};
 					var listTableHeight = $('#data_table_container', contentDoc).length ? $('#data_table_container', contentDoc).outerHeight(false) : 0;
 
 					docHeight = actionsHeight + notificationsHeight + mainContentHeight + listTableHeight + 30; // 30 is a fudge factor
-					
+
 					//docHeight = 100
 					// var heightFudge = $('#fuel_notification', contentDoc).outerHeight() + 30; // padding for #fuel_main_content_inner is 15 top and 15 bottom
 					// heightFudge += $('#fuel_actions', contentDoc).outerHeight();
@@ -105,11 +105,11 @@ if (fuel == undefined) var fuel = {};
 
 					$(iframe).height(docHeight);
 					$(iframe).width(docWidth);
-					
+
 				})
 				$modal.jqm({}).jqmShow();
 			}
-			
+
 			fuel.refreshIframeSize = function(iframe){
 				var i = 0;
 				// polling
@@ -119,12 +119,12 @@ if (fuel == undefined) var fuel = {};
 					i++;
 				}, 100);
 			}
-			
+
 			fuel.setIframeSize = function(iframe){
 				var MIN_WIDTH = 850;
 				var contentDoc = iframe.contentDocument;
 				var docHeight = fuel.calcHeight(contentDoc);
-				
+
 				if ($('#fuel_main_content_inner .form, #fuel_actions', contentDoc).length){
 					var width1 = $('#fuel_main_content_inner .form', contentDoc).outerWidth(false) + 74; // 74 includes the 37 in padding on each side
 					var width2 = $('#fuel_actions', contentDoc).outerWidth(false);
@@ -145,10 +145,10 @@ if (fuel == undefined) var fuel = {};
 				$(iframe).height(docHeight);
 				$(iframe).width(docWidth);
 			}
-			
+
 		}
-		
-		
+
+
 		function initMarkers(){
 			$('.__fuel_edit__').remove();
 			var markers = $(".__fuel_marker__");
@@ -170,8 +170,8 @@ if (fuel == undefined) var fuel = {};
 						html += '<span class="__fuel_edit_marker_inner__">' + varName + '</span>';
 						html += '</a>';
 						html += '<div class="__fuel_edit_form__" style="display: none;"><img src="' + imgPath + 'spinner_sm.gif" width="16" height="16" alt="loading"></div>';
-						
-						
+
+
 						html += '</div>';
 						$body.append(html);
 						toggleEditOff = false;
@@ -182,7 +182,7 @@ if (fuel == undefined) var fuel = {};
 			}
 			if (toggleEditOff) $('#__fuel_page_edit_toggle__').parent().hide();
 		}
-		
+
 		function refresh(){
 			if (editorsOn){
 				moveMarkers();
@@ -192,15 +192,15 @@ if (fuel == undefined) var fuel = {};
 				}
 			}
 		}
-		
+
 		function moveMarkers(){
 			var markers = $(".__fuel_marker__");
 			markers.each(function(i){
 				var $this = $(this);
 				var coords = getMarkerPosition($this);
-				
+
 				$('#__fuel_edit__' + i).css({left: coords.x, top: coords.y});
-				
+
 				// determine if it is visible so that we can filter out the hidden to speed things up
 				if ($this.filter(':hidden').length != 0) {
 					$('#__fuel_edit__' + i).hide();
@@ -225,18 +225,18 @@ if (fuel == undefined) var fuel = {};
 			var y = (yCoord <= Y_OFFSET) ? 0 : yCoord - Y_OFFSET;
 			return {x:x, y:y};
 		}
-		
+
 		// used to prevent overlaps of editors
 		function adjustPosition(editors, $obj, counter){
 			editors.each(function(i){
 				var $compareObj = $(this);
 				var topPos = parseInt($obj.css('top'));
 				var leftPos = parseInt($obj.css('left'));
-				
+
 				var objAttrsId = $obj.attr('id');
 				var objCompareAttrsId = $compareObj.attr('id');
-				if (counter <= maxAdjustLoops && $obj.attr('id') != $compareObj.attr('id') && 
-					Math.abs(topPos - parseInt($compareObj.css('top'))) < Y_OFFSET && 
+				if (counter <= maxAdjustLoops && $obj.attr('id') != $compareObj.attr('id') &&
+					Math.abs(topPos - parseInt($compareObj.css('top'))) < Y_OFFSET &&
 					Math.abs(leftPos - parseInt($compareObj.css('left'))) < X_OFFSET){
 					$compareObj.css('top', (topPos + Y_OFFSET) + 'px');
 					counter++;
@@ -245,17 +245,17 @@ if (fuel == undefined) var fuel = {};
 				}
 			});
 		}
-		
+
 		function initEditors(){
-			
+
 			var formAction = '';
-			
+
 			var editors = $('.__fuel_edit__');
 
 			var resetCss = {height: 'auto', width: 'auto', opacity: 1, display: 'block'};
 
 			var closeEditor = function(){
-				
+
 				// turn off inline editing mode
 				if (activeEditor){
 
@@ -271,7 +271,7 @@ if (fuel == undefined) var fuel = {};
 					}
 				}
 			}
-			
+
 			var ajaxSubmit = function($form){
 				$form.attr('action', formAction).ajaxSubmit(function(html){
 					if ($(html).is('error')){
@@ -287,7 +287,7 @@ if (fuel == undefined) var fuel = {};
 					return false;
 				});
 			}
-			
+
 			// set up cancel button
 			$('.__fuel_edit__ .ico_cancel').on('click', function(){
 				closeEditor();
@@ -308,7 +308,7 @@ if (fuel == undefined) var fuel = {};
 				}
 				return false;
 			});
-			
+
 			editors.each(function(i){
 				var $this = $(this);
 				var module = $this.attr('data-module');
@@ -325,13 +325,13 @@ if (fuel == undefined) var fuel = {};
 						$('.__fuel_edit_marker_inner__', this).stop().css(resetCss).hide();
 					}
 				});
-				
-				_anchor.click(function(e){
+
+				_anchor.on('click',function(e){
 					if (!activeEditor || activeEditor != $this){
-						
-						
+
+
 						if ($('.__fuel_edit_form__', $this).children().not('img').length == 0){
-							
+
 							var relArr = $(this).attr('rel').split('|');
 							var param1 = relArr[0];
 							if (module == 'pagevariables'){
@@ -347,44 +347,44 @@ if (fuel == undefined) var fuel = {};
 							}
 							var lang = $('#__fuel_language__').val();
 							if (lang && lang.length){
-								url = url + '?lang=' + $('#__fuel_language__').val();	
+								url = url + '?lang=' + $('#__fuel_language__').val();
 							}
-							
+
 
 							if (_anchor.next('.__fuel_edit_form__').find('iframe').length == 0){
 								var iframeId = '__fuel_iframe__' + $this.attr('id');
 								_anchor.next('.__fuel_edit_form__').html('<div class="loader"></div><iframe src="' + url +'" id="' + iframeId +'" frameborder="0" scrolling="no" class="inline_iframe"></iframe>');
-								
+
 								$('#' + iframeId).on('load', function(){
 									var iframe = this;
 									var contentDoc = iframe.contentDocument;
-									
+
 									// we check for the variable "saved" on the child windo
 									// if set to true, then we refresh the entire window so the changes can be seen
 									if (iframe.contentWindow.saved){
 										closeEditor();
 										window.location.reload();
 									} else {
-										$('.cancel', contentDoc).click(function(e){
+										$('.cancel', contentDoc).on('click',function(e){
 											closeEditor();
-											
+
 											return false;
 										});
 
 										$('#' + iframeId).prev().hide();
 										fuel.refreshIframeSize(iframe);
 									}
-									
+
 								})
-								
+
 							} else {
-								
+
 								// set the frame size just in case it wasn't set
 								var iframe = _anchor.next('.__fuel_edit_form__').find('iframe');
 								fuel.setIframeSize(iframe);
 							}
 							_anchor.next('.__fuel_edit_form__').show();
-						} else { 
+						} else {
 							_anchor.next('.__fuel_edit_form__').show();
 						}
 						$('.__fuel_edit_marker_inner__', this).css(resetCss);
@@ -404,12 +404,12 @@ if (fuel == undefined) var fuel = {};
 				});
 			});
 		}
-		
+
 		function initFUELBar(){
 
 			var hideEditors = function(){
-				if (useAutoAdjust) $(resizeTags).unbind('resize', refresh);
-				
+				if (useAutoAdjust) $(resizeTags).off('resize', refresh);
+
 				var elem = $('#__fuel_page_edit_toggle__');
 				$('.__fuel_edit__').hide();
 				editorsOn = false;
@@ -420,18 +420,18 @@ if (fuel == undefined) var fuel = {};
 			}
 
 			var showEditors = function(){
-				// use the great resize plugin to accomplish this... 
-				if (useAutoAdjust) $(resizeTags).bind('resize', refresh);
+				// use the great resize plugin to accomplish this...
+				if (useAutoAdjust) $(resizeTags).on('resize', refresh);
 				refresh(); // just in case things have moved since they were last turned off
 				var elem = $('#__fuel_page_edit_toggle__');
 				$('.__fuel_edit__').show();
-				
+
 				editorsOn = true;
 				//elem.text('Hide Editable Areas');
 				elem.parent('li').addClass('active');
 				$.supercookie('fuel_bar', 'show_editable_areas', '1', {path: cookiePath});
 			}
-			
+
 			var toggleEditors = function(shown){
 				if (shown){
 					hideEditors();
@@ -439,15 +439,13 @@ if (fuel == undefined) var fuel = {};
 					showEditors();
 				}
 			}
-			
-			$('#__fuel_page_edit_toggle__').click(
-				function(){
-					toggleEditors(editorsOn);
-					return false;
-				}
-			);
 
-			$('#__fuel_page_tools__').change(function(){
+			$('#__fuel_page_edit_toggle__').on('click',function(){
+				toggleEditors(editorsOn);
+				return false;
+			});
+
+			$('#__fuel_page_tools__').on('change',function(){
 				var url = $(this).val();
 				if (url == '') return;
 				var html = '<iframe src="' + url +'?id=' + pageId + '&amp;location=' + pageLocation + '" id="tool_output_iframe" frameborder="0" scrolling="no" style="border: none; height: 0px; width: 0px;"></iframe>';
@@ -456,23 +454,23 @@ if (fuel == undefined) var fuel = {};
 				return false;
 			});
 
-			$('#__fuel_page_layout__').change(function(){
+			$('#__fuel_page_layout__').on('change',function(){
 				$('#__fuel_edit_bar_form__').ajaxSubmit(function(){
 					window.location.reload();
 				});
 				return false;
 			});
 
-			$('#__fuel_language__').change(function(){
+			$('#__fuel_language__').on('change',function(){
 				var param = $(this).attr('name');
 				var lang = $(this).val();
 				if ($('#__fuel_language_mode__').val() == 'segment'){
 					if ($('#__fuel_language_default__').val() != lang){
-						var url = basePath + lang + '/' + pageLocation;	
+						var url = basePath + lang + '/' + pageLocation;
 					} else {
 						var url = basePath + pageLocation;
 					}
-					
+
 				} else {
 					var beginUrl = window.location.href.split('?')[0];
 					var queryStr = window.location.search.substring(1);
@@ -487,19 +485,19 @@ if (fuel == undefined) var fuel = {};
 				return false;
 			});
 
-			$('#__fuel_page_publish_toggle__').click(function(e){
+			$('#__fuel_page_publish_toggle__').on('click',function(e){
 				var $this = this;
 				var elem = $('#__fuel_page_published__')
 				var val = (elem.val() == 'yes') ? 'no' : 'yes';
 				elem.val(val);
-				
+
 				$('#__fuel_edit_bar_form__').ajaxSubmit(function(){
 					window.location.reload();
 				});
 				return false;
 			});
 
-			$('#__fuel_page_cache_toggle__').click(function(e){
+			$('#__fuel_page_cache_toggle__').on('click',function(e){
 				var elem = $('#__fuel_page_cached__')
 				var val = (elem.val() == 'yes') ? 'no' : 'yes';
 				elem.val(val);
@@ -509,7 +507,7 @@ if (fuel == undefined) var fuel = {};
 				return false;
 			});
 
-			$('#__fuel_page_others__').change(function(){
+			$('#__fuel_page_others__').on('change',function(){
 				window.location = basePath + $(this).val();
 			});
 
@@ -543,13 +541,11 @@ if (fuel == undefined) var fuel = {};
 				elem.parent('li').addClass('active');
 				$.supercookie('fuel_bar', 'show_fuel_bar', '1', {path: cookiePath});
 			}
-			$('#__fuel_page_toolbar_toggle__').click(
-				function(){
-					toggleFuelBar(fuelBarOn, true);
-					return false;
-				}
-			);
-			
+			$('#__fuel_page_toolbar_toggle__').on('click',function(){
+				toggleFuelBar(fuelBarOn, true);
+				return false;
+			});
+
 			var toggleFuelBar = function(shown, animate){
 				if (shown){
 					hideFuelBar(animate);
@@ -562,8 +558,8 @@ if (fuel == undefined) var fuel = {};
 			toggleFuelBar(!fuelBarOn, false);
 			toggleEditors(!editorsOn, false);
 		}
-		
+
 		init();
 	});
-	
+
 })(jQuery);

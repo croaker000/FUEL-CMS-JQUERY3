@@ -3,7 +3,7 @@
  * FUEL CMS
  * http://www.getfuelcms.com
  *
- * An open source Content Management System based on the 
+ * An open source Content Management System based on the
  * Codeigniter framework (http://codeigniter.com)
  *
  * @package		FUEL CMS
@@ -18,17 +18,17 @@
 /**
  * A form creation class
  *
- * The Form_builder class allows you to create forms by passing in configurable 
- * array values. Each field has a base set of parameters that can be set 
- * for it. Other fields have additional parameters you can pass to it 
- * (e.g. the date field). This class works with the 
- * <a href="[user_guide_url]libraries/my_model#func_form_fields">MY_Model form_fields</a> 
- * method which returns table meta information regarding the fields of a 
+ * The Form_builder class allows you to create forms by passing in configurable
+ * array values. Each field has a base set of parameters that can be set
+ * for it. Other fields have additional parameters you can pass to it
+ * (e.g. the date field). This class works with the
+ * <a href="[user_guide_url]libraries/my_model#func_form_fields">MY_Model form_fields</a>
+ * method which returns table meta information regarding the fields of a
  * table.
  *
- * The <a href="[user_guide_url]libraries/form">Form.php</a> class is required if a 
+ * The <a href="[user_guide_url]libraries/form">Form.php</a> class is required if a
  * form object is not passed in the initialization process.
- * 
+ *
  * Custom form fields can be configured in the <span class="file">fuel/application/config/custom_fields.php</span> file.
  *
  * <p class="important">Additional information about <a href="[user_guide_url]general/forms">creating forms using Form_builder can be found in the General Topics area</a>.
@@ -68,14 +68,14 @@ class Form_builder {
 	public $fieldset = ''; // field set name
 	public $name_array = ''; // put the form fields into an array for namespacing
 	public $name_prefix = ''; // prefix the form fields as an alternatie to an array for namespacing
-	public $class_type_prefix = 'field_type_'; // the CSS class prefix to associate with each field type 
+	public $class_type_prefix = 'field_type_'; // the CSS class prefix to associate with each field type
 	public $names_id_match = TRUE; // determines if the names and ids match if using a name_prefix or name_array
 	public $key_check = ''; // the keycheck value used for forms that create session unique session variables to prevent spamming
 	public $key_check_name = ''; // the keycheck form name used for forms that create session unique session variables to prevent spamming
 	public $tooltip_format = '<span title="{?}" class="tooltip">[?]</span>'; // tooltip formatting string
 	public $tooltip_labels = TRUE; // use tooltip labels?
-	public $single_select_mode = 'auto'; // auto will use enum if 2 or less and a single select if greater than 2. Other values are enum or select 
-	public $multi_select_mode = 'auto'; // auto will use a series of checkboxes if 5 or less and a multiple select if greater than 5. Other values are multi or checkbox 
+	public $single_select_mode = 'auto'; // auto will use enum if 2 or less and a single select if greater than 2. Other values are enum or select
+	public $multi_select_mode = 'auto'; // auto will use a series of checkboxes if 5 or less and a multiple select if greater than 5. Other values are multi or checkbox
 	public $boolean_mode = 'checkbox'; // boolean mode can be checkbox or enum (which will display radio inputs)
 	public $display_errors_func = 'display_errors'; // the function used to generate errors... usually display_errors is the name
 	public $display_errors = FALSE; // displays errors at the top of the form if TRUE
@@ -110,9 +110,9 @@ class Form_builder {
 	protected $_rendered_field_types = array(); // holds all the fields types rendered
 	protected $_is_nested = FALSE; // used to detect nested fields
 	protected $CI;
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Constructor
 	 *
@@ -121,7 +121,7 @@ class Form_builder {
 	 * @access	public
 	 * @param	array	config preferences
 	 * @return	void
-	 */	
+	 */
 	public function __construct($params = array())
 	{
 		$this->CI =& get_instance();
@@ -139,24 +139,24 @@ class Form_builder {
 	 */
 	public function initialize($params = array())
 	{
-		
+
 		// clear out any data before initializing
 		$this->reset();
 		$this->set_params($params);
-		
+
 		// setup custom fields
 		if (!empty($this->custom_fields))
 		{
 			$this->load_custom_fields($this->custom_fields);
 		}
-		
+
 		// create form object if not in initialization params
 		if (is_null($this->form))
 		{
 			$this->CI->load->library('form');
 			$this->CI->load->library('encryption');
 			$this->form = new Form();
-			
+
 			// load localization helper if not already
 			if (!function_exists('lang'))
 			{
@@ -172,7 +172,7 @@ class Form_builder {
 			}
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -204,7 +204,7 @@ class Form_builder {
 			}
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -217,7 +217,7 @@ class Form_builder {
 	{
 		$this->reset();
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -238,12 +238,12 @@ class Form_builder {
 		$this->key_check = NULL;
 		$this->key_check_name = NULL;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Set the fields for the form
-	 * 
+	 *
 	 * Check the normalize_params method for possible values
 	 *
 	 * @access	public
@@ -262,12 +262,12 @@ class Form_builder {
 			$i++;
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Set the fields for the form
-	 * 
+	 *
 	 * Check the normalize_params method for possible values
 	 *
 	 * @access	public
@@ -294,18 +294,18 @@ class Form_builder {
 			{
 				$this->_fields[$key] = $val;
 			}
-			
+
 			// set the key value
 			if (empty($this->_fields[$key]['key']))
 			{
-				$this->_fields[$key]['key'] = $key;	
+				$this->_fields[$key]['key'] = $key;
 			}
-			
+
 			if (empty($val['name']))
 			{
 				$this->_fields[$key]['name'] = $key;
 			}
-			
+
 			// set the order of the field
 			if (isset($order) AND empty($val['order']))
 			{
@@ -317,12 +317,12 @@ class Form_builder {
 			}
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Removes a field before rendering
-	 * 
+	 *
 	 * @access	public
 	 * @param	string
 	 * @return	void
@@ -344,12 +344,12 @@ class Form_builder {
 			}
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Returns the fields for the form. If a key value is passed, it will only return that one field
-	 * 
+	 *
 	 * @access	public
 	 * @param	string field key
 	 * @return	array
@@ -360,18 +360,18 @@ class Form_builder {
 		{
 			if (isset($this->_fields[$key]))
 			{
-				return $this->_fields[$key];		
+				return $this->_fields[$key];
 			}
 			return FALSE;
 		}
 		return $this->_fields;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Returns the values of the form fields. If a key value is passed, it will only return that one value
-	 * 
+	 *
 	 * @access	public
 	 * @param	string field key
 	 * @return	array
@@ -382,7 +382,7 @@ class Form_builder {
 		{
 			if (isset($this->_values[$key]))
 			{
-				return $this->_values[$key];		
+				return $this->_values[$key];
 			}
 			return FALSE;
 		}
@@ -393,7 +393,7 @@ class Form_builder {
 
 	/**
 	 * Sets the value attribute for the fields of the form
-	 * 
+	 *
 	 * Often times this is database or post data
 	 *
 	 * @access	public
@@ -422,7 +422,7 @@ class Form_builder {
 				}
 			}
 		}
-		
+
 		if (!empty($this->_fields))
 		{
 			foreach($this->_fields as $key => $val)
@@ -433,7 +433,7 @@ class Form_builder {
 					{
 						$is_checkbox = FALSE;
 					}
-					
+
 					// don't set the values of these form types'
 					else if ($val['type'] == 'submit' OR $val['type'] == 'button')
 					{
@@ -447,15 +447,15 @@ class Form_builder {
 					{
 						$this->_fields[$key]['value'] = $values[$key];
 					}
-					
+
 					if (!empty($val['type']))
 					{
 						if ($is_checkbox)
 						{
-							$this->_fields[$key]['checked'] = ((isset($this->_fields[$key]['value']) AND $values[$key] == $this->_fields[$key]['value']) OR 
-								$values[$key] === TRUE OR  
-								$values[$key] === 1 OR  
-								$values[$key] === 'y' OR  
+							$this->_fields[$key]['checked'] = ((isset($this->_fields[$key]['value']) AND $values[$key] == $this->_fields[$key]['value']) OR
+								$values[$key] === TRUE OR
+								$values[$key] === 1 OR
+								$values[$key] === 'y' OR
 								$values[$key] === 'yes') ? TRUE : FALSE;
 						}
 					}
@@ -468,7 +468,7 @@ class Form_builder {
 
 	/**
 	 * Render the HTML output
-	 * 
+	 *
 	 * @access	public
 	 * @param	array	fields values... will overwrite anything done with the set_fields method previously
 	 * @param	string	'divs or table
@@ -487,7 +487,7 @@ class Form_builder {
 			if (empty($template))
 			{
 				$template = $this->template;
-			} 
+			}
 			return $this->render_template($template, $fields);
 		}
 		else
@@ -500,7 +500,7 @@ class Form_builder {
 
 	/**
 	 * Render the HTML output
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields values... will overwrite anything done with the set_fields method previously
 	 * @return	string
@@ -511,10 +511,10 @@ class Form_builder {
 
 		// reorder
 		$this->set_field_order();
-		
+
 		// pre process field values
 		$this->pre_process_field_values();
-		
+
 		$this->_html = $this->html_prepend;
 		$str = '';
 		$begin_str = '';
@@ -529,7 +529,7 @@ class Form_builder {
 		}
 
 		$colspan = ($this->label_layout == 'top') ? '1' : '2';
-		
+
 		$first = $this->_find_first_renderable_field();
 
 		$is_fieldset_first = FALSE;
@@ -543,11 +543,11 @@ class Form_builder {
 		}
 
 		$fieldset_on = FALSE;
-		
+
 		foreach($this->_fields as $key => $val)
 		{
 			$val = $this->normalize_params($val);
-			
+
 			if ($val['type'] == 'fieldset' OR !empty($val['fieldset']))
 			{
 				// don't close the table if it isn't opened earlier
@@ -557,7 +557,7 @@ class Form_builder {
 				}
 				$is_fieldset_first = FALSE;
 				// close any existing field sets
-				
+
 				if ($fieldset_on)
 				{
 					$fieldset_val['open'] = FALSE;
@@ -575,14 +575,14 @@ class Form_builder {
 				$str .= $this->create_fieldset($fieldset_val);
 				$str .= $this->_open_div();
 				$fieldset_on = TRUE;
-				
+
 				// continue if the fieldset is part of the field values and not the "type"
 				if (empty($val['fieldset']))
 				{
 					continue;
 				}
 			}
-			
+
 			if ($val['type'] == 'section')
 			{
 				$str .= "<div".$this->_open_row_attrs($val).'>';
@@ -594,7 +594,7 @@ class Form_builder {
 			{
 				$str .= "<div class=\"section\"><".$this->section_tag.">".$val['section']."</".$this->section_tag."></div>\n";
 			}
-			
+
 			if ($val['type'] == 'copy')
 			{
 				$str .= "<div".$this->_open_row_attrs($val).'>';
@@ -608,7 +608,7 @@ class Form_builder {
 				$str .= "<div class=\"copy\"><".$this->copy_tag.">".$val['copy']."</".$this->copy_tag."></div>\n";
 				$str .= "</div>\n";
 			}
-			
+
 			if (!empty($val['custom']))
 			{
 				$str .= "<div".$this->_open_row_attrs($val).'>';
@@ -632,7 +632,7 @@ class Form_builder {
 				}
 				else
 				{
-					$display_value = (is_array($val['value'])) ? print_r($val['value'], TRUE) : $val['value'];	
+					$display_value = (is_array($val['value'])) ? print_r($val['value'], TRUE) : $val['value'];
 				}
 
 				$str .= "<div".$this->_open_row_attrs($val).'>';
@@ -665,7 +665,7 @@ class Form_builder {
 			$str .= $this->create_fieldset($val);
 			$str .= $this->_open_div();
 		}
-		
+
 		$actions =  $this->_render_actions();
 
 		if (!empty($actions))
@@ -676,7 +676,7 @@ class Form_builder {
 
 			$str .= "</div></div>\n";
 		}
-		
+
 		if ($this->has_required AND ($this->show_required AND strtolower($this->show_required) != 'top'))
 		{
 			$str .= "<div class=\"required\">";
@@ -684,7 +684,7 @@ class Form_builder {
 			$str .= "</div>\n";
 		}
 		$str .= "</div>\n";
-		
+
 		$str = $begin_str . $str . $end_str;
 		$this->_close_form($str);
 		return $this->_html;
@@ -694,7 +694,7 @@ class Form_builder {
 
 	/**
 	 * Render the HTML output
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields values... will overwrite anything done with the set_fields method previously
 	 * @return	string
@@ -705,10 +705,10 @@ class Form_builder {
 
 		// reorder
 		$this->set_field_order();
-		
+
 		// pre process field values
 		$this->pre_process_field_values();
-		
+
 		$this->_html = $this->html_prepend;
 		$str = '';
 		$begin_str = '';
@@ -741,9 +741,9 @@ class Form_builder {
 		foreach($this->_fields as $key => $val)
 		{
 			$val = $this->normalize_params($val);
-		
+
 			if ($val['type'] == 'fieldset' OR !empty($val['fieldset']))
-			{	
+			{
 				// don't close the table if it isn't opened earlier
 				if ($is_fieldset_first == FALSE)
 				{
@@ -769,14 +769,14 @@ class Form_builder {
 				$str .= $this->create_fieldset($fieldset_val);
 				$str .= $this->_open_table();
 				$fieldset_on = TRUE;
-				
+
 				// continue if the fieldset is part of the field values and not the "type"
 				if (empty($val['fieldset']))
 				{
 					continue;
 				}
 			}
-			
+
 			if ($val['type'] == 'section')
 			{
 				$str .= "<tr".$this->_open_row_attrs($val);
@@ -788,7 +788,7 @@ class Form_builder {
 				$str .= "<tr".$this->_open_row_attrs($val);
 				$str .= ">\n\t<td colspan=\"".$colspan."\" class=\"section\"><".$this->section_tag.">".$val['section']."</".$this->section_tag."></td>\n</tr>\n";
 			}
-			
+
 			if ($val['type'] == 'copy')
 			{
 				$str .= "<tr".$this->_open_row_attrs($val);
@@ -800,7 +800,7 @@ class Form_builder {
 				$str .= "<tr".$this->_open_row_attrs($val);
 				$str .= ">\n\t<td colspan=\"".$colspan."\" class=\"copy\"><".$this->copy_tag.">".$val['copy']."</".$this->copy_tag."></td>\n</tr>\n";
 			}
-			
+
 			if (!empty($val['custom']))
 			{
 				$str .= "<tr".$this->_open_row_attrs($val);
@@ -839,9 +839,9 @@ class Form_builder {
 				}
 				else
 				{
-					$display_value = (is_array($val['value'])) ? print_r($val['value'], TRUE) : $val['value'];	
+					$display_value = (is_array($val['value'])) ? print_r($val['value'], TRUE) : $val['value'];
 				}
-				
+
 				if ($this->label_layout != 'top')
 				{
 					$str .= $val['before_label'].$this->create_label($val, FALSE).$val['after_label'];
@@ -930,9 +930,9 @@ class Form_builder {
 
 	/**
 	 * Render the HTML output using a specified template.
-	 * 
+	 *
 	 * Will provide an array of form fields that can be parsed like so {my_field}
-	 * 
+	 *
 	 * @access	public
 	 * @param	string the name of the template view file to use
 	 * @param	array fields values... will overwrite anything done with the set_fields method previously
@@ -944,10 +944,10 @@ class Form_builder {
 
 		// reorder
 		$this->set_field_order();
-		
+
 		// pre process field values
 		$this->pre_process_field_values();
-		
+
 		$this->_html = $this->html_prepend;
 
 		$errors = NULL;
@@ -959,14 +959,14 @@ class Form_builder {
 				$errors = $func();
 			}
 		}
-		
+
 		$fields = array();
 		foreach($this->_fields as $key => $field)
 		{
 			$fields[$key]['field'] = $this->create_field($field);
 			$fields[$key]['label'] = $this->create_label($field);
 		}
-		
+
 		$vars['fields'] = $fields;
 		$vars['errors'] = $errors;
 
@@ -981,7 +981,7 @@ class Form_builder {
 		{
 			$str = $this->CI->load->view($template, $vars, TRUE);
 		}
-		
+
 		if ($parse === TRUE)
 		{
 			$this->CI->load->library('parser');
@@ -1000,7 +1000,7 @@ class Form_builder {
 		}
 
 		$this->_html = $this->_close_form($str);
-		
+
 		return $this->_html;
 	}
 
@@ -1008,7 +1008,7 @@ class Form_builder {
 
 	/**
 	 * Finds the first field that is not hidden and renderable
-	 * 
+	 *
 	 * @access	protected
 	 * @return	array
 	 */
@@ -1030,7 +1030,7 @@ class Form_builder {
 
 	/**
 	 * Creates the opening div element that contains the form fields
-	 * 
+	 *
 	 * @access	protected
 	 * @return	string
 	 */
@@ -1045,7 +1045,7 @@ class Form_builder {
 
 	/**
 	 * Creates the opening table element
-	 * 
+	 *
 	 * @access	protected
 	 * @return	string
 	 */
@@ -1060,12 +1060,12 @@ class Form_builder {
 		$str .= "<tbody>\n";
 		return $str;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Creates the closing element
-	 * 
+	 *
 	 * @access	protected
 	 * @return	string
 	 */
@@ -1080,7 +1080,7 @@ class Form_builder {
 
 	/**
 	 * Creates the closing table elements
-	 * 
+	 *
 	 * @access	protected
 	 * @return	string
 	 */
@@ -1096,7 +1096,7 @@ class Form_builder {
 
 	/**
 	 * Creates the opening row TR or div with attrs
-	 * 
+	 *
 	 * @access	protected
 	 * @param	array fields parameters
 	 * @return	string
@@ -1123,7 +1123,7 @@ class Form_builder {
 
 	/**
 	 * Creates the opening field td.value or div.value with attrs
-	 * 
+	 *
 	 * @access	protected
 	 * @param	array fields parameters
 	 * @return	string
@@ -1146,9 +1146,9 @@ class Form_builder {
 	// --------------------------------------------------------------------
 	/**
 	 * Outputs the actions for the form
-	 * 
+	 *
 	 * @access	protected
-	 * @param	string	
+	 * @param	string
 	 * @return	string
 	 */
 	protected function _render_actions()
@@ -1209,18 +1209,18 @@ class Form_builder {
 		if (!empty($this->other_actions)) $str .= $this->other_actions;
 		return $str;
 	}
-	
+
 	// --------------------------------------------------------------------
 	/**
 	 * Outputs the last part of the form rendering for both a table and div
-	 * 
+	 *
 	 * @access	protected
-	 * @param	string	
+	 * @param	string
 	 * @return	string
 	 */
 	protected function _close_form($str)
 	{
-		if ($this->use_form_tag) 
+		if ($this->use_form_tag)
 		{
 			$this->_html .= $this->form->open($this->form_attrs);
 		}
@@ -1228,7 +1228,7 @@ class Form_builder {
 		{
 			$this->_html .= $this->form->fieldset_open($this->fieldset);
 		}
-		
+
 		// wrapper div to apply ID
 		$wrapper_open_str = "<div class=\"".$this->css_class."\"";
 		if (empty($this->id))
@@ -1237,9 +1237,9 @@ class Form_builder {
 		}
 		$wrapper_open_str .= ' id="'.$this->id.'"';
 		$wrapper_open_str .= ">\n";
-		
+
 		$wrapper_close_str = "</div>";
-		
+
 		// apply any CSS first
 		foreach($this->css as $css)
 		{
@@ -1247,7 +1247,7 @@ class Form_builder {
 		}
 
 		$this->_html .= $wrapper_open_str.$str.$wrapper_close_str;
-		
+
 		if (!empty($this->key_check))
 		{
 			$this->_html .= $this->create_hidden(array('name' => $this->key_check_name, 'value' => $this->key_check));
@@ -1256,23 +1256,23 @@ class Form_builder {
 		{
 			$this->_html .= $this->form->fieldset_close();
 		}
-		
+
 		if ($this->use_form_tag)
 		{
-			$this->_html .= $this->form->close('', FALSE); // we set the token above just in case form tags are turned off	
+			$this->_html .= $this->form->close('', FALSE); // we set the token above just in case form tags are turned off
 		}
 		$this->_html .= $this->_render_js();
 		$this->_html .= $this->html_append;
 
 		return $this->_html;
 	}
-	
+
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Normalize the fields so that the other methods can expect certain field attributes
-	 * 
+	 *
 	 * @access	protected
 	 * @param	array fields values... will overwrite anything done with the set_fields method previously
 	 * @return	array
@@ -1280,7 +1280,7 @@ class Form_builder {
 	protected function _default($val)
 	{
 		if (is_object($val)) $val = get_object_vars($val);
-		
+
 		$defaults = array(
 			'key' => '', // a unique identifier for the field. By default, it will be the the same as the ID. This parameter is used mostly for post processing of a field
 			'id' => '', // the ID attribute of the field. This value will be auto generated if not provided. Set to FALSE if you don't want an ID value
@@ -1295,7 +1295,7 @@ class Form_builder {
 			'required' => FALSE, // puts a required flag next to field label
 			'size' => '', // the size attribute of the field
 			'class' => '', // the CSS class attribute to associate with the field
-			'style' => '', // inline style 
+			'style' => '', // inline style
 			'value' => '', // the value of the field
 			'readonly' => '', // sets readonly attribute on field
 			'disabled' => '', // sets disabled attribute on the field
@@ -1317,9 +1317,9 @@ class Form_builder {
 			'attributes' => '', // a generic string value of attributes for the form field (e.g. 'class="myclass"')
 			'__DEFAULTS__' => TRUE // set so that we no that the array has been processed and we can check it so it won't process it again
 		);
-		
+
 		$params = array_merge($defaults, $val);
-		
+
 		if (empty($params['orig_name'])) $params['orig_name'] = $params['name']; // for labels in case the name_array is used
 		if (empty($params['key']))
 		{
@@ -1329,12 +1329,12 @@ class Form_builder {
 		{
 			$params['value'] = $params['default'];
 		}
-		
+
 		if (!isset($params['label_colons']))
 		{
 			$params['label_colons'] = $this->label_colons;
 		}
-		
+
 		if (!empty($val['name']))
 		{
 			if ((is_array($this->readonly) AND in_array($val['name'], $this->readonly)) OR  (is_string($this->readonly) AND strtolower($this->readonly) == 'all'))
@@ -1389,10 +1389,10 @@ class Form_builder {
 				}
 				else
 				{
-					$params['name'] = $params['orig_name'];				
+					$params['name'] = $params['orig_name'];
 				}
 			}
-			
+
 			if (in_array($params['orig_name'], $this->hidden) AND !in_array($params['name'], $this->hidden)) $this->hidden[] = $params['name'];
 		}
 
@@ -1419,14 +1419,14 @@ class Form_builder {
 				$params['display_label'] = FALSE;
 			}
 		}
-		
+
 		// fix common errors
-		if (!empty($params['maxlength']) AND empty($params['max_length'])) 
+		if (!empty($params['maxlength']) AND empty($params['max_length']))
 		{
 			$params['max_length'] = $params['maxlength'];
 			unset($params['maxlength']);
 		}
-		
+
 		// take out javascript so we execute it only once per render
 		if (!empty($params['js']))
 		{
@@ -1438,13 +1438,13 @@ class Form_builder {
 		{
 			$this->add_css($params['css']);
 		}
-		
+
 		// says whether this field can represent other field types
 		if (!empty($params['represents']))
 		{
 			$this->representatives[$params['type']] = $params['represents'];
 		}
-		
+
 		// set the field type CSS class
 		$type = (!empty($params['type'])) ? $params['type'] : 'text';
 		$field_class = $this->class_type_prefix.$type;
@@ -1458,7 +1458,7 @@ class Form_builder {
 
 	/**
 	 * Returns the id for a form
-	 * 
+	 *
 	 * @access	public
 	 * @return	string
 	 */
@@ -1470,12 +1470,12 @@ class Form_builder {
 		}
 		return $this->id;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Get the default values for any field
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields values... will overwrite anything done with the set_fields method previously
 	 * @return	array
@@ -1495,7 +1495,7 @@ class Form_builder {
 
 		// set up defaults
 		$params = array_merge($defaults, $val);
-		
+
 		return $params;
 	}
 
@@ -1503,7 +1503,7 @@ class Form_builder {
 
 	/**
 	 * Renders the custom field
-	 * 
+	 *
 	 * @access	protected
 	 * @param	array fields values... will overwrite anything done with the set_fields method previously
 	 * @return	array
@@ -1520,7 +1520,7 @@ class Form_builder {
 				// give custom fields a reference to the current object
 				$params['instance'] =& $this;
 				$this->_rendering = TRUE;
-				
+
 				// take out CSS so we execute it only once per render
 				if (!empty($params['css']))
 				{
@@ -1544,7 +1544,7 @@ class Form_builder {
 				{
 					$this->add_js($func->js, $params['type']);
 				}
-				
+
 				$field = $func->render($params);
 			}
 			else if (is_callable($func))
@@ -1557,7 +1557,7 @@ class Form_builder {
 		{
 			$field = $params;
 		}
-		
+
 		$this->_rendering = FALSE;
 		return $field;
 	}
@@ -1581,9 +1581,9 @@ class Form_builder {
 
 	/**
 	 * Looks at the field type attribute and determines which form field to render
-	 * 
+	 *
 	 * IMPORTANT! You probably shouldn't call this method from within a custom field type because it may create an infinite loop!
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @param	boolean should the normalization be ran again?
@@ -1604,7 +1604,7 @@ class Form_builder {
 			foreach($this->representatives as $key => $val)
 			{
 				$matched = FALSE;
-				
+
 				// if the representative is an associative array with keys being parameters to match (e.g. type and name), then we loop through those parameters to find a match
 				if (is_array($val) AND is_string(key($val)))
 				{
@@ -1617,19 +1617,19 @@ class Form_builder {
 						}
 					}
 				}
-				
+
 				// if the representative is an array and the param type is in that array then we are a match
 				else if (is_array($val) AND in_array($params['type'], $val))
 				{
 					$matched = TRUE;
 				}
-				
+
 				// if the representative is a string, then we do a regex to see if we are a match
 				else if (is_string($val) AND preg_match('#'.$val.'#', $params['type']))
 				{
 					$matched = TRUE;
 				}
-				
+
 				// if we matched,then set the param type to it's representative and we break the loop and continue on
 				if ($matched)
 				{
@@ -1638,9 +1638,9 @@ class Form_builder {
 				}
 			}
 		}
-		
+
 		$str = $this->_render_custom_field($params);
-		
+
 		if (!$str)
 		{
 			switch($params['type'])
@@ -1652,7 +1652,7 @@ class Form_builder {
 					$func = (isset($params['func'])) ? $params['func'] : function($params) { return (isset($params["value"])) ? $params["value"] : "" ; };
 					$str = $this->create_custom($func, $params);
 					break;
-				default : 
+				default :
 					$method = 'create_'.$params['type'];
 					if (method_exists($this, $method) AND $params['type'] != 'field')
 					{
@@ -1670,13 +1670,13 @@ class Form_builder {
 		$rendered_type = (!empty($matched)) ? $key : $params['type'];
 		$this->_rendered_field_types[$rendered_type] = $rendered_type;
 		// $this->_rendered_field_types[$params['type']] = $params['type'];
-		
-		// add before/after html 
+
+		// add before/after html
 		$str = $params['before_html'].$str.$params['after_html'];
 		return $str;
-		
+
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -1684,7 +1684,7 @@ class Form_builder {
 	 *
 	 * By default, if no label value is given, the method will generate one
 	 * based on the name of the field
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @param	boolean should the label be displayed?
@@ -1696,12 +1696,12 @@ class Form_builder {
 		{
 			$params = array('label' => $params);
 		}
-		
+
 		$params = $this->normalize_params($params);
-		
+
 		$str = '';
 		if (isset($params['display_label']) AND $params['display_label'] === FALSE) return $str;
-		
+
 		if (empty($params['label']))
 		{
 			if ($lang = $this->label_lang($params['orig_name']))
@@ -1711,14 +1711,14 @@ class Form_builder {
 			else
 			{
 				$params['label'] = ucfirst(str_replace('_', ' ', $params['orig_name']));
-				
+
 			}
 			$label_words = explode(' ', $params['label']);
 			if (in_array(strtolower($label_words[0]), $this->question_keys))
 			{
 				$params['label'] .= '?';
 			}
-			
+
 		}
 		$mode = (!empty($params['mode'])) ? $params['mode'] : $this->single_select_mode;
 
@@ -1742,7 +1742,7 @@ class Form_builder {
 			{
 				$id_name = $params['orig_name'];
 			}
-			
+
 			$class = '';
 			if (isset($params['label_class']) AND !empty($params['label_class']))
 			{
@@ -1754,7 +1754,7 @@ class Form_builder {
 		if ($this->tooltip_labels)
 		{
 			$str .= $this->create_tooltip($params);
-		} 
+		}
 		else
 		{
 			$str .= $params['label'];
@@ -1772,8 +1772,8 @@ class Form_builder {
 		}
 		return $str;
 	}
-	
-	
+
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -1786,7 +1786,7 @@ class Form_builder {
 	public function create_text($params)
 	{
 		$params = $this->normalize_params($params);
-		
+
 		if (empty($params['size']))
 		{
 			if (!empty($params['max_length']))
@@ -1802,13 +1802,13 @@ class Form_builder {
 		{
 			$size = $params['size'];
 		}
-		
+
 		$attrs = array(
 			'id' => $params['id'],
-			'class' => $params['class'], 
-			'maxlength' => $params['max_length'], 
-			'size' => $size, 
-			'readonly' => $params['readonly'], 
+			'class' => $params['class'],
+			'maxlength' => $params['max_length'],
+			'size' => $size,
+			'readonly' => $params['readonly'],
 			'autocomplete' => (!empty($params['autocomplete']) ? $params['autocomplete'] : NULL),
 			'placeholder' => (!empty($params['placeholder']) ? $params['placeholder'] : NULL),
 			'required' => (!empty($params['required']) ? TRUE : NULL),
@@ -1819,7 +1819,7 @@ class Form_builder {
 			'disabled' => $params['disabled'],
 			'pattern' => (!empty($params['pattern']) ? $params['pattern'] : NULL),
 		);
-		
+
 		if (isset($params['attrs']))
 		{
 			$attrs = array_merge($attrs, $params['attrs']);
@@ -1858,13 +1858,13 @@ class Form_builder {
 			'first_option' => '',
 			'disabled_options' => array(),
 		);
-		
+
 		$params = $this->normalize_params($params, $defaults);
-		
+
 		$attrs = array(
 			'id' => $params['id'],
-			'class' => $params['class'], 
-			'readonly' => $params['readonly'], 
+			'class' => $params['class'],
+			'readonly' => $params['readonly'],
 			'disabled' => $params['disabled'],
 			'required' => (!empty($params['required']) ? TRUE : NULL),
 			'data' => $params['data'],
@@ -1880,7 +1880,7 @@ class Form_builder {
 			$attrs['multiple'] = 'multiple';
 			$name = $params['name'].'[]';
 		}
-		
+
 		if (!empty($params['options']) AND !empty($params['equalize_key_value']) AND is_array($params['options']))
 		{
 			$options = array_values($params['options']);
@@ -1889,7 +1889,7 @@ class Form_builder {
 		}
 		return $this->form->select($name, $params['options'], $params['value'], $attrs, $params['first_option'], $params['disabled_options']);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -1910,7 +1910,7 @@ class Form_builder {
 		$attrs = array(
 			'id' => $params['id'],
 			'class' => $params['class'],
-			'readonly' => $params['readonly'], 
+			'readonly' => $params['readonly'],
 			'disabled' => $params['disabled'],
 			'data' => $params['data'],
 			'style' => $params['style'],
@@ -1929,7 +1929,7 @@ class Form_builder {
 		$str .= $this->form->checkbox($params['name'], $params['value'], $attrs);
 		return $str;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -1950,7 +1950,7 @@ class Form_builder {
 		$attrs = array(
 			'id' => $params['id'],
 			'class' => $params['class'],
-			'readonly' => $params['readonly'], 
+			'readonly' => $params['readonly'],
 			'disabled' => $params['disabled'],
 			'data' => $params['data'],
 			'style' => $params['style'],
@@ -1984,10 +1984,10 @@ class Form_builder {
 		$params = $this->normalize_params($params);
 		$attrs = array(
 			'id' => $params['id'],
-			'class' => $params['class'], 
-			'rows' => (!empty($params['rows'])) ? $params['rows'] : $this->textarea_rows, 
-			'cols' => (!empty($params['cols'])) ? $params['cols'] : $this->textarea_cols, 
-			'readonly' => $params['readonly'], 
+			'class' => $params['class'],
+			'rows' => (!empty($params['rows'])) ? $params['rows'] : $this->textarea_rows,
+			'cols' => (!empty($params['cols'])) ? $params['cols'] : $this->textarea_cols,
+			'readonly' => $params['readonly'],
 			'autocomplete' => (!empty($params['autocomplete']) ? $params['autocomplete'] : NULL),
 			'placeholder' => (!empty($params['placeholder']) ? $params['placeholder'] : NULL),
 			'required' => (!empty($params['required']) ? TRUE : NULL),
@@ -2000,7 +2000,7 @@ class Form_builder {
 		);
 		return $this->form->textarea($params['name'], $params['value'], $attrs);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2013,7 +2013,7 @@ class Form_builder {
 	public function create_hidden($params)
 	{
 		$params = $this->normalize_params($params);
-		
+
 		// need to do check here because hidden is used for key_check
 		$attrs = array(
 			'id' => $params['id'],
@@ -2037,8 +2037,8 @@ class Form_builder {
 		$params = $this->normalize_params($params);
 		$attrs = array(
 			'id' => $params['id'],
-			'class' => $params['class'], 
-			'readonly' => $params['readonly'], 
+			'class' => $params['class'],
+			'readonly' => $params['readonly'],
 			'disabled' => $params['disabled'],
 			'data' => $params['data'],
 			'style' => $params['style'],
@@ -2062,8 +2062,8 @@ class Form_builder {
 		$params = $this->normalize_params($params);
 		$attrs = array(
 			'id' => $params['id'],
-			'class' => $params['class'], 
-			'readonly' => $params['readonly'], 
+			'class' => $params['class'],
+			'readonly' => $params['readonly'],
 			'disabled' => $params['disabled'],
 			'data' => $params['data'],
 			'style' => $params['style'],
@@ -2081,7 +2081,7 @@ class Form_builder {
 	 *
 	 * If set to auto and their are less than 2 options, then it will render
 	 * radio inputs. Otherwise it will render a select input
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @return	string
@@ -2100,7 +2100,7 @@ class Form_builder {
 		);
 
 		$params = $this->normalize_params($params, $defaults);
-		
+
 		$i = 0;
 		$str = '';
 		$mode = (!empty($params['mode'])) ? $params['mode'] : $this->single_select_mode;
@@ -2115,7 +2115,7 @@ class Form_builder {
 				$str .= '<'.$params['wrapper_tag'].' class="'.$params['wrapper_class'].'">';
 				$attrs = array(
 					'class' => $params['class'],
-					'readonly' => $params['readonly'], 
+					'readonly' => $params['readonly'],
 					'disabled' => $params['disabled'],
 					'style' => $params['style'],
 					'tabindex' => ((is_array($params['tabindex']) AND isset($params['tabindex'][$i])) ? $params['tabindex'][$i] : NULL),
@@ -2144,7 +2144,7 @@ class Form_builder {
 				if (!empty($params['enum_params']) AND is_array($params['enum_params'])) {
 					$enum_params = array_merge($enum_params, $params['enum_params']);
 				}
-				
+
 				$str .= ' '.$this->create_label($enum_params);
 				$str .= $params['spacer'];
 				$str .= '</'.$params['wrapper_tag'].'>';
@@ -2161,7 +2161,7 @@ class Form_builder {
 		}
 		return $str;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2183,7 +2183,7 @@ class Form_builder {
 		);
 
 		$params = $this->normalize_params($params, $defaults);
-		
+
 		$str = '';
 		$mode = (!empty($params['mode'])) ? $params['mode'] : $this->multi_select_mode;
 		if ($mode == 'checkbox' OR ($mode == 'auto' AND (isset($params['options']) AND count($params['options']) <= 5)))
@@ -2192,7 +2192,7 @@ class Form_builder {
 
 			$params['name'] = $params['name'].'[]';
 			$i = 1;
-			
+
 			if (!empty($params['options']))
 			{
 				foreach($params['options'] as $key => $val)
@@ -2202,7 +2202,7 @@ class Form_builder {
 					$tabindex_id = $i -1;
 					$str .= '<'.$params['wrapper_tag'].' class="'.$params['wrapper_class'].'">';
 					$attrs = array(
-						'readonly' => $params['readonly'], 
+						'readonly' => $params['readonly'],
 						'disabled' => $params['disabled'],
 						'id' => Form::create_id($params['name']).$i,
 						'style' => '', // to overwrite any input width styles
@@ -2235,10 +2235,10 @@ class Form_builder {
 			$params['multiple'] = TRUE;
 			$str .= $this->create_select($params);
 		}
-		
+
 		return $str;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2261,18 +2261,18 @@ class Form_builder {
 		);
 
 		$params = $this->normalize_params($params, $defaults);
-	
+
 		$attrs = array(
 			'id' => $params['id'],
-			'class' => $params['class'], 
-			'readonly' => $params['readonly'], 
+			'class' => $params['class'],
+			'readonly' => $params['readonly'],
 			'disabled' => $params['disabled'],
 			'required' => (!empty($params['required']) ? TRUE : NULL),
 			'accept' => !is_array($params['accept']) ? str_replace('|', ', .', str_replace('|.', '|', $params['accept'])) : $params['accept'],
 			'tabindex' => $params['tabindex'],
 			'attributes' => $params['attributes'],
 		);
-		
+
 		if (is_array($this->form_attrs))
 		{
 			$this->form_attrs['enctype'] = 'multipart/form-data';
@@ -2281,7 +2281,7 @@ class Form_builder {
 		{
 			$this->form_attrs .= ' enctype="multipart/form-data"';
 		}
-		
+
 		$file = $this->form->file($params['name'], $attrs);
 		if (isset($params['overwrite']))
 		{
@@ -2320,15 +2320,15 @@ class Form_builder {
 		}
 		return $file;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Creates the date input for the form
 	 *
-	 * Adds the datepicker so that you can use jquery to 
+	 * Adds the datepicker so that you can use jquery to
 	 * add the datepicker jquery plugin
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @return	string
@@ -2346,23 +2346,23 @@ class Form_builder {
 				$params['date_format'] = $this->date_format;
 			}
 		}
-		
+
 		$defaults = array(
-			'date_format' => '', 
-			'region' => '', 
+			'date_format' => '',
+			'region' => '',
 			'min_date' => date($params['date_format'], strtotime('01/01/2000')),
 			'max_date' =>  date($params['date_format'], strtotime('12/31/2030')),
-			'first_day' => 0, 
+			'first_day' => 0,
 			'show_on' => 'button',
 			'button_image' => NULL,
 		);
 
 		$params = $this->normalize_params($params, $defaults);
-		
-		
+
+
 		// check date to format it
 		if ((!empty($params['value']) AND (int) $params['value'] != 0)
-			&& (preg_match("#([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})#", $params['value'], $regs1) 
+			&& (preg_match("#([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})#", $params['value'], $regs1)
 			|| preg_match("#([0-9]{1,2})[/\-\.]([0-9]{1,2})[/\-\.]([0-9]{4})#", $params['value'], $regs2)))
 		{
 			$params['value'] = date($params['date_format'], strtotime($params['value']));
@@ -2371,11 +2371,11 @@ class Form_builder {
 		}
 		$params['maxlength'] = 10;
 		$params['size'] = 12; // extra room for cramped styling
-		
+
 		// create the right format for placeholder display based on the date format
 		$date_arr = preg_split('#-|/|\.#', $params['date_format']);
 		$format = '';
-		
+
 		// order counts here!
 		$format = str_replace('m', 'mm', $params['date_format']);
 		$format = str_replace('n', 'm', $format);
@@ -2383,7 +2383,7 @@ class Form_builder {
 		$format = str_replace('j', 'd', $format);
 		$format = str_replace('y', 'yy', $format);
 		$format = str_replace('Y', 'yyyy', $format);
-		
+
 		// set data parameters to be used by javascript
 		$params['data'] = array();
 		if (empty($params['region']))
@@ -2400,13 +2400,13 @@ class Form_builder {
 		$params['data']['show_on'] = $params['show_on'];
 		if (!empty($params['button_image']))
 		{
-			$params['data']['button_image'] = $params['button_image'];	
+			$params['data']['button_image'] = $params['button_image'];
 		}
 		$params['placeholder'] = $format;
 		$params['type'] = 'text';
 		return $this->create_text($params);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2477,7 +2477,7 @@ class Form_builder {
 
 		$process_key = $params[$key];
 
-		
+
 		// needed for post processing
 		if (!empty($_POST) AND !isset($_POST[$params['key']]))
 		{
@@ -2497,7 +2497,7 @@ class Form_builder {
 						$ampm = (isset($val[$process_key.'_am_pm']) AND $hr AND $min) ? $val[$process_key.'_am_pm'] : "";
 						if (!empty($ampm) AND !empty($hr) AND $hr > 12)
 						{
-							if ($hr > 24) 
+							if ($hr > 24)
 							{
 								$hr = "00";
 							}
@@ -2525,7 +2525,7 @@ class Form_builder {
 					$ampm  = (isset($_POST[$process_key.'_am_pm']) AND $hr AND $min) ? $_POST[$process_key.'_am_pm'] : "";
 					if (!empty($ampm) AND !empty($hr) AND $hr > 12)
 					{
-						if ($hr > 24) 
+						if ($hr > 24)
 						{
 							$hr = "00";
 						}
@@ -2550,7 +2550,7 @@ class Form_builder {
 		}
 		return $str;
 	}
-	
+
 		// --------------------------------------------------------------------
 
 	/**
@@ -2599,7 +2599,7 @@ class Form_builder {
 							$hr   = (!empty($val[$process_key.'_hour']) AND  (int)$val[$process_key.'_hour'] > 0 AND (int)$val[$process_key.'_hour'] < 24) ? $val[$process_key.'_hour'] : "";
 							$min  = (!empty($val[$process_key.'_min']) AND is_numeric($val[$process_key.'_min']))  ? $val[$process_key.'_min'] : "00";
 							$ampm = (isset($val[$process_key.'_am_pm']) AND $hr AND $min) ? $val[$process_key.'_am_pm'] : "";
-							
+
 
 							if (is_string($val[$process_key]))
 							{
@@ -2610,7 +2610,7 @@ class Form_builder {
 
 								if (!empty($ampm) AND !empty($hr) AND $hr > 12)
 								{
-									if ($hr > 24) 
+									if ($hr > 24)
 									{
 										$hr = "00";
 									}
@@ -2628,7 +2628,7 @@ class Form_builder {
 								}
 								if (!empty($dateval))
 								{
-									$value[$key][$process_key] = $dateval;	
+									$value[$key][$process_key] = $dateval;
 								}
 							}
 							else if (is_array($val[$process_key]) AND isset($val[$process_key][$params['name']]))
@@ -2640,7 +2640,7 @@ class Form_builder {
 
 								if (!empty($ampm) AND !empty($hr) AND $hr > 12)
 								{
-									if ($hr > 24) 
+									if ($hr > 24)
 									{
 										$hr = "12";
 										$ampm = "am";
@@ -2664,7 +2664,7 @@ class Form_builder {
 								}
 								if (!empty($dateval))
 								{
-									$value[$key][$process_key][$params['name']] = $dateval;	
+									$value[$key][$process_key][$params['name']] = $dateval;
 								}
 							}
 						}
@@ -2681,7 +2681,7 @@ class Form_builder {
 
 					if (!empty($ampm) AND !empty($hr) AND $hr > 12)
 					{
-						if ($hr > 24) 
+						if ($hr > 24)
 						{
 							$hr = "12";
 							$ampm = "am";
@@ -2718,7 +2718,7 @@ class Form_builder {
 		$this->set_post_process($params['key'], $func);
 		return $str;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2739,11 +2739,11 @@ class Form_builder {
 		);
 
 		$params = $this->normalize_params($params, $defaults);
-	
+
 		$attrs = array(
 			'id' => $params['id'],
-			'class' => $params['class'], 
-			'readonly' => $params['readonly'], 
+			'class' => $params['class'],
+			'readonly' => $params['readonly'],
 			'disabled' => $params['disabled'],
 			'required' => (!empty($params['required']) ? TRUE : NULL),
 			'min' => (isset($params['min']) ? $params['min'] : NULL),
@@ -2763,7 +2763,7 @@ class Form_builder {
 		$params['type'] = 'number';
 		$decimal = (!empty($params['decimal'])) ? (int) $params['decimal'] : 0;
 		$negative = (!empty($params['negative'])) ? 1 : 0;
-		
+
 		// invalid HTML
 		// if (empty($params['size']))
 		// {
@@ -2782,7 +2782,7 @@ class Form_builder {
 			);
 		return $this->form->input($params['name'], $params['type'], $params['value'], $attrs);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2799,11 +2799,11 @@ class Form_builder {
 		if (strpos($params['attrs']['attributes'], 'class=') === FALSE)
 		{
 			$email_class = 'email';
-			$params['class'] = (!empty($params['class'])) ? $params['class'].' '.$email_class : $email_class;	
+			$params['class'] = (!empty($params['class'])) ? $params['class'].' '.$email_class : $email_class;
 		}
 		return $this->create_text($params);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2820,7 +2820,7 @@ class Form_builder {
 		if (strpos($params['attrs']['attributes'], 'class=') === FALSE)
 		{
 			$email_class = 'phone';
-			$params['class'] = (!empty($params['class'])) ? $params['class'].' '.$email_class : $email_class;	
+			$params['class'] = (!empty($params['class'])) ? $params['class'].' '.$email_class : $email_class;
 		}
 		return $this->create_text($params);
 	}
@@ -2848,7 +2848,7 @@ class Form_builder {
 		}
 		return $this->create_text($params);
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2856,7 +2856,7 @@ class Form_builder {
 	 *
 	 * This method check the boolean_mode class attribute to determine
 	 * what type of field, either checkbox or radio, to render
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @return	string
@@ -2864,7 +2864,7 @@ class Form_builder {
 	public function create_boolean($params)
 	{
 		$mode = (!empty($params['mode'])) ? $params['mode'] : $this->boolean_mode;
-		
+
 		if ($mode == 'checkbox')
 		{
 			return $this->create_checkbox($params);
@@ -2874,7 +2874,7 @@ class Form_builder {
 			return $this->create_enum($params);
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2882,7 +2882,7 @@ class Form_builder {
 	 *
 	 * First checks the value, then the label, then the name attribute
 	 * then wraps it in the section_tag
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @return	string
@@ -2905,7 +2905,7 @@ class Form_builder {
 	 *
 	 * First checks the value, then the label, then the name attribute
 	 * then wraps it in the copy_tag
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @return	string
@@ -2927,7 +2927,7 @@ class Form_builder {
 	 *
 	 * Creates a tooltip on the label. Uses the tooltip_format class attribute
 	 * to determine how to render tooltip
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @return	string
@@ -2957,7 +2957,7 @@ class Form_builder {
 		}
 		return $str;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2973,7 +2973,7 @@ class Form_builder {
 		$str = $params['value']."\n".$this->create_hidden($params);
 		return $str;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2987,7 +2987,7 @@ class Form_builder {
 	{
 		$params = $this->normalize_params($params);
 		$attrs = array(
-			'class' => $params['class'], 
+			'class' => $params['class'],
 		);
 		$str = '';
 		$legend = $this->simple_field_value($params);
@@ -3018,7 +3018,7 @@ class Form_builder {
 		$this->CI =& get_instance();
 		$this->CI->load->library('parser');
 		$fb_class = get_class($this);
-		
+
 		if (empty($params['fields']) OR !is_array($params['fields']))
 		{
 			return '';
@@ -3027,12 +3027,12 @@ class Form_builder {
 		{
 			$params['init'] = array();
 		}
-		
+
 		if (empty($params['value']))
 		{
 			$params['value'] = array();
 		}
-		
+
 		$form_builder = new $fb_class($params['init']);
 		$form_builder->set_fields($params['fields']);
 		$form_builder->submit_value = '';
@@ -3040,7 +3040,7 @@ class Form_builder {
 		$form_builder->reset_value = '';
 		$form_builder->other_actions = '';
 		$form_builder->required_text = '';
-		
+
 		$form_builder->name_prefix = $this->name_prefix;
 		$form_builder->name_array = $this->name_array;
 
@@ -3068,7 +3068,7 @@ class Form_builder {
 		$form = $form_builder->render();
 
 		return $form;
-		
+
 	}
 
 	// --------------------------------------------------------------------
@@ -3077,7 +3077,7 @@ class Form_builder {
 	 * Creates a custom input form field
 	 *
 	 * Calls a function and passes it the field params
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @return	string
@@ -3085,15 +3085,15 @@ class Form_builder {
 	public function create_custom($func, $params)
 	{
 		$params = $this->normalize_params($params);
-		
+
 		// give custom fields a reference to the current object
 		$params['instance'] =& $this;
-		
+
 		if (!empty($params['js']))
 		{
 			$this->add_js($params['js'], $params['type']);
 		}
-		
+
 		// render
 		return call_user_func($func, $params);
 	}
@@ -3134,7 +3134,7 @@ class Form_builder {
 			}
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -3151,7 +3151,7 @@ class Form_builder {
 		if (is_array($custom_field))
 		{
 			$this->CI =& get_instance();
-			
+
 			// must have at least a function value otherwise you get nada
 			if (empty($custom_field['function']))
 			{
@@ -3179,7 +3179,7 @@ class Form_builder {
 					$func = $custom_field['function'];
 				}
 			}
-			
+
 			// if class parameter is set, then it will assume it's a library'
 			else if (!empty($custom_field['class']))
 			{
@@ -3199,9 +3199,9 @@ class Form_builder {
 				$library = end($library_parts);
 				$func = array($this->CI->$library, $custom_field['function']);
 			}
-			
+
 			// if no class parameter is set, then it will assume it's a helper'
-			else 
+			else
 			{
 				if (!is_callable($custom_field['function']))
 				{
@@ -3211,7 +3211,7 @@ class Form_builder {
 						$helper = current($custom_field['function']);
 						$this->CI->load->module_library($module, $helper, $custom_field);
 					}
-					else 
+					else
 					{
 						$this->CI->load->helper($custom_field['function'], $custom_field);
 					}
@@ -3220,7 +3220,7 @@ class Form_builder {
 			}
 			$params = $custom_field;
 		}
-		
+
 		// if it's a simple function, then we'll just use this for rendering
 		else if (is_callable($custom_field))
 		{
@@ -3230,21 +3230,21 @@ class Form_builder {
 		{
 			return FALSE;
 		}
-		
+
 		$params['render_func'] = $func;
-		
+
 		$field = new Form_builder_field($params);
-		
+
 		$this->custom_fields[$key] = $field;
-		
-		
+
+
 		// says whether this field can represent other field types
 		if (!empty($params['represents']))
 		{
 			$this->representatives[$key] = $params['represents'];
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -3252,7 +3252,7 @@ class Form_builder {
 	 *
 	 * The validator object is used to determine if the fields have been
 	 * filled out properly and will display any errors at the top of the form
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @return	void
@@ -3269,7 +3269,7 @@ class Form_builder {
 	 *
 	 * The validator object is used to determine if the fields have been
 	 * filled out properly and will display any errors at the top of the form
-	 * 
+	 *
 	 * @access	public
 	 * @return	object
 	 */
@@ -3277,14 +3277,14 @@ class Form_builder {
 	{
 		return $this->form->validator;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Handles validation for the form builder fields
 	 *
 	 * If valid it will return TRUE. If not, it will return an array of errors
-	 * 
+	 *
 	 * @access	public
 	 * @param	object the validator object to use for validating (optional)
 	 * @return	mixed
@@ -3323,7 +3323,7 @@ class Form_builder {
 					}
 				}
 				// add required validation if it is set outside of the validation
-				if (array_key_exists('required', $params) AND $params['required'] 
+				if (array_key_exists('required', $params) AND $params['required']
 					AND ! array_key_exists('required', $field_validations)) {
 					$field_validations['required'] = '';
 				}
@@ -3364,7 +3364,7 @@ class Form_builder {
 			}
 			else
 			{
-				return $validator->get_errors();	
+				return $validator->get_errors();
 			}
 		}
 	}
@@ -3375,7 +3375,7 @@ class Form_builder {
 	 * Sets the order of the fields
 	 *
 	 * An array value with the keys as the order for the field
-	 * 
+	 *
 	 * @access	public
 	 * @param	array fields parameters
 	 * @return	string
@@ -3399,16 +3399,16 @@ class Form_builder {
 			}
 		}
 		$this->_fields = $this->_fields_sorter($this->_fields, 'order');
-		
+
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Appends HTML to the form
 	 *
 	 * Used to append HTML after the form... good for Javascript files
-	 * 
+	 *
 	 * @access	public
 	 * @param	string HTML to append
 	 * @return	void
@@ -3424,7 +3424,7 @@ class Form_builder {
 	 * Prepends HTML to the form
 	 *
 	 * Used to prepend HTML before the form... good for Javascript files
-	 * 
+	 *
 	 * @access	public
 	 * @param	string HTML to prepend
 	 * @return	void
@@ -3485,7 +3485,7 @@ class Form_builder {
 				$this->set_pre_process($key, $field['pre_process']);
 			}
 		}
-		
+
 		if (is_array($this->_pre_process))
 		{
 			foreach($this->_pre_process as $key => $functions)
@@ -3521,17 +3521,17 @@ class Form_builder {
 		$this->no_css_js = FALSE; // then set it back to preven any issues with further use
 
 		if (empty($posted)) $posted = $_POST;
-		
+
 		// combine field post processes with those already set
 		foreach($this->_fields as $key => $field)
 		{
 			if (!empty($field['post_process']) AND isset($posted[$key]))
 			{
 				$this->set_post_process($key, $field['post_process']);
-		
+
 			}
 		}
-		
+
 		if (is_array($this->_post_process))
 		{
 			foreach($this->_post_process as $key => $functions)
@@ -3593,13 +3593,13 @@ class Form_builder {
 		{
 			$func = $process;
 		}
-		
+
 		// shorthand if the function name is remove or clear, then we return an empty string
 		if ($func == 'remove' OR $func == 'clear')
 		{
 			$func = function($value){ return ""; };
 		}
-		
+
 		return array('func' => $func, 'params' => $params);
 	}
 
@@ -3607,7 +3607,7 @@ class Form_builder {
 
 	/**
 	 * Sets a representative for a field type.
-	 * 
+	 *
 	 * This allows for one field type to represent several field types (e.g. number = int, bigint, smallint, tinyint,...etc)
 	 *
 	 * @access	public
@@ -3624,7 +3624,7 @@ class Form_builder {
 
 	/**
 	 * Removes a representative for a field type.
-	 * 
+	 *
 	 * This removes a representative globally for all fields
 	 *
 	 * @access	public
@@ -3640,7 +3640,7 @@ class Form_builder {
 
 	/**
 	 * Adds a js file to be rendered with the form a representative for a field type.
-	 * 
+	 *
 	 * @access	public
 	 * @param	string A js file name
 	 * @param	mixed A key value to associate with the JS file (so it only gets loaded once). Or an associative array of keyed javascript file names
@@ -3687,7 +3687,7 @@ class Form_builder {
 
 	/**
 	 * Removes a javascript file
-	 * 
+	 *
 	 * @access	public
 	 * @param	string A js file name or an array of file names
 	 * @return	void
@@ -3736,7 +3736,7 @@ class Form_builder {
 
 	/**
 	 * Adds a CSS file to be rendered with the form a representative for a field type.
-	 * 
+	 *
 	 * @access	public
 	 * @param	string A CSS file name
 	 * @param	mixed A key value to associate with the CSS file (so it only gets loaded once). Or an associative array of keyed CSS file names
@@ -3748,7 +3748,7 @@ class Form_builder {
 		{
 			$this->css = array();
 		}
-		
+
 		if (is_array($key))
 		{
 			foreach($key as $k => $c)
@@ -3795,7 +3795,7 @@ class Form_builder {
 
 	/**
 	 * Removes a css file
-	 * 
+	 *
 	 * @access	public
 	 * @param	string A css file name or an array of file names
 	 * @return	void
@@ -3833,7 +3833,7 @@ class Form_builder {
 	 */
 	public function options_from_model($model, $params = array())
 	{
-		// can't think of a good reason to grab options when post processing 
+		// can't think of a good reason to grab options when post processing
 		// so will just return an empty array to speed things up on post processing
 		if ($this->is_post_processing)
 		{
@@ -3856,12 +3856,12 @@ class Form_builder {
 				$model = $val;
 			}
 		}
-		
+
 		if (!isset($method))
 		{
 			$method = 'options_list'; // default method'
 		}
-		
+
 		if (substr($model, strlen($model) - 6) != '_model')
 		{
 			$model = $model.'_model';
@@ -3881,7 +3881,7 @@ class Form_builder {
 		$options = call_user_func_array($func, $params);
 		return $options;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -3919,7 +3919,7 @@ class Form_builder {
 
 	/**
 	 * Helper method that returns the language key value if it exist, otherwise it returns FALSE
-	 * 
+	 *
 	 * @access	protected
 	 * @param	string
 	 * @return	string
@@ -3932,13 +3932,13 @@ class Form_builder {
 		}
 		return FALSE;
 	}
-	
+
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Returns a boolean value as to whether the rendered form_builder instance is nested or not
-	 * 
+	 *
 	 * @access	protected
 	 * @return	boolean
 	 */
@@ -3953,7 +3953,7 @@ class Form_builder {
 	 * Sorts the fields for the form
 	 *
 	 * Same as the MY_array_helper array_sorter function
-	 * 
+	 *
 	 * @access	protected
 	 * @param	array fields parameters
 	 * @return	string
@@ -3968,14 +3968,14 @@ class Form_builder {
 				if (!$nat_sort)
 				{
 					($order=='asc') ? asort($temp) : arsort($temp);
-				} 
+				}
 				else
 				{
 					($case_sensitive) ? natsort($temp) : natcasesort($temp);
 				}
 				if ($order != 'asc') $temp = array_reverse($temp,TRUE);
 			}
-			
+
 			foreach(array_keys($temp) as $key)
 			{
 				(is_numeric($key)) ? $sorted[] = $array[$key] : $sorted[$key] = $array[$key];
@@ -3984,12 +3984,12 @@ class Form_builder {
 		}
 		return $array;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
 	 * Renders the javascript for fields (only once)
-	 * 
+	 *
 	 * @access	protected
 	 * @return	string
 	 */
@@ -4009,10 +4009,10 @@ class Form_builder {
 		$str_files = '';
 		$js_exec = array();
 		$script_regex = '#^<script(.+)src=#U';
-		
+
 		$orig_ignore = $this->CI->asset->ignore_if_loaded;
 		$this->CI->asset->ignore_if_loaded = TRUE;
-		
+
 		$orig_asset_output = $this->CI->asset->assets_output;
 		$this->CI->asset->assets_output = FALSE;
 		$add_js = array();
@@ -4027,13 +4027,13 @@ class Form_builder {
 				{
 					$str_files .= $this->_apply_asset_files('js', $js);
 				}
-			
+
 				// if it starts with a script tag and DOES have a src attribute
 				else if (strpos($js, '<script') !== FALSE)
 				{
 					$str_inline .= $js;
 				}
-			
+
 				// else it will simply call a function if it exists
 				else
 				{
@@ -4044,7 +4044,7 @@ class Form_builder {
 			}
 		}
 
-		
+
 
 		// loop through custom fields to generate any js function calls
 		foreach($this->_rendered_field_types as $type => $cs_field)
@@ -4053,7 +4053,7 @@ class Form_builder {
 			{
 				$cs_field = $this->custom_fields[$type];
 
-				// check if the field type has a js function to call 
+				// check if the field type has a js function to call
 				if (!empty($cs_field->js_function))
 				{
 					$js_options = (!empty($cs_field->js_params)) ? $cs_field->js_params : NULL;
@@ -4062,45 +4062,51 @@ class Form_builder {
 				}
 			}
 		}
-		
+
 		if (!empty($js_exec) OR !empty($str_files) OR !empty($str_inline) OR !empty($str))
 		{
 			// change ignore value on asset back to original
 			$this->CI->asset->ignore_if_loaded = $orig_ignore;
 			$this->CI->asset->assets_output = $orig_asset_output;
-			
+
 			// sort the javascript
 			$js_exec = $this->_fields_sorter($js_exec, 'order');
-			
+
 			$out = $str_files;
 			$out .= $str_inline;
 			$out .= "<script type=\"text/javascript\">\n";
+         $out .= '/* Page formBuilder() initialisation */';
+         $out .= "$(document).ready(function() {\n";
 			$out .= $str."\n";
 
-			if (!empty($js_exec))
-			{
-				$out .= 'if (jQuery){ jQuery(function(){';
-				$out .= 'if (jQuery.fn.formBuilder) {';
-				$out .= 'if (typeof(window[\'formBuilderFuncs\']) == "undefined") { window[\'formBuilderFuncs\'] = {}; };';
-				$out .= 'window[\'formBuilderFuncs\'] = jQuery.extend(window[\'formBuilderFuncs\'], '.json_encode($js_exec).');';
-				$out .= 'jQuery("#'.$this->id.'").formBuilder(window[\'formBuilderFuncs\']);';
-				if ($this->auto_execute_js) $out .= 'jQuery("#'.$this->id.'").formBuilder().initialize();';
-				$out .= '}';
+			if (!empty($js_exec)) {
+            $out .= "if (jQuery){ jQuery(function(){";
+            $out .= "if (typeof jQuery.fn.formBuilder !== 'undefined') {";
+            $out .= "if (typeof(window['formBuilderFuncs']) == 'undefined') { window['formBuilderFuncs'] = {}; };";
+            $jse = json_encode($js_exec);
+            $out .= "window['formBuilderFuncs'] = jQuery.extend(window['formBuilderFuncs'],{$jse});";
+            $out .= "jQuery('#{$this->id}').formBuilder(window['formBuilderFuncs']);";
+            if ($this->auto_execute_js) {
+               $out .= "jQuery('#{$this->id}').formBuilder();";
+            }
+            $out .= "jQuery('#{$this->id}').formBuilder('run');";
+            $out .= "}";
 
-				$out .= '})}';
+            $out .= "})}\n";
 			}
 
+         $out .= "});\n";
 			$out .= "</script>\n";
 			return $out;
 		}
 	}
-	
+
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Applies the JS OR CSS for the fields. A variable of $css must exist for the page to render
-	 * 
+	 *
 	 * @access	protected
 	 * @param	string 	'js' OR 'css'
 	 * @param	array 	An array of js or css files. If it is an array and has a string key, then the key will be assumed to be the module in which the asset belongs
@@ -4110,7 +4116,7 @@ class Form_builder {
 	{
 
 		if (empty($this->$type) OR $this->no_css_js) return;
-		
+
 		// set as global variable to help with nested forms
 		$global_key = '__'.$type.'_files__';
 		$path_func = $type.'_path';
@@ -4180,7 +4186,7 @@ class Form_builder {
 						var attr = $(this).attr("'.$tag_attr.'");
 						if (attr){
 							attr = attr.split("?")[0];
-							assets.push(attr);	
+							assets.push(attr);
 						}
 					});
 					for(var n in files){
@@ -4207,7 +4213,7 @@ class Form_builder {
 				// var script = document.createElement("script");
 				// script.src = file;
 				// script.async = false;
-				
+
 				// // var attachElement = document.getElementsByTagName("head");
 				// // if (!attachElement.length){
 				// // 	attachElement = document.getElementsByTagName("body");
@@ -4226,16 +4232,16 @@ class Form_builder {
 				var script = document.createElement("script");
 				script.src = file;
 				script.async = false;
-				
+
 				$("head").append(script);
 
 				$.ajaxSetup({cache: currentCacheSetting});
 				';
 			}
-			$out .= '		
+			$out .= '
 						}
 					}
-				
+
 			})(jQuery);}';
 			$out .= "</script>\n";
 		}
@@ -4250,9 +4256,9 @@ class Form_builder {
 /**
  * A custom field class for Form_builder
  *
- * The Form.php class is required if a form object is not passed in the 
+ * The Form.php class is required if a form object is not passed in the
  * initialization process.
- * 
+ *
  * @package		FUEL CMS
  * @subpackage	Libraries
  * @category	Libraries
@@ -4262,7 +4268,7 @@ class Form_builder {
  */
 
 class Form_builder_field {
-	
+
 	public $type = ''; // the type value of the field (e.g. textare, enum, datetime)
 	public $render_func = array();
 	public $html = ''; // html output for form field
@@ -4274,7 +4280,7 @@ class Form_builder_field {
 	public $represents = ''; // the field types this form field will represent  (e.g. 'number'=>'bigint|smallint|tinyint|int')
 	public $css = ''; // a CSS file to load for this form field
 	public $css_class = ''; // a CSS class to automatically apply to the form field... very convenient for simply adding JS functionality to an existing field type
-	
+
 	/**
 	 * Constructor - Sets Form_builder preferences
 	 *
@@ -4305,7 +4311,7 @@ class Form_builder_field {
 		}
 
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -4322,7 +4328,7 @@ class Form_builder_field {
 		{
 			$params['class'] = $this->css_class.' '.$params['class'];
 		}
-		
+
 		if (!empty($this->render_func))
 		{
 			return call_user_func($this->render_func, $params);

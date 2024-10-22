@@ -2,7 +2,7 @@ if (typeof(window.fuel) == 'undefined'){
 	window.fuel = {};
 }
 
-if (typeof(window.fuel.fields) == 'undefined'){ 
+if (typeof(window.fuel.fields) == 'undefined'){
 
 	// create fields namespace
 	fuel.fields = {};
@@ -23,7 +23,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 	fuel.fields.getElementData = function(elem, key){
 		if (typeof(fuel.fields.elementData[elem]) != 'undefined'){
 			if (key){
-				return fuel.fields.elementData[elem][key];	
+				return fuel.fields.elementData[elem][key];
 			}
 			return fuel.fields.elementData[elem];
 		}
@@ -65,8 +65,8 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				options.buttonImage = $(this).attr('data-button_image');
 			}
 			var opts = $.extend(o, options);
-			$.datepicker.regional[o.region];	
-			
+			$.datepicker.regional[o.region];
+
 			$(this).datepicker(opts);
 		})
 	}
@@ -79,7 +79,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			comboOpts.valuesEmptyString = fuel.lang('comboselect_values_empty');
 			comboOpts.selectedEmptyString = fuel.lang('comboselect_selected_empty');
 			comboOpts.defaultSearchBoxString = fuel.lang('comboselect_filter');
-			
+
 			var $sortingElem = $(elem).parent().find('.sorting');
 			if ($sortingElem.length){
 				comboOpts.autoSort = false;
@@ -93,7 +93,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			var comboOpts = comboOptions(this);
 			$(this).supercomboselect(comboOpts);
 		});
-		
+
 		if (inline_edit !== false){
 			fuel.fields.inline_edit_field(context);
 		}
@@ -108,22 +108,22 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 		var createPreviewParams = function(elem){
 			var $elem = $(elem);
-			var q = 'module=' + escape(module) + '&field=' + escape($elem.attr('name'));
-			if ($elem.attr('data-preview')){
-				q += '&preview=' + escape($elem.attr('data-preview'));
+         var q = 'module=' + escape(module) + '&field=' + escape($elem.attr('name'));
+         if ($elem.attr('data-preview')){
+            q += '&preview=' + escape($elem.attr('data-preview'));
 			}
 			return q;
 		}
 
 		var createMarkItUp = function(elem){
-			
+
 			var $elem = $(elem);
 
 			// add custom configs
 			var editorSet = $elem.data('editor_set');
-			
-			var config = fuel.fields.getElementData($elem.attr('name'), 'editor');
-			
+
+         var config = fuel.fields.getElementData($elem.attr('name'), 'editor');
+
 			if (!config || config.length == 0 || $elem.hasClass('ckeditor_applied')){
 				if ($elem.hasClass('wysiwyg') || $elem.hasClass('ckeditor_applied')){
 					config = myMarkItUpSettings.sets['default'];
@@ -136,7 +136,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 			var config = myMarkItUpSettings.processConfig(config, editorSet);
 			$elem.not('.markItUpEditor').markItUp(config);
-			
+
 			// set the width of the preview to match the width of the textarea
 			$('.markItUpPreviewFrame', context).each(function(){
 				var width = $(this).parent().find('textarea').width();
@@ -161,7 +161,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			//window.CKEDITOR_BASEPATH = jqx_config.jsPath + 'editors/ckeditor/'; // only worked once in jqx_header.php file
 			var ckId = $(elem).attr('id');
 			var sourceButton = '<a href="#" id="' + ckId + '_viewsource" class="btn_field editor_viewsource">' + fuel.lang('btn_view_source') + '</a>';
-			
+
 			// used in cases where repeatable fields cause issues
 			if ($(elem).hasClass('ckeditor_applied') || $('#cke_' + ckId).length != 0) {
 				return;
@@ -199,49 +199,51 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				this.document.on('keyup', function(e){
 					editor.updateElement();
 				});
-				
+
 				// set processors
 				// http://docs.cksource.com/CKEditor_3.x/Howto/FCKeditor_HTML_Output
-				var writer = this.dataProcessor.writer; 
-				
+				var writer = this.dataProcessor.writer;
+
 				// The character sequence to use for every indentation step.
 				writer.indentationChars = '    ';
 
 				var dtd = CKEDITOR.dtd;
 				// Elements taken as an example are: block-level elements (div or p), list items (li, dd), and table elements (td, tbody).
 				for ( var e in CKEDITOR.tools.extend( {}, dtd.$block, dtd.$listItem, dtd.$tableContent ) )
+
+            //FoM : dataProcessor.writer.setRules remmed out. broken on latest CKEditor v4.22
 				{
-					editor.dataProcessor.writer.setRules( e, {
-						// Indicates that an element creates indentation on line breaks that it contains.
-						indent : false,
-						// Inserts a line break before a tag.
-						breakBeforeOpen : true,
-						// Inserts a line break after a tag.
-						breakAfterOpen : false,
-						// Inserts a line break before the closing tag.
-						breakBeforeClose : false,
-						// Inserts a line break after the closing tag.
-						breakAfterClose : true
-					});
+               // editor.dataProcessor.writer.setRules( e, {
+               // 	// Indicates that an element creates indentation on line breaks that it contains.
+					// 	indent : false,
+					// 	// Inserts a line break before a tag.
+					// 	breakBeforeOpen : true,
+					// 	// Inserts a line break after a tag.
+					// 	breakAfterOpen : false,
+					// 	// Inserts a line break before the closing tag.
+					// 	breakBeforeClose : false,
+					// 	// Inserts a line break after the closing tag.
+					// 	breakAfterClose : true
+					// });
 				}
 
-				for ( var e in CKEDITOR.tools.extend( {}, dtd.$list, dtd.$listItem, dtd.$tableContent ) )
-				{
-					this.dataProcessor.writer.setRules( e, {			
-						indent : true
-					});
-				}
+				// for ( var e in CKEDITOR.tools.extend( {}, dtd.$list, dtd.$listItem, dtd.$tableContent ) )
+				// {
+				// 	this.dataProcessor.writer.setRules( e, {
+				// 		indent : true
+				// 	});
+				// }
 
 				// You can also apply the rules to a single element.
-				this.dataProcessor.writer.setRules( 'table',
-				{ 		
-					indent : true
-				});	
-
-				this.dataProcessor.writer.setRules( 'form',
-				{ 		
-					indent : true
-				});
+				// this.dataProcessor.writer.setRules( 'table',
+				// {
+				// 	indent : true
+				// });
+            //
+				// this.dataProcessor.writer.setRules( 'form',
+				// {
+				// 	indent : true
+				// });
 
 				// process image paths
 				this.dataProcessor.htmlFilter.addRules( {
@@ -266,12 +268,12 @@ if (typeof(window.fuel.fields) == 'undefined'){
 						}
 					}
 				});
-				
+
 				$elem = $('#' + ckId);
-				
+
 				// so we can check
 				//$elem.addClass('ckeditor_applied');
-				
+
 				// need so the warning doesn't pop up if you duplicate a value
 				if ($.changeChecksaveValue){
 					//$.changeChecksaveValue('#' + ckId, editor.getData());
@@ -287,27 +289,27 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 				createPreview(ckId);
 			})
-		
+
 			// translate image paths
 			$(elem).val(unTranslateImgPath($(elem).val()));
 
 			CKEDITOR.instances[ckId].resetDirty();
-			
-			// needed so it doesn't update the content before submission which we need to clean up... 
+
+			// needed so it doesn't update the content before submission which we need to clean up...
 			// our keyup event took care of the update
 			CKEDITOR.config.autoUpdateElement = false;
-			
+
 			CKEDITOR.instances[ckId].hidden = false; // for toggling
-		
+
 
 			// add view source
 			if ($('#' + ckId).parent().find('.editor_viewsource').length == 0){
-				
+
 				$('#' + ckId).parent().append(sourceButton);
 
-				$('#' + ckId + '_viewsource').click(function(e){
+				$('#' + ckId + '_viewsource').on('click',function(e){
 					var elem = $(e.currentTarget).closest('.field').find('textarea:first');
-					
+
 					$elem = $(elem);
 					ckInstance = CKEDITOR.instances[ckId];
 
@@ -321,38 +323,38 @@ if (typeof(window.fuel.fields) == 'undefined'){
 						$('#cke_' + ckId).hide();
 						$elem.css({visibility: 'visible'}).closest('.html').css({position: 'static'}); // used instead of show/hide because of issue with it not showing textarea
 						//$elem.closest('.html').show();
-					
+
 						$('#' + ckId + '_viewsource').text(fuel.lang('btn_view_editor'));
-					
+
 						if (!ckInstance.checkDirty() && $.changeChecksaveValue){
 							$.changeChecksaveValue('#' + ckId, ckInstance.getData())
 						}
 
 						// update the info
 						ckInstance.updateElement();
-					
-					
+
+
 					} else {
 
 						ckInstance.hidden = false;
-					
+
 						$('#cke_' + ckId).show();
-					
+
 						$elem.closest('.html').css({position: 'absolute', 'left': '-100000px', overflow: 'hidden'}); // used instead of show/hide because of issue with it not showing textarea
 						//$elem.show().closest('.html').hide();
 						$('#' + ckId + '_viewsource').text(fuel.lang('btn_view_source'))
-					
+
 						var txt = unTranslateImgPath($elem.val());
 						ckInstance.setData(txt);
 					}
-				
+
 					fixCKEditorOutput(elem);
 					return false;
 				})
 			}
 
 		}
-		
+
 		var unTranslateImgPath = function(txt){
 			var regex = lDelim + "img_path\\('?([^'|\"]+?)'?\\)" + rDelim;
 			txt = txt.replace(new RegExp(regex, 'g'), function(match, contents, offset, s) {
@@ -363,7 +365,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 										}
 									);
 			return txt;
-		}	
+		}
 
 
 		var createPreview = function(id){
@@ -381,14 +383,14 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				if ($previewBtn){
 					$textarea.parent().append(previewButton);
 
-					$('#' + id + '_preview').click(function(e){
+					$('#' + id + '_preview').on('click',function(e){
 						e.preventDefault();
 						var val = (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances[id] !== undefined && $textarea.css('visibility') !== 'visible') ? CKEDITOR.instances[id].getData() : $textarea.val();
 
 						var csrf = $('#csrf_test_name').val() ? $('#csrf_test_name').val() : '';
 
 						var config = fuel.fields.getElementData($textarea.attr('name'), 'editor');
-						
+
 						if (!config.previewParserPath || config.previewParserPath == 'preview') config.previewParserPath = __FUEL_PATH__ + '/' + myMarkItUpSettings.sets['default'].previewParserPath;
 						if (!config.previewParserVar) config.previewParserVar = 'data'
 
@@ -417,9 +419,9 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			var ckId = $(this).attr('id');
 
 			if (jqx_config.editor.toLowerCase() == 'none' && !($(this).hasClass('markItUpEditor') || $(this).hasClass('markItUpEditor'))){
-			
+
 				return;
-			
+
 			} else if ((jqx_config.editor.toLowerCase() == 'ckeditor' && !$(this).hasClass('markitup')) || $(this).hasClass('wysiwyg')){
 				//createCKEditor(this);
 				setTimeout(function(){
@@ -430,22 +432,22 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				createMarkItUp(this);
 				createPreview(ckId);
 			}
-			
+
 			// setup update of element on save just in case
-			$(this).parents('form').submit(function(){
+			$(this).parents('form').on('submit',function(){
 				if (typeof CKEDITOR != 'undefined' && CKEDITOR.instances[ckId] != undefined && CKEDITOR.instances[ckId].hidden == false){
 					CKEDITOR.instances[ckId].updateElement();
 				}
 			})
-			
-			
-			
+
+
+
 		});
 	}
 
 	// file upload field
 	fuel.fields.file_upload_field = function(context){
-		
+
 		// hackalicious... to prevent issues when things get ajaxed in
 		setTimeout(function(){
 			// setup multi-file naming convention
@@ -479,7 +481,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 	// asset select field
 	fuel.fields.asset_field = function(context, options){
-		
+
 		var selectedAssetFolder = 'images';
 		var activeField = null;
 
@@ -488,12 +490,12 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			var url = jqx_config.fuelPath + 'assets/select/' + selectedAssetFolder + '/?selected=' + escape($('#' + activeField).val()) + '&' + params;
 			var html = '<iframe src="' + url +'" id="asset_inline_iframe" class="inline_iframe" frameborder="0" scrolling="auto" style="border: none; height: ' + winHeight + 'px; width: 850px;"></iframe>';
 			$modal = fuel.modalWindow(html, 'inline_edit_modal', false);
-			
+
 			// // bind listener here because iframe gets removed on close so we can't grab the id value on close
 			var $iframe = $modal.find('iframe#asset_inline_iframe');
-			$iframe.bind('load', function(){
+			$iframe.on('load', function(){
 				var iframeContext = this.contentDocument;
-				
+
 				if (this.contentWindow.parent){
 					var parentWindowHeight = $(this.contentWindow.parent.document).height();
 					if (parentWindowHeight < winHeight){
@@ -503,11 +505,12 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 				$assetSelect = $('#asset_select', iframeContext);
 				$assetPreview = $('#asset_preview', iframeContext);
-				$('.cancel', iframeContext).add('.modal_close').click(function(){
+				$('.cancel', iframeContext).add('.modal_close').on('click',function(){
 					$modal.jqmHide();
 					if ($(this).is('.save')){
 						var $activeField = $('#' + activeField);
-						var assetVal = jQuery.trim($activeField.val());
+                  var assetVal = $activeField.val();
+                  var assetVal = assetVal.trim();
 						var selectedVal = $assetSelect.val();
 						var separator = $activeField.attr('data-separator');
 						var multiple = parseInt($activeField.attr('data-multiple')) == 1;
@@ -517,7 +520,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 						} else {
 							assetVal = selectedVal;
 						}
-	
+
 						if (! $activeField.data('remove_subfolder') && $activeField.data('subfolder')){
 							assetVal = $activeField.data('subfolder') + '/' + assetVal;
 						}
@@ -533,7 +536,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			})
 			return false;
 		}
-		
+
 		var replacePlaceholders = function(folder, context){
 
 			if (! folder) return '';
@@ -541,7 +544,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			var $inputs = $(context).closest('form').find('select, textarea')
 			.add('input').not('input[type="radio"], input[type="checkbox"], input[type="button"]')
 			.add('input[type="radio"]:checked, input[type="checkbox"]:checked');
-			
+
 			var replaceValues = {};
 			$inputs.each(function(i){
 				var id = ($(this).is('input[type="radio"], input[type="checkbox"]')) ? $(this).attr('name'): $(this).attr('id');
@@ -558,7 +561,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			return folder;
 		}
 
-		var convertQueryStringToJSON = function(url) {            
+		var convertQueryStringToJSON = function(url) {
 			var pairs = url.split('&');
 			var result = {};
 			pairs.forEach(function(pair) {
@@ -599,7 +602,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			}
 		});
 
-		$('.asset_select_button', context).click(function(e){
+		$('.asset_select_button', context).on('click',function(e){
 			activeField = $(e.target).parent().find('input[type="text"],textarea').filter(':first').attr('id');
 			selectedAssetFolder = $(e.target).data('folder');
 
@@ -619,13 +622,13 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			showAssetsSelect(params);
 			return false;
 		});
-		
-		// asset upload 
+
+		// asset upload
 		var showAssetUpload = function(url){
 			var html = '<iframe src="' + url +'" id="add_edit_inline_iframe" class="inline_iframe" frameborder="0" scrolling="auto" style="border: none; height: 0px; width: 0px;"></iframe>';
 			$modal = fuel.modalWindow(html, 'inline_edit_modal', true);
 			// // bind listener here because iframe gets removed on close so we can't grab the id value on close
-			$modal.find('iframe#add_edit_inline_iframe').bind('load', function(){
+			$modal.find('iframe#add_edit_inline_iframe').on('load', function(){
 				var iframeContext = this.contentDocument;
 				selected = $('#uploaded_file_name', iframeContext).val();
 
@@ -633,7 +636,8 @@ if (typeof(window.fuel.fields) == 'undefined'){
 					var $activeField = $('#' + activeField);
 					var multiple = parseInt($activeField.attr('data-multiple')) == 1;
 					if (multiple){
-						var selectedAssetValue = jQuery.trim($activeField.val());
+                  var selectedAssetValue = $activeField.val();
+                  var selectedAssetValue = selectedAssetValue.trim();
 						var selectedAssets = [];
 						if (selectedAssetValue.length){
 							selectedAssets = selectedAssetValue.split(',');
@@ -641,9 +645,9 @@ if (typeof(window.fuel.fields) == 'undefined'){
 						selectedAssets.push(selected);
 						$activeField.val(selectedAssets.join(','))
 					} else {
-						$activeField.val(selected);	
+						$activeField.val(selected);
 					}
-					
+
 					$modal.jqmHide();
 					refreshImage($activeField);
 				}
@@ -663,8 +667,8 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				$(this).after('&nbsp;<a href="'+ jqx_config.fuelPath + 'assets/inline_create/" class="btn_field asset_upload_button ' + assetFolder + '" data-params="' + $(this).attr('data-params') + '">' + btnLabel + '</a>');
 			}
 		});
-		
-		$('.asset_upload_button', context).click(function(e){
+
+		$('.asset_upload_button', context).on('click',function(e){
 			activeField = $(e.target).parent().find('input:first').attr('id');
 			selectedAssetFolder = $(e.target).data('folder');
 
@@ -682,7 +686,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			var url = $(this).attr('href') + '?' + params;
 			showAssetUpload(url);
 			return false;
-			
+
 		});
 
 		// refresh any images
@@ -702,10 +706,12 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			var previewHTML = '';
 			$.each(imgValues, function(img){
 
-				// check if it is an image 
+				// check if it is an image
 				if (this.length && this.toLowerCase().match(/\.jpg$|\.jpeg$|\.gif$|\.png$|\.svg$/i)){
 					var newSrc = (this.toLowerCase().match(/^http(s)?:\/\//)) ? '' : imgPath;
-					newSrc += $.trim(this) + '?c=' + new Date().getTime()
+               //newSrc += $.trim(this) + '?c=' + new Date().getTime()
+               t = this;
+               newSrc += t.trim() + '?c=' + new Date().getTime();
 					previewHTML += '<a href="' + newSrc + '" target="_blank">';
 					previewHTML += '<img src="' + newSrc + '" style="' + imgStyles + '" class="img_bg">';
 					previewHTML += '</a>';
@@ -717,20 +723,20 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			})
 
 			if (previewHTML.length){
-				$preview.show().html(previewHTML);	
+				$preview.show().html(previewHTML);
 			} else {
 				$preview.hide();
 			}
-			
+
 		}
 
 		$('.asset_select, .asset_upload', context).each(function(){
 			$(this).on('change', function(e){
-				refreshImage(this);	
+				refreshImage(this);
 			})
 			refreshImage(this);
 		});
-		
+
 	}
 
 	// inline editing of another module
@@ -739,20 +745,20 @@ if (typeof(window.fuel.fields) == 'undefined'){
 		// fuel.fields.multi_field(context, false);
 
 		var topWindowContext = window.top.document;
-		
+
 		var displayError = function($form, html){
 			$form.find('.inline_errors').addClass('notification error ico_error').html(html).animate( { backgroundColor: '#ee6060'}, 1500);
 		}
-		
+
 		var $modal = null;
 		var selected = null;
 		var csrf = null;
 		var editModule = function(url, onLoadCallback, onCloseCallback){
 			var html = '<iframe src="' + url +'" id="add_edit_inline_iframe" class="inline_iframe" frameborder="0" scrolling="auto" style="border: none; height: 0px; width: 0px;"></iframe>';
 			$modal = fuel.modalWindow(html, 'inline_edit_modal', true, onLoadCallback, onCloseCallback);
-			
+
 			// bind listener here because iframe gets removed on close so we can't grab the id value on close
-			$modal.find('iframe#add_edit_inline_iframe').bind('load', function(){
+			$modal.find('iframe#add_edit_inline_iframe').on('load', function(){
 				var iframeContext = this.contentDocument;
 				selected = $('#id', iframeContext).val();
 				csrf = $('#csrf_test_name', iframeContext).val() ? $('#csrf_test_name', iframeContext).val() : '';
@@ -760,7 +766,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			})
 			return false;
 		}
-		
+
 		$('select.add_edit, input.add_edit', context).each(function(i){
 			var $field = $(this);
 			var fieldId = $field.attr('id');
@@ -770,20 +776,18 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			var fields = ($field.data('fields')) ? '/' + $field.data('fields') : '';
 
 			var isMulti = ($field.attr('multiple')) ? true : false;
-			
+
 			var parentModule = fuel.getModuleURI(context);
 			var url = jqx_config.fuelPath + module + '/inline_';
 			var btnClasses = ($field.attr('multiple')) ? 'btn_field btn_field_right ' : 'btn_field';
 			if (!$field.parent().find('.edit_inline_button').length) $field.after('&nbsp;<a href="' + url + 'edit/" class="' + btnClasses+ ' edit_inline_button" tabindex="-1">' + fuel.lang('btn_edit') + '</a>');
 			if (!$field.parent().find('.add_inline_button').length) $field.after('&nbsp;<a href="' + url + 'create' + fields + addParams + '" class="' + btnClasses+ ' add_inline_button" tabindex="-1">' + fuel.lang('btn_add') + '</a>');
-			
+
 			var refreshField = function($field){
 
-				//$field = (field != undefined) ? field : $field;
-				
 				// redeclared here in case $field is set
 				var fieldId = $field.attr('id');
-				
+
 				// if no value added,then no need to refresh
 				if (!selected) return;
 				var refreshUrl = jqx_config.fuelPath + parentModule + '/refresh_field';
@@ -793,7 +797,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				if (parentModule == 'pages'){
 					params.layout = $('#layout').val();
 				}
-				
+
 				// for template fields
 				if ($field.data('orig_name')) {
 					params.field = $field.data('orig_name');
@@ -815,11 +819,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 				var $fieldContainer = $('#' + fieldId, context).closest('td.field');
 
-				// will delete fields if triggered
-				//$field.closest('form').trigger('form-pre-serialize');
-
 				// refresh value
-
 				$field = $(selector);
 				if ($field.length > 1){
 					var val = [];
@@ -835,32 +835,25 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				$.post(refreshUrl, params, function(html){
 					$('#notification').html('<ul class="success ico_success"><li>Successfully added to module ' + module + '</li></ul>')
 					fuel.notifications();
-				
+
 					$modal.jqmHide();
 					if (html.length){
 						$fieldContainer.empty();
 						$fieldContainer.html(html)
-
-						//$('#' + fieldId, context).replaceWith(html);
 					}
-					
-					// already inited with custom fields
-					
-					//console.log($form.formBuilder())
-					//$form.formBuilder().call('inline_edit');
 					// refresh field with formBuilder jquery
 					if (!$('#' + fieldId, context).hasClass('select2')){
 						fuel.fields.multi_field(context);
 					}
 
-					$('#form').formBuilder().initialize(context);
+               $('#form').formBuilder(context);
 					$('#' + fieldId, context).off('.addedit').on('change.addedit', function(){
 						changeField($(this));
 					});
 					changeField($('#' + fieldId, context));
 				});
 			}
-			
+
 			var changeField = function($this){
 				if (!$this.is('[multiple]')){
 					if ($this.val() == '' || $this.find('option').length == 0){
@@ -873,18 +866,18 @@ if (typeof(window.fuel.fields) == 'undefined'){
 					} else {
 						$this.parent().find('.edit_inline_button').show();
 						if (!$this.is('.select2_applied')) $this.show();
-					}	
+					}
 				}
 			}
-			
-			$('.add_inline_button', context).unbind().click(function(e){
+
+         $('.add_inline_button', context).off().on('click',function(e){
 				$field = $(this).closest('.field').find('select, input[type="checkbox"], input[type="radio"]:first');
 				editModule($(this).attr('href'), null, function(){ refreshField($('#' + $field.attr('id')))});
 				$(context).scrollTo('body', 800);
 				return false;
 			});
 
-			$('.edit_inline_button', context).unbind().click(function(e){
+         $('.edit_inline_button', context).off().on('click',function(e){
 				var $elem = $(this).parent().find('select, input[type="checkbox"], input[type="radio"]');
 				if ($elem.length){
 					if ($elem.is('input[type="checkbox"]')){
@@ -896,9 +889,9 @@ if (typeof(window.fuel.fields) == 'undefined'){
 						})
 						val = valArr.join(',');
 					} else {
-						var val = $elem.val();	
+						var val = $elem.val();
 					}
-					
+
 					var fieldName = $elem.attr('name')
 					fieldName = fieldName.replace('[', '');
 					fieldName = fieldName.replace(']', '');
@@ -908,7 +901,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 					$elem = $(this);
 					var val = $elem.data('value');
 				}
-				
+
 				if (!val){
 					alert(fuel.lang('edit_multi_select_warning'));
 					return false;
@@ -942,7 +935,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 	// creates a field that will use apply it's value when typed it to another field after passing it through a transformation function
 	fuel.fields.linked_field = function(context){
-		
+
 		var _this = this;
 		var module = fuel.getModule();
 
@@ -951,14 +944,14 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			var id = ($key.length) ? $key.attr('id') : $('#' + refId, context).attr('id');
 			return id;
 		}
-		
+
 		// needed for enclosure
 		var bindLinkedKeyup = function(slave, master, func){
 			var slaveId = getFieldId(slave, context);
 			var masterId = getFieldId(master, $('#' + slaveId).closest('.form'));
 
 			if ($('#' + slaveId).val() == ''){
-				$('#' + masterId).keyup(function(e){
+            $('#' + masterId).on('keyup',function(e){
 					// for most common cases
 					if (func){
 						var newVal = func($(this).val());
@@ -967,14 +960,14 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 				});
 			}
-			
+
 			// setup ajax on blur to do server side processing if no javascript function exists
 			if (!func){
-				$('#' + masterId).blur(function(e){
+            $('#' + masterId).on('blur',function(e){
 					var url = __FUEL_PATH__ + '/' + module + '/process_linked';
 					var parameters = {
-						master_field:master, 
-						master_value:$(this).val(), 
+						master_field:master,
+						master_value:$(this).val(),
 						slave_field:slave
 					};
 					$.post(url, parameters, function(response){
@@ -982,7 +975,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 					});
 				});
 			}
-			
+
 		}
 
 		// needed for enclosure
@@ -1021,7 +1014,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				}
 			}
 		}
-		
+
 		$('.linked', context).each(function(i){
 
 			// go all the way up to the value containing element because error messages insert HTML that won't allow us to use prev()
@@ -1030,7 +1023,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				bindLinked($(this).attr('id'), eval('(' + linkedInfo + ')'));
 			}
 		});
-		
+
 	}
 
 	// create number field
@@ -1048,7 +1041,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			} else {
 
 				// remove any negative symbol
-				$(this).blur(function(){
+				$(this).on('blur',function(){
 					var val = Math.abs($(this).val());
 					$(this).val(val);
 				})
@@ -1084,11 +1077,11 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 	// create a repeatable field
 	fuel.fields.template_field = function(context, options){
-		
+
 		if (!options) options = {};
 
 		var repeatable = function($repeatable){
-			
+
 			// set individual options based on the data-max attribute
 			$repeatable.each(function(i){
 				var $attrElem = ($(this).is('.repeatable_container')) ? $(this) : $(this).closest('.repeatable_container');
@@ -1119,10 +1112,10 @@ if (typeof(window.fuel.fields) == 'undefined'){
 		})
 
 		// used event namespace http://api.jquery.com/event.namespace/
-		// Remove clone event	
+		// Remove clone event
 		$(document).off('cloned.fuel', '.repeatable_container');
 
-		// Add another event handler	
+		// Add another event handler
 		$(document).on('cloned.fuel', '.repeatable_container', fuel.fields.clonedFunc)
 
 	}
@@ -1148,7 +1141,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 	}
 
 	fuel.fields.clonedFunc = function(e){
-		$('#form').formBuilder().initialize(e.clonedNode);
+      $('#form').formBuilder(e.clonedNode);
 
 		// Hacktastic to remove any loader icons left on from fuel.fields.block_field
 		e.clonedNode.find('.loader').hide();
@@ -1162,13 +1155,13 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 	// url select field
 	fuel.fields.url_field = function(context, options){
-		
+
 		var activeField = null;
 
 		var showUrlSelect = function(){
 			$activeField = $('#' + activeField);
 			var url = jqx_config.fuelPath + 'pages/select/?selected=' + escape($activeField.val());
-			
+
 			if ($activeField.data('input')){
 				url += '&input=' + $activeField.val();
 			}
@@ -1176,23 +1169,23 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				url += '&target=' + $activeField.data('target');
 			}
 			if ($activeField.data('title')){
-				url += '&title=' + $activeField.data('title');	
+				url += '&title=' + $activeField.data('title');
 			}
 			if ($activeField.data('pdfs')){
-				url += '&pdfs=1';	
+				url += '&pdfs=1';
 			}
 			if ($activeField.data('filter')){
-				url += '&filter=' + $activeField.data('filter');	;	
+				url += '&filter=' + $activeField.data('filter');	;
 			}
 			var html = '<iframe src="' + url +'" id="url_inline_iframe" class="inline_iframe" frameborder="0" scrolling="auto" style="border: none; width: 850px;"></iframe>';
 			$modal = fuel.modalWindow(html, 'inline_edit_modal', true);
-			
+
 			// // bind listener here because iframe gets removed on close so we can't grab the id value on close
 			var $iframe = $modal.find('iframe#url_inline_iframe');
-			$iframe.bind('load', function(){
+			$iframe.on('load', function(){
 				var iframeContext = this.contentDocument;
-				
-				$('.cancel', iframeContext).add('.modal_close').click(function(){
+
+				$('.cancel', iframeContext).add('.modal_close').on('click',function(){
 					$modal.jqmHide();
 					if ($(this).is('.save')){
 						var $activeField = $('#' + activeField);
@@ -1219,9 +1212,9 @@ if (typeof(window.fuel.fields) == 'undefined'){
 							}
 							selectedVal += '>' + $selected.val() + '</a>';
 						} else {
-							var selectedVal = $urlSelect.val();	
+							var selectedVal = $urlSelect.val();
 						}
-						
+
 						$('#' + activeField).val(selectedVal).trigger("change");
 					}
 					return false;
@@ -1229,8 +1222,8 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			})
 			return false;
 		}
-		
-		
+
+
 		var _this = this;
 		$('.url_select', context).not('.no_url').each(function(i){
 			if ($(this).parent().find('.url_select_button').length == 0){
@@ -1238,12 +1231,12 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			}
 		});
 
-		$('.url_select_button', context).click(function(e){
+		$('.url_select_button', context).on('click',function(e){
 			activeField = $(e.target).parent().find('input,textarea:first').attr('id');
 			showUrlSelect();
 			return false;
 		});
-		
+
 	}
 
 	fuel.fields.block_field = function(context, options){
@@ -1275,12 +1268,12 @@ if (typeof(window.fuel.fields) == 'undefined'){
 					url = jqx_config.fuelPath + 'blocks/layout_fields/' + layout + '/' + id+ '/' + language + '/';
 				}
 			}
-			
+
 			// var contextArr = context.split("--")
 			// if (contextArr.length > 1){
 			// 	context = contextArr.pop();
 			// }
-			
+
 			$layout_fields = $this.next('.block_layout_fields');
 
 			if (url.length){
@@ -1306,7 +1299,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 		if (!window['invalidatedSession']) {
 			var invalidateUrl = url = jqx_config.fuelPath + 'blocks/invalidate_session';
 			$.get(invalidateUrl, {}, function(){
-				$('.block_layout_select', context).change();
+				$('.block_layout_select', context).trigger('change');
 				window.invalidatedSession = true;
 			});
 		}
@@ -1314,7 +1307,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 	}
 
 	fuel.fields.toggler_field = function(context, options){
-		
+
 		var toggler = function(elem, context){
 			var $elem = $(elem);
 			$elem.addClass('__applied__');
@@ -1330,21 +1323,21 @@ if (typeof(window.fuel.fields) == 'undefined'){
 			if (prefix){
 				var regex = new RegExp(' ' + prefix)
 				$togglers.filter(function() {
-					return $(this).attr('class').match(regex); 
+					return $(this).attr('class').match(regex);
 				}).closest(selector).hide();
 
 			} else {
-				$(".toggle", context).closest(selector).hide();	
+				$(".toggle", context).closest(selector).hide();
 			}
 			var val = $elem.val();
 			if (val) {
 				val = val.replace(/[\s$&+,:;=?[\]@#|{}'<>.^*()%!-/]/g, '-');
 			}
-			
+
 			$(".toggle." + prefix + val, context).closest(selector).show();
 		}
-		
-		// kill any previous toggler events 
+
+		// kill any previous toggler events
 		$(document).off('change.toggler');
 
 		$(document).on('change.toggler', 'select.toggler, input[type="radio"].toggler:checked', function(e){
@@ -1359,10 +1352,10 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				var $this = $(this);
 				if ($(this).is('select') || $(this).is('input:checked')){
 					var context = ($this.attr('context')) ? $this.closest($this.attr('context')) : $this.closest('.form');
-					toggler(this, context);	
+					toggler(this, context);
 				}
 			})
-			
+
 		})
 
 		// exlude blocks since they get ajaxed in and then run the toggler function
@@ -1399,7 +1392,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 				setSwatchColor(hex, $activeColorPicker);
 			}
 		})
-		.bind("keyup", function(){
+		.on("keyup", function(){
 			$(this).ColorPickerSetColor(this.value);
 			var hex = $(this).val();
 			setSwatchColor(hex, this);
@@ -1407,18 +1400,18 @@ if (typeof(window.fuel.fields) == 'undefined'){
 	}
 
 	fuel.fields.dependent_field = function(context, options){
-		
+
 		$('.dependent', context).each(function(i){
 
 			var _this = this;
 			var dependsOn = $(this).data('depends_on');
 			if (dependsOn.substr(0, 1) != '.' && dependsOn.substr(0, 1) != '#'){
-				var dependentSelector = "select[name$=" + $(this).data('depends_on') + "], select[name$='" + $(this).data('depends_on') + "\]']";	
+				var dependentSelector = "select[name$=" + $(this).data('depends_on') + "], select[name$='" + $(this).data('depends_on') + "\]']";
 			} else {
-				var dependentSelector = "select" + $(this).data('depends_on');	
+				var dependentSelector = "select" + $(this).data('depends_on');
 			}
 
-			// for the pages module, we'll prevent conflict with fields that use "language" in their name, 
+			// for the pages module, we'll prevent conflict with fields that use "language" in their name,
 			// we change the context to be more specific to exclude the page property fields
 			var module = fuel.getModule();
 			if (module == 'pages') context = '#layout_fields';
@@ -1458,18 +1451,16 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 						$select.html(html);
 						$select.val(origValue);
-						//if ($select.prop("multiple")){
-							fuel.fields.multi_field(context);
-						//}
+						fuel.fields.multi_field(context);
 
 						if (!$select.data('checksave')){
 							$.changeChecksaveValue($select, $select.val());
-							$select.data('checksave', true);	
+							$select.data('checksave', true);
 						}
 					});
 				}
 			})
-			
+
 		})
 		$('.dependee', context).trigger('change');
 	}
@@ -1509,7 +1500,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 
 		$fuel.off("click", ".datatable_action, #data_table td[class^='col']:not('.actions')");
 		$fuel.on("click", ".datatable_action, #data_table td[class^='col']:not('.actions')", embeddedListModalOpen);
-		
+
 		// added refresh event that can be triggered
 		$('.embedded_list_container').on("refreshEmbedList", function(){
 			embeddedListModalClose(this);
@@ -1519,7 +1510,7 @@ if (typeof(window.fuel.fields) == 'undefined'){
 	fuel.fields.select2 = function(context, options){
 		if (options){
 			var options = $.extend({}, options);
-		} else { 
+		} else {
 			options = {};
 		}
 		$('select.select2_applied', context).select2('destroy').removeClass('select2_applied');

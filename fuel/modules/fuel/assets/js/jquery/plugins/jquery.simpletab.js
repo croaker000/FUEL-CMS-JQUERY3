@@ -13,14 +13,14 @@ dave@thedaylightstudio.com
 			startIndex: 0,
 			childrenSelector: null,
 			cookie: false
-			 }, 
+			 },
 		settings);
-		
+
 		var activeTab = null;
 		var activeContent = null;
 		var hasCookie = (s.cookie && s.cookie.group && s.cookie.name);
 		return this.each(function(){
-			
+
 			var _this = this;
 
 			// hide them all at first
@@ -28,11 +28,11 @@ dave@thedaylightstudio.com
 				var id = $(this).attr('href');
 				$(id).hide();
 			})
-			
+
 			// set tab click handler
 			$children = (s.childrenSelector) ? $(this).find(s.childrenSelector) : $(this).children();
-			
-			$children.click(function(){
+
+			$children.on('click',function(){
 				$this = $(this);
 				var index = $this.index();
 				if (isNaN(index)) index = 0;
@@ -48,7 +48,7 @@ dave@thedaylightstudio.com
 					var id = $(this).find('a').attr('href'); // remove the #
 					activeContent = $(id);
 					activeContent.show();
-					
+
 					activeTab = $this;
 					$(_this).trigger('tabClicked', [index, activeTab, activeContent, s]);
 					if (hasCookie){
@@ -57,17 +57,17 @@ dave@thedaylightstudio.com
 						s.startIndex = 0;
 					}
 				}
-				
+
 				return false;
 			});
-			
+
 			if (hasCookie){
 				s.startIndex = parseInt($.supercookie(s.cookie.group, s.cookie.name));
 			}
 
-			if (isNaN(s.startIndex) || ($children.size() -1) < s.startIndex) s.startIndex = 0;
-			$(this).children().eq(s.startIndex).click();
-			
+			if (isNaN(s.startIndex) || ($children.length -1) < s.startIndex) s.startIndex = 0;
+         $(this).children().eq(s.startIndex).trigger('click');
+
 			return this;
 		});
 	};

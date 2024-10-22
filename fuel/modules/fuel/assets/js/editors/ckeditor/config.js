@@ -1,9 +1,10 @@
 /**
- * @license Copyright (c) 2003-2016, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * @license Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.html or http://ckeditor.com/license
  */
 
 CKEDITOR.editorConfig = function( config ) {
+   config.versionCheck = false;
 	// Define changes to default configuration here.
 	// For complete reference see:
 	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
@@ -35,4 +36,13 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+   //FOM Tweaks
+	//config.protectedSource.push(/<i[^>]*><\/i>/g);
+	//CKEDITOR.dtd.$removeEmpty['i'] = false;
+	//CKEDITOR.config.autoParagraph = false;
 };
+//FOM Tweaks for v4.5
+$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
+   CKEDITOR.dtd.$removeEmpty[i] = false;
+});
