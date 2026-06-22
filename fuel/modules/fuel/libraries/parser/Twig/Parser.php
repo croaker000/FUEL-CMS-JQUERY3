@@ -111,7 +111,7 @@ class Twig_Parser implements Twig_ParserInterface
             throw $e;
         }
 
-        $node = new Twig_Node_Module(new Twig_Node_Body(array($body)), $this->parent, new Twig_Node($this->blocks), new Twig_Node($this->macros), new Twig_Node($this->traits), $this->embeddedTemplates, $this->getFilename());
+        $node = new Twig_Node_Module(new Twig_Node_Body(array($body)), new Twig_Node($this->blocks), new Twig_Node($this->macros), new Twig_Node($this->traits), $this->embeddedTemplates, $this->getFilename(), $this->parent);
 
         $traverser = new Twig_NodeTraverser($this->env, $this->visitors);
 
@@ -286,7 +286,7 @@ class Twig_Parser implements Twig_ParserInterface
         $this->embeddedTemplates[] = $template;
     }
 
-    public function addImportedSymbol($type, $alias, $name = null, Twig_Node_Expression $node = null)
+    public function addImportedSymbol($type, $alias, $name = null, ?Twig_Node_Expression $node = null)
     {
         $this->importedSymbols[0][$type][$alias] = array('name' => $name, 'node' => $node);
     }

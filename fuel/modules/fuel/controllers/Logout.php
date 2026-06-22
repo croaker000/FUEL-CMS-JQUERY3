@@ -35,6 +35,7 @@ class Logout extends CI_Controller {
 			$redirect = $this->fuel->config('default_home_view');
 		}
 
-		redirect($redirect, 'location', 302, FALSE);
+		//redirect($redirect, 'location', 302, FALSE);
+		redirect(site_url($redirect), 'location', 302, FALSE);  //preserves http/https status
 	}
 }

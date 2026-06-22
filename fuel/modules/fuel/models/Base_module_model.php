@@ -3,7 +3,7 @@
  * FUEL CMS
  * http://www.getfuelcms.com
  *
- * An open source Content Management System based on the 
+ * An open source Content Management System based on the
  * Codeigniter framework (http://codeigniter.com)
  *
  * @package		FUEL CMS
@@ -18,18 +18,18 @@
 /**
  * Extends MY_Model to be specific to FUEL modules
  *
- * <strong>Base_module_model</strong> is the base class that should be extended when creating modules. 
+ * <strong>Base_module_model</strong> is the base class that should be extended when creating modules.
  * The class should be required at the top of your module like so:
  *
  * 	<code>
  * 	&lt;?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
- * 	
+ *
  * 	require_once(FUEL_PATH.'models/Base_module_model.php');
- * 	
+ *
  * 	class My_super_model extends Base_module_model {
  * 	...
  * 	</code>
- * 
+ *
  * @package		FUEL CMS
  * @subpackage	Models
  * @category	Models
@@ -41,7 +41,7 @@ require_once(APPPATH.'core/MY_Model.php');
 require_once('Base_model_helpers.php');
 
 class Base_module_model extends MY_Model {
-	
+
 	public $filters = array(); // filters to apply to when searching for items
 	public $filter_value = NULL; // the values of the filters
 	public $filter_join = 'or'; // how to combine the filters in the query (and or or)
@@ -53,7 +53,7 @@ class Base_module_model extends MY_Model {
 	public $form_fields_class = ''; // a class that can extend Base_model_fields and manipulate the form_fields method
 	public $validation_class = ''; // a class that can extend Base_model_validation and manipulate the validate method by adding additional validation to the model
 	public $related_items_class = ''; // a class that can extend Base_model_related_items and manipulate what is displayed in the related items area (right side of page)
-	
+
 	public $limit_to_user_field = ''; // a user ID field in your model that can be used to limit records based on the logged in user
 	public static $tables = array(); // cached array of table names that can be accessed statically
 	protected $dsn = FUEL_DSN;
@@ -62,26 +62,26 @@ class Base_module_model extends MY_Model {
 	protected $_formatters = array(
 								'datetime'			=> array(
 															'formatted' => 'date_formatter',
-															'month', 
-															'day', 
-															'weekday', 
-															'year', 
-															'hour', 
-															'minute', 
+															'month',
+															'day',
+															'weekday',
+															'year',
+															'hour',
+															'minute',
 															'second',
 															'pretty',
 															'ts' => 'strtotime'),
 								'date' 				=> array(
 															'formatted' => 'date_formatter',
-															'month', 
-															'day', 
-															'year', 
+															'month',
+															'day',
+															'year',
 															'hour',
 															'pretty',
 															'ts' => 'strtotime'),
 								'string'			=> array(
 															'formatted'		=> 'auto_typography',
-															'stripped' 		=> 'strip_tags', 
+															'stripped' 		=> 'strip_tags',
 															'markdown',
 															'parsed' 		=> 'parse_template_syntax',
 															'excerpt'		=> 'character_limiter',
@@ -119,7 +119,7 @@ class Base_module_model extends MY_Model {
 															'exists'		=> array('asset_exists', 'pdf', ''),
 															)
 								); // default formatters which get merged into $formatters property array
-	
+
 	/**
 	 * Constructor
 	 *
@@ -136,7 +136,7 @@ class Base_module_model extends MY_Model {
 		$this->fuel =& $this->CI->fuel;
 
 		$CI->load->module_language(FUEL_FOLDER, 'fuel');
-		
+
 		// initialize parameters to pass to parent model
 		// if it is a string, then we assume it's a module name, if it is an array, then we extract the module name from it'
 		if (is_array($params))
@@ -151,17 +151,17 @@ class Base_module_model extends MY_Model {
 			$module = $params;
 			$params = array();
 		}
-		
+
 		if (!isset($module)) $module = FUEL_FOLDER;
-		
+
 		$fuel_tables = array();
 		$module_tables = array();
 		$config_tables = array();
-		
+
 		// first load the FUEL config so that we can get the tables
 		$CI->config->module_load(FUEL_FOLDER, 'fuel', TRUE);
 		$fuel_tables = $CI->config->item('tables', 'fuel');
-		
+
 		// load in the module configuration file
 		if (!empty($module) AND $module != FUEL_FOLDER)
 		{
@@ -172,28 +172,28 @@ class Base_module_model extends MY_Model {
 				$module_tables = $CI->config->item('tables');
 			}
 		}
-		
+
 		// look in the generic configuration space
-		if ($CI->config->item('tables')) 
+		if ($CI->config->item('tables'))
 		{
 			$config_tables = $CI->config->item('tables');
 		}
-		
+
 		// create master list of tables
 		self::$tables = array_merge(self::$tables, $config_tables, $module_tables, $fuel_tables);
 		$this->set_tables(self::$tables);
-		
+
 		// set the table to the configuration mapping if it is in array
-		if ($this->tables($table)) 
+		if ($this->tables($table))
 		{
 			$table = $this->tables($table);
 		}
-		
+
 		// if no configuration mapping is found then we will assume it is just the straight up table name
 		parent::__construct($table, $params); // table name and params
 
 
-		// load additional helpers here 
+		// load additional helpers here
 		$this->load->helper('typography');
 		$this->load->helper('text');
 		$this->load->helper('markdown');
@@ -202,12 +202,12 @@ class Base_module_model extends MY_Model {
 		// set formatters
 		if (!empty($this->_formatters) AND !empty($this->formatters))
 		{
-			$this->formatters = array_merge_recursive($this->_formatters, $this->formatters);	
+			$this->formatters = array_merge_recursive($this->_formatters, $this->formatters);
 		}
 		else
 		{
-			$this->formatters = $this->_formatters;	
-		}		
+			$this->formatters = $this->_formatters;
+		}
 
 		// setup this class since it may be used in several methods
 		if (!empty($this->list_items_class) AND class_exists($this->list_items_class))
@@ -215,9 +215,9 @@ class Base_module_model extends MY_Model {
 			$this->list_items = new $this->list_items_class($this);
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Adds a filter for searching
 	 *
@@ -225,7 +225,7 @@ class Base_module_model extends MY_Model {
 	 * @param	string The name of the field to filter on
 	 * @param	string A key to associate with the filter(optional)
 	 * @return	void
-	 */	
+	 */
 	public function add_filter($filter, $key = NULL)
 	{
 		if (!empty($key))
@@ -237,16 +237,16 @@ class Base_module_model extends MY_Model {
 			$this->filters[] = $filter;
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Adds multiple filters for searching
 	 *
 	 * @access	public
 	 * @param	array An array of fields to filter on
 	 * @return	void
-	 */	
+	 */
 	public function add_filters($filters)
 	{
 		if (empty($this->filters))
@@ -260,7 +260,7 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Adds a filter join such as "and" or "or" to a particular field
 	 *
@@ -268,7 +268,7 @@ class Base_module_model extends MY_Model {
 	 * @param	string The name of the field to filter on
 	 * @param	string "and" or "or" (optional)
 	 * @return	void
-	 */	
+	 */
 	public function add_filter_join($field, $join_type = 'or')
 	{
 		if (!empty($this->filter_join) AND is_string($this->filter_join))
@@ -279,7 +279,7 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Lists the module's items
 	 *
@@ -290,7 +290,7 @@ class Base_module_model extends MY_Model {
 	 * @param	string The sorting order (optional)
 	 * @param	boolean Determines whether the result is just an integer of the number of records or an array of data (optional)
 	 * @return	mixed If $just_count is true it will return an integer value. Otherwise it will return an array of data (optional)
-	 */	
+	 */
 	public function list_items($limit = NULL, $offset = 0, $col = 'id', $order = 'asc', $just_count = FALSE)
 	{
 		if (!empty($this->list_items))
@@ -328,14 +328,14 @@ class Base_module_model extends MY_Model {
 				return $this->db->count_all_results();
 			}
 		}
-		
+
 		if (!$this->db->has_select())
 		{
 			$this->db->select($this->table_name.'.*'); // make select table specific
 		}
 
 		$escape_order_by = (property_exists($this, 'escape_order_by')) ? $this->escape_order_by : TRUE;
-		
+
 		// Additional cleaning
 		if ($escape_order_by && strpos((string) $col, ')') !== FALSE)
 		{
@@ -358,18 +358,18 @@ class Base_module_model extends MY_Model {
 		{
 			return count($data);
 		}
-		
+
 		return $data;
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Creates the query logic for the list view using CI's active record. Separated out so that the count can use this method as well.
 	 *
 	 * @access	protected
 	 * @return	void
-	 */	
+	 */
 	protected function _list_items_query()
 	{
 		$this->_common_joins();
@@ -393,9 +393,9 @@ class Base_module_model extends MY_Model {
 				// used for separating table names and fields since periods get translated to underscores
 				$key = str_replace(':', '.', $key);
 			}
-			
+
 			$joiner = $this->filter_join;
-			
+
 			if (is_array($joiner))
 			{
 				if (isset($joiner[$key]))
@@ -411,11 +411,11 @@ class Base_module_model extends MY_Model {
 			if (!empty($val) OR $val === '0')
 			{
 				$joiner_arr = 'where_'.strtolower($joiner);
-				
+
 				if (strpos($key, '.') === FALSE AND strpos($key, '(') === FALSE AND !preg_match('#_having$#', $key)) $key = $this->table_name.'.'.$key;
-				
+
 				//$method = ($joiner == 'or') ? 'or_where' : 'where';
-				
+
 				// do a direct match if the values are integers and have _id in them
 				if (preg_match('#_id$#', $key) AND is_numeric($val))
 				{
@@ -463,7 +463,7 @@ class Base_module_model extends MY_Model {
 				}
 			}
 		}
-		
+
 		// here we will group the AND and OR separately which should handle most cases me thinks... but if not, you can always overwrite
 		$where = array();
 		if (!empty($where_or))
@@ -479,20 +479,20 @@ class Base_module_model extends MY_Model {
 			$where_sql = implode(' AND ', $where);
 			$this->db->where($where_sql);
 		}
-		
-		
+
+
 		// set the table here so that items total will work
 		$this->db->from($this->table_name);
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Lists the total number of module items
 	 *
 	 * @access	public
 	 * @return	int The total number of items with filters applied
-	 */	
+	 */
 	public function list_items_total()
 	{
 		$cnt = $this->list_items(NULL, NULL, NULL, NULL, TRUE);
@@ -504,13 +504,13 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Filter fields to be used to filter the list view data
 	 *
 	 * @access	public
 	 * @return	array
-	 */	
+	 */
 	public function filters($values = array())
 	{
 		if (!empty($this->list_items))
@@ -525,14 +525,14 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Displays friendly text for what is being filtered on the list view
 	 *
 	 * @access	public
 	 * @param	array The values applied to the filters
 	 * @return	string The friendly text string
-	 */	
+	 */
 	public function friendly_filter_info($values)
 	{
 		if (!empty($this->list_items))
@@ -569,7 +569,7 @@ class Base_module_model extends MY_Model {
 					{
 						$options = $form_filters[$key]['options'];
 					}
-					
+
 
 					if (is_array($val))
 					{
@@ -605,7 +605,7 @@ class Base_module_model extends MY_Model {
 						break;
 					}
 				}
-				
+
 				$joiner = $this->filter_join;
 				if (is_array($joiner))
 				{
@@ -637,16 +637,16 @@ class Base_module_model extends MY_Model {
 		}
 		return $str;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
-	 * Returns a tree array structure that can be used by a public "tree" method on models inheriting from this class 
+	 * Returns a tree array structure that can be used by a public "tree" method on models inheriting from this class
 	 *
 	 * @access	protected
 	 * @param	string The name of the model's property to use to generate the tree. Options are 'foreign_keys', 'has_many' or 'belongs_to'
 	 * @return	array An array that can be used by the Menu class to create a hierarchical structure
-	 */	
+	 */
 	protected function _tree($prop = NULL)
 	{
 		$CI =& get_instance();
@@ -743,16 +743,16 @@ class Base_module_model extends MY_Model {
 				if (isset($used_groups[$group[$rel_key_field]]))
 				{
 					$attributes = ((isset($group['published']) AND $group['published'] == 'no') OR (isset($group['active']) AND $group['active'] == 'no')) ? array('class' => 'unpublished', 'title' => 'unpublished') : NULL;
-					$return[$group[$rel_key_field]] = array('id' => $group[$rel_key_field], 'parent_id' => 0, 'label' => $group[$rel_display_field], 'location' => fuel_url($rel_module_obj->info('module_uri').'/edit/'.$group[$rel_key_field]), 'attributes' => $attributes);	
+					$return[$group[$rel_key_field]] = array('id' => $group[$rel_key_field], 'parent_id' => 0, 'label' => $group[$rel_display_field], 'location' => fuel_url($rel_module_obj->info('module_uri').'/edit/'.$group[$rel_key_field]), 'attributes' => $attributes);
 				}
-				
+
 			}
 		}
 		return $return;
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Saves data to the archive
 	 *
@@ -760,20 +760,20 @@ class Base_module_model extends MY_Model {
 	 * @param	int The record ID associated with the archive
 	 * @param	array The array of data to be archived
 	 * @return	boolean Whether it was saved properly or not
-	 */	
+	 */
 	public function archive($ref_id, $data)
 	{
 		$CI =& get_instance();
 		$CI->load->module_model(FUEL_FOLDER, 'fuel_archives_model');
-		
+
 		// grab archive to compare it to current data values... don't want to save if it isn't different
 		$last_archive = $this->get_last_archive($ref_id, TRUE);
 		$last_archive_data = (!empty($last_archive['data'])) ?  $last_archive['data'] : array();
 		$last_archive_version = (!empty($last_archive['version'])) ? $last_archive['version'] : 0;
-		
+
 		// just return true if it's the same as the last version'
 		$tmp_data = $data;
-		
+
 		// remove unimportant data from check
 		$remove_from_check = array('last_modified', 'published');
 		foreach($remove_from_check as $val)
@@ -781,7 +781,7 @@ class Base_module_model extends MY_Model {
 			if (!empty($last_archive_data[$val])) unset($last_archive_data[$val]);
 			if (!empty($tmp_data[$val])) unset($tmp_data[$val]);
 		}
-		
+
 		if (!empty($last_archive_data) AND $last_archive_data == $tmp_data) {
 			return true;
 		}
@@ -805,9 +805,9 @@ class Base_module_model extends MY_Model {
 		}
 		return $saved;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Retrieves the last archived value
 	 *
@@ -815,7 +815,7 @@ class Base_module_model extends MY_Model {
 	 * @param	int The record ID associated with the archive
 	 * @param	boolean Determines whether to return all of the archives fields or just the data field value (optional)
 	 * @return	array
-	 */	
+	 */
 	public function get_last_archive($ref_id, $all_data = FALSE)
 	{
 		$CI =& get_instance();
@@ -828,9 +828,9 @@ class Base_module_model extends MY_Model {
 		}
 		return array();
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Retrieves an archived value
 	 *
@@ -839,13 +839,13 @@ class Base_module_model extends MY_Model {
 	 * @param	int The version of the archive to retrieve (optional)
 	 * @param	boolean Determines whether to return all of the archives fields or just the data field value (optional)
 	 * @return	array
-	 */	
+	 */
 	public function get_archive($ref_id, $version = NULL, $all_data = FALSE)
 	{
 		$CI =& get_instance();
 		$CI->load->module_model(FUEL_FOLDER, 'fuel_archives_model');
 		$CI->load->helper('date');
-		
+
 		// best to use ref_id and version because it is more secure
 		$where = array('table_name' => $this->table_name, 'ref_id' => $ref_id, 'version' => $version);
 		$archive = $CI->fuel_archives_model->find_one_array($where);
@@ -877,9 +877,9 @@ class Base_module_model extends MY_Model {
 		}
 		return ($all_data) ? $return : $return['data'];
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Restores module item from an archived value
 	 *
@@ -887,7 +887,7 @@ class Base_module_model extends MY_Model {
 	 * @param	int The record ID associated with the archive
 	 * @param	int The version of the archive to retrieve (optional)
 	 * @return	boolean Whether it was saved properly or not
-	 */	
+	 */
 	public function restore($ref_id, $version = NULL)
 	{
 		$archive = $this->get_archive($ref_id, $version);
@@ -895,7 +895,7 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Get other listed module items excluding the currently displayed
 	 *
@@ -904,7 +904,7 @@ class Base_module_model extends MY_Model {
 	 * @param	int The current value... and actually deprecated (optional)
 	 * @param	string The value field (optional)
 	 * @return	array Key/value array
-	 */	
+	 */
 	public function get_others($display_field, $id = NULL, $val_field = NULL)
 	{
 		$orderby = TRUE;
@@ -924,7 +924,7 @@ class Base_module_model extends MY_Model {
 			}
 			else
 			{
-				$val_field = $this->table_name.'.'.$this->key_field;	
+				$val_field = $this->table_name.'.'.$this->key_field;
 			}
 		}
 		$this->_limit_to_user();
@@ -934,16 +934,16 @@ class Base_module_model extends MY_Model {
 		//if (isset($others[$id])) unset($others[$id]);
 		return $others;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns a key/value array of a distinct set of languages associated with records that have a language field
 	 *
 	 * @access	public
 	 * @param	string The name of the field used to determine which language. if empty, it will default to 'language' (optional)
 	 * @return	array
-	 */	
+	 */
 	public function get_languages($field = NULL)
 	{
 		if (empty($field))
@@ -951,7 +951,7 @@ class Base_module_model extends MY_Model {
 			$field = 'language';
 		}
 		$fields = $this->fields();
-		
+
 		if (!in_array($field, $fields))
 		{
 			return array();
@@ -965,9 +965,9 @@ class Base_module_model extends MY_Model {
 		$options = $this->options_list($field, $field, $where, TRUE);
 		return $options;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Replaces an existing record with another record
 	 *
@@ -976,7 +976,7 @@ class Base_module_model extends MY_Model {
 	 * @param	int The new record id of data that will be used for the replacement
 	 * @param	boolean Determines whether to delete the old record (optional)
 	 * @return	boolean Whether it was saved properly or not
-	 */	
+	 */
 	public function replace($replace_id, $id, $delete = TRUE)
 	{
 		$replace_values = $this->find_by_key($replace_id, 'array');
@@ -984,7 +984,7 @@ class Base_module_model extends MY_Model {
 
 		// set values to save based on the new $id
 		$values = $new_values;
-		
+
 		if (!empty($this->ignore_replacement))
 		{
 			// ignore certain fields by setting them to their old values
@@ -997,10 +997,10 @@ class Base_module_model extends MY_Model {
 				}
 			}
 		}
-		
+
 		// set the id to be that of the old replace_id
 		$values[$this->key_field()] = $replace_id;
-		
+
 		// must delete before saving to prevent errors
 		if ($delete)
 		{
@@ -1013,20 +1013,20 @@ class Base_module_model extends MY_Model {
 
 		// archive values saving
 		$this->archive($replace_id, $values);
-		
+
 		return $saved;
-		
+
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns CSV data that will be downloaded automatically. Overwrite this method for more specific output
 	 *
 	 * @access	public
 	 * @param	array An array that contains "col", "order", "offset", "limit", "search_term" to help with the formatting of the output. By default only the "col" and "order" parameters are used (optional)
 	 * @return	string
-	 */	
+	 */
 	public function export_data($params = array())
 	{
 		// normalize parameters
@@ -1038,7 +1038,7 @@ class Base_module_model extends MY_Model {
 				$params[$p] = NULL;
 			}
 		}
-		
+
 		$data = array();
 		$items = $this->list_items(NULL, NULL, $params['col'], $params['order']);
 
@@ -1055,14 +1055,14 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Placeholder for return data that appears in the right side when editing a record (e.g. Related Navigation in pages module )
 	 *
 	 * @access	public
 	 * @param	array View variable data (optional)
 	 * @return	mixed Can be an array of items or a string value
-	 */	
+	 */
 	public function related_items($params = array())
 	{
 		if (!empty($this->related_items_class) AND class_exists($this->related_items_class))
@@ -1079,9 +1079,9 @@ class Base_module_model extends MY_Model {
 			return array();
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Overwrites the MY_Model options_list to insert the _common_joins method as a convenience
 	 *
@@ -1091,7 +1091,7 @@ class Base_module_model extends MY_Model {
 	 * @param	mixed	an array or string containing the where parameters of a query (optional)
 	 * @param	mixed	the order by of the query. Defaults to TRUE which means it will sort by $val asc (optional)
 	 * @return	array
-	 */	
+	 */
 	public function options_list($key = NULL, $val = NULL, $where = array(), $order = TRUE)
 	{
 		$this->_common_joins();
@@ -1103,7 +1103,7 @@ class Base_module_model extends MY_Model {
 	 *
 	 * @access	public
 	 * @return	string
-	 */	
+	 */
 	public function ajax_options($where = array())
 	{
 
@@ -1155,7 +1155,7 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Generates an HTML data table of list view data for the embedded list view
 	 * @param  array  	Params that will be used for filtering & urls (optional)
@@ -1177,7 +1177,7 @@ class Base_module_model extends MY_Model {
 		}
 
 		$this->CI->load->library('data_table', array('sort_js_func' => '', 'actions_field' => 'last'));
-		
+
 		$data_table =& $this->CI->data_table;
 		$data_table->clear();
 
@@ -1192,7 +1192,7 @@ class Base_module_model extends MY_Model {
 					$k = str_replace(':', '.', $k);
 					if (is_string($v))
 					{
-						$params['where'][$k] = str_replace(':', '.', $v);	
+						$params['where'][$k] = str_replace(':', '.', $v);
 					}
 
 					$method = (is_array($v)) ? 'where_in' : 'where';
@@ -1236,9 +1236,9 @@ class Base_module_model extends MY_Model {
 		$offset = (isset($params['offset'])) ? $params['offset'] : 0;
 		$col = (isset($params['col'])) ? $params['col'] : $module->info('default_col');
 		$order = (isset($params['order'])) ? $params['order'] : $module->info('default_order');
-				
+
 		$list_items = $this->list_items($limit, $offset, $col, $order);
-		
+
 		if (empty($list_items))
 		{
 			return '';
@@ -1254,22 +1254,22 @@ class Base_module_model extends MY_Model {
 			{
 				$limit = (int) $limit;
 				$tooltip_func = function($values) use ($field, $limit) {
-					$value = strip_tags($values[$field]);
- 						if (strlen($value) > $limit)
-						{
-							// display tooltip for long notes
-							$trimmed = character_limiter($value, $limit);
-							$data = "<span title=\"" . $value . "\" class=\"tooltip\">" . $trimmed . "</span>";
-						}
-						else
-						{
-							$data = $value;
-						}
-						return $data;
+				$value = strip_tags($values[$field]);
+ 				if (strlen($value) > $limit)
+					{
+						// display tooltip for long notes
+						$trimmed = character_limiter($value, $limit);
+						$data = "<span title=\"" . $value . "\" class=\"tooltip\">" . $trimmed . "</span>";
+					}
+					else
+					{
+						$data = $value;
+					}
+					return $data;
 				};
 				$data_table->add_field_formatter($field, $tooltip_func);
 			}
-			
+
 		}
 
 		if (!empty($actions))
@@ -1280,7 +1280,7 @@ class Base_module_model extends MY_Model {
 			}
 
 			$valid_actions = array();
-		
+
 			foreach($actions as $action => $label)
 			{
 				if (is_int($action))
@@ -1344,7 +1344,7 @@ class Base_module_model extends MY_Model {
 				}
 			}
 		}
-		
+
 		$data_table->row_action = (!empty($valid_actions)) ? TRUE : FALSE;
 
 		$data_table->assign_data($list_items, $list_cols);
@@ -1352,14 +1352,14 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * The ajax method to be called for the embedded list view
 	 *
 	 * @access	public
 	 * @param  	array  GET and POST params that will be used for filtering
 	 * @return	string The HTML to display
-	 */	
+	 */
 	public function ajax_embedded_list_items($params)
 	{
 		$cols = (!empty($params['cols']) AND $params['cols'] != 'null') ? $params['cols'] : array();
@@ -1370,7 +1370,7 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Add FUEL specific changes to the form_fields method
 	 *
@@ -1378,7 +1378,7 @@ class Base_module_model extends MY_Model {
 	 * @param	array Values of the form fields (optional)
 	 * @param	array An array of related fields. This has been deprecated in favor of using has_many and belongs to relationships (deprecated)
 	 * @return	array An array to be used with the Form_builder class
-	 */	
+	 */
 	public function form_fields($values = array(), $related = array())
 	{
 		$fields = parent::form_fields($values, $related);
@@ -1388,7 +1388,7 @@ class Base_module_model extends MY_Model {
 		// 	$fields[$key]['order'] = $order;
 		// 	$order++;
 		// }
-		
+
 		$yes = lang('form_enum_option_yes');
 		$no = lang('form_enum_option_no');
 		if (isset($fields['published']))
@@ -1409,50 +1409,50 @@ class Base_module_model extends MY_Model {
 
 		return $fields;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the module object for this model
 	 *
 	 * @access	public
 	 * @return	object
-	 */	
+	 */
 	public function get_module()
 	{
 		return $this->fuel->modules->get(strtolower(get_class($this)), FALSE);
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * A method that will load arbitrary variables to the create/edit view
 	 *
 	 * @access	public
 	 * @param	array 	An array of data (optional)
 	 * @return	array
-	 */	
+	 */
 	public function vars($data = array())
 	{
 		return array();
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Common query that will automatically hide non-published/active items from view on the front end
 	 *
 	 * @access	public
 	 * @param	boolean	whether to display unpublished content in the front end if logged in
 	 * @return	void
-	 */	
+	 */
 	public function _common_query($display_unpublished_if_logged_in = NULL)
 	{
 		if (!isset($display_unpublished_if_logged_in))
 		{
 			$display_unpublished_if_logged_in = $this->display_unpublished_if_logged_in;
 		}
-		
+
 		if ((!defined('FUEL_ADMIN') AND $display_unpublished_if_logged_in === FALSE) OR ($display_unpublished_if_logged_in AND !is_fuelified()))
 		{
 			$this->_publish_status();
@@ -1464,26 +1464,26 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Placeholder to be overwritten for common joins to be used by _common_query, options_list and list_items methods
 	 *
 	 * @access	public
 	 * @return	void
-	 */	
+	 */
 	public function _common_joins()
 	{
-		
+
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Used for displaying content that is published
 	 *
 	 * @access	protected
 	 * @return	void
-	 */	
+	 */
 	protected function _publish_status()
 	{
 		//$fields = $this->fields();
@@ -1520,30 +1520,30 @@ class Base_module_model extends MY_Model {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Limit query to a specific fuel user
 	 *
 	 * @access	protected
 	 * @return	void
-	 */	
+	 */
 	protected function _limit_to_user()
 	{
 		if (defined('FUEL_ADMIN') AND !empty($this->limit_to_user_field) AND !$this->fuel->auth->is_super_admin())
 		{
-			$this->db->join($this->_tables['fuel_users'].' AS fuser', 'fuser.id = '.$this->limit_to_user_field, 'left');	
+			$this->db->join($this->_tables['fuel_users'].' AS fuser', 'fuser.id = '.$this->limit_to_user_field, 'left');
 			$this->db->where('fuser.id = '.$this->fuel->auth->user_data('id'));
 		}
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * A check that the record belongs to a user
 	 *
 	 * @access	protected
 	 * @return	boolean
-	 */	
+	 */
 	protected function _editable_by_user()
 	{
 		if (!empty($this->limit_to_user_field) AND !$this->fuel->auth->is_super_admin())
@@ -1557,9 +1557,9 @@ class Base_module_model extends MY_Model {
 		}
 		return TRUE;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	* Function to return the display name as defined by the display_field in MY_fuel_modules
 	* @param  array $values The values of the current record
@@ -1590,23 +1590,23 @@ class Base_module_model extends MY_Model {
 	 * @access	public
 	 * @param	array The values to be saved right before saving
 	 * @return	array Returns the values to be saved
-	 */	
+	 */
 	public function on_before_save($values)
 	{
 		$values = parent::on_before_save($values);
 		$this->_editable_by_user();
 		return $values;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Model hook executed right before deleting
 	 *
 	 * @access	public
 	 * @param	mixed The where condition to be applied to the delete (e.g. array('user_name' => 'darth'))
 	 * @return	void
-	 */	
+	 */
 	public function on_before_delete($where)
 	{
 		parent::on_before_delete($where);
@@ -1622,7 +1622,7 @@ class Base_module_model extends MY_Model {
 	 * @param	mixed	object or array of values
 	 * @param	boolean	run on_before_validate hook or not (optional)
 	 * @return	array
-	 */	
+	 */
 	public function validate($record, $run_hook = FALSE)
 	{
 		if (!empty($this->validation_class) AND class_exists($this->validation_class))
@@ -1648,7 +1648,7 @@ class Base_module_record extends Data_record {
 
 	protected $_parsed_fields = NULL;
 	protected $_fuel = NULL;
-	
+
 	/**
 	 * Constructor - overwritten to add _fuel object for reference for convenience
 	 * @param	object	parent object
@@ -1658,30 +1658,30 @@ class Base_module_record extends Data_record {
 		parent::__construct($parent);
 		$this->_fuel =& $this->_CI->fuel;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the fields to parse
 	 *
 	 * @access	public
 	 * @param	string
 	 * @return	array
-	 */	
+	 */
 	public function set_parsed_fields($fields)
 	{
 		$this->_parsed_fields = $fields;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns any fields that should be automatically parsed from the $this->_parsed_fields array
 	 *
 	 * @access	public
 	 * @param	string
 	 * @return	array
-	 */	
+	 */
 	public function get_parsed_fields()
 	{
 		$parsed = NULL;
@@ -1695,9 +1695,9 @@ class Base_module_record extends Data_record {
 		}
 		return $parsed;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * After get hook that will parse fields automatically
 	 *
@@ -1705,13 +1705,13 @@ class Base_module_record extends Data_record {
 	 * @param	string
 	 * @param	string
 	 * @return	string
-	 */	
+	 */
 	public function after_get($output, $var)
 	{
 		if (is_string($output))
 		{
 			$parsed_fields = $this->get_parsed_fields();
-			if ($parsed_fields === TRUE OR 
+			if ($parsed_fields === TRUE OR
 				(is_array($parsed_fields) AND in_array($var, $parsed_fields)))
 			{
 				$output = $this->_parse($output);
@@ -1719,16 +1719,16 @@ class Base_module_record extends Data_record {
 		}
 		return $output;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Get other listed module items excluding the currently displayed
 	 *
 	 * @access	protected
 	 * @param	string
 	 * @return	string
-	 */	
+	 */
 	protected function _parse($output)
 	{
 		$vars = $this->values();
@@ -1745,9 +1745,9 @@ class Base_module_record extends Data_record {
 		}
 		elseif(is_string($output))
 		{
-			$output = $this->_CI->fuel->parser->parse_string($output, $vars, TRUE);	
+			$output = $this->_CI->fuel->parser->parse_string($output, $vars, TRUE);
 			return $output;
 		}
 	}
-	
+
 }

@@ -28,7 +28,6 @@ if (PHP_SAPI === 'cli' OR defined('STDIN'))
 	$_SERVER['SERVER_PORT'] = 80;
 	$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 	$_SERVER['HTTP_HOST'] = 'localhost';
-	$_SERVER['SERVER_NAME'] = 'localhost';
 }
 
 /**
@@ -111,7 +110,7 @@ else
 				$path = str_replace(array(':any', '*'), '.*', str_replace(':num', '[0-9]+', $path));
 
 				// Does the RegEx match?
-				if (!empty($_SERVER['SERVER_NAME']) AND preg_match('#^'.$path.'$#', $_SERVER['SERVER_NAME']))
+				if (!empty($_SERVER['HTTP_HOST']) AND preg_match('#^'.$path.'$#', $_SERVER['HTTP_HOST']))
 				{
 					define('ENVIRONMENT', $env);
 					break 2;

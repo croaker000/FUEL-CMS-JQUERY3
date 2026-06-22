@@ -3,7 +3,7 @@
  * FUEL CMS
  * http://www.getfuelcms.com
  *
- * An open source Content Management System based on the 
+ * An open source Content Management System based on the
  * Codeigniter framework (http://codeigniter.com)
  *
  * @package		FUEL CMS
@@ -38,17 +38,17 @@
  *
  * @copyright	Copyright (c) Wiredesignz 2010-11-12
  * @version 	5.3.5
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -64,7 +64,7 @@ class Fuel_Router extends MX_Router
 {
 	// --------------------------------------------------------------------
 
-	//private $located;
+	private $located;
 
 	/**
 	 * Parse Routes
@@ -86,7 +86,7 @@ class Fuel_Router extends MX_Router
 			$this->_set_request(explode('/', $this->routes[$uri]));
 			return;
 		}
-		
+
 		// Get HTTP verb
 		$http_verb = isset($_SERVER['REQUEST_METHOD']) ? strtolower($_SERVER['REQUEST_METHOD']) : 'cli';
 
@@ -150,7 +150,7 @@ class Fuel_Router extends MX_Router
 		}
 
 		$newsegments = $this->locate($segments);
-		
+
 		if($this->located == -1)
 		{
 			// <-- FUEL
@@ -170,9 +170,9 @@ class Fuel_Router extends MX_Router
 			$this->_set_default_controller();
 			return;
 		}
-		
+
 		$this->set_class($segments[0]);
-		
+
 		if (isset($segments[1]))
 		{
 			$this->set_method($segments[1]);
@@ -181,7 +181,7 @@ class Fuel_Router extends MX_Router
 		{
 			$segments[1] = 'index';
 		}
-       
+
        // <-- FUEL
        $this->_set_rsegments($segments);
        // FUEL -->
@@ -194,7 +194,7 @@ class Fuel_Router extends MX_Router
 		unset($segments[0]);
 		$this->uri->rsegments = $segments;
 	}
-	
+
 	/** Locate the controller **/
 	public function locate($segments)
 	{
@@ -224,7 +224,7 @@ class Fuel_Router extends MX_Router
 				{
 					/* module sub-directory exists? */
 					if(is_dir($source.$directory.'/'))
-					{	
+					{
 						$source .= $directory.'/';
 						$this->directory .= $directory.'/';
 
@@ -270,7 +270,7 @@ class Fuel_Router extends MX_Router
 
 			/* application sub-sub-directory controller exists? */
 			if($controller)
-			{ 
+			{
 				if(is_file(APPPATH.'controllers/'.$module.'/'.$directory.'/'.ucfirst($controller).$ext))
 				{
 					$this->directory = $module.'/'.$directory.'/';
@@ -291,7 +291,7 @@ class Fuel_Router extends MX_Router
 		{
 			return $segments;
 		}
-		
+
 		$this->located = -1;
 	}
 
@@ -302,7 +302,7 @@ class Fuel_Router extends MX_Router
 		{
 			// Are module/directory/controller/method segments being specified?
 			$sgs = sscanf($_route, '%[^/]/%[^/]/%[^/]/%s', $module, $directory, $class, $method);
-			
+
 			// set the module/controller directory location if found
 			if ($this->locate(array($module, $directory, $class)))
 			{

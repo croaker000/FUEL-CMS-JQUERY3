@@ -38,7 +38,7 @@ class Fuel_twig_parser extends Fuel_abstract_parser {
 	protected $charset = 'utf-8';
 	protected $base_template_class = 'Twig_Template';
 	protected $strict_variables = FALSE;
-	protected $autoescape = TRUE;
+	protected $autoescape = FALSE;
 	protected $optimizations = -1;
 
 	/**
@@ -108,6 +108,14 @@ class Fuel_twig_parser extends Fuel_abstract_parser {
 	 */
 	public function _parse($string, $data, $return = FALSE)
 	{
+		// protect script and style content from Twig parsing (single-brace delimiters conflict with JS)
+		$protected = array();
+		$string = preg_replace_callback('#<(script|style)\b[^>]*>.*?</\1>#is', function($m) use (&$protected) {
+			$key = '<!--TWIG_PROTECTED_'.count($protected).'-->';
+			$protected[$key] = $m[0];
+			return $key;
+		}, $string);
+
 		// start benchmark
 		$this->CI->benchmark->mark('twig_parse_start');
 
@@ -120,6 +128,9 @@ class Fuel_twig_parser extends Fuel_abstract_parser {
 		{
 			show_error($e);
 		}
+
+		// restore protected content
+		$parsed_string = str_replace(array_keys($protected), array_values($protected), $parsed_string);
 
 		// finish benchmark
 		$this->CI->benchmark->mark('twig_parse_end');

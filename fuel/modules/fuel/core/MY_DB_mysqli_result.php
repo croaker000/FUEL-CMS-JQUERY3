@@ -3,7 +3,7 @@
  * FUEL CMS
  * http://www.getfuelcms.com
  *
- * An open source Content Management System based on the 
+ * An open source Content Management System based on the
  * Codeigniter framework (http://codeigniter.com)
  *
  * @package		FUEL CMS
@@ -25,13 +25,11 @@
  * @link		http://docs.getfuelcms.com/libraries/my_db_mysql_result
  */
 
-require_once(BASEPATH.'database/drivers/mysqli/mysqli_result'.EXT);
-
 class MY_DB_mysqli_result extends CI_DB_mysqli_result {
-	
+
 	protected $result_assoc_array	= array();
 	protected $result_assoc	= array();
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -48,8 +46,8 @@ class MY_DB_mysqli_result extends CI_DB_mysqli_result {
 			return $this->result_assoc_array;
 		}
 
-		// In the event that query caching is on the result_id variable 
-		// will return FALSE since there isn't a valid SQL resource so 
+		// In the event that query caching is on the result_id variable
+		// will return FALSE since there isn't a valid SQL resource so
 		// we'll simply return an empty array.
 		if ($this->result_id === FALSE OR $this->num_rows() == 0)
 		{
@@ -57,13 +55,13 @@ class MY_DB_mysqli_result extends CI_DB_mysqli_result {
 		}
 
 		$this->data_seek(0);
-		
+
 		while ($row = $this->_fetch_assoc())
 		{
 			if (count($row) == 1)
 			{
 				$this->result_assoc_array[$row[$key]] = $row[$key];
-			} 
+			}
 			else if (count($row) == 2)
 			{
 				$this->result_assoc_array[$row[$key]] = next($row);
@@ -92,8 +90,8 @@ class MY_DB_mysqli_result extends CI_DB_mysqli_result {
 			return $this->result_assoc;
 		}
 
-		// In the event that query caching is on the result_id variable 
-		// will return FALSE since there isn't a valid SQL resource so 
+		// In the event that query caching is on the result_id variable
+		// will return FALSE since there isn't a valid SQL resource so
 		// we'll simply return an empty array.
 		if ($this->result_id === FALSE OR $this->num_rows() == 0)
 		{
@@ -107,7 +105,7 @@ class MY_DB_mysqli_result extends CI_DB_mysqli_result {
 			if (count($row_arr) == 1)
 			{
 				$this->result_assoc[$row->$key] = $row->$key;
-			} 
+			}
 			else if (count($row_arr) == 2)
 			{
 				$this->result_assoc[$row->$key] = next($row_arr);

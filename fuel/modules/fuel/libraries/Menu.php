@@ -1056,7 +1056,7 @@ class Menu {
 			$active_parent = $this->_items[$active]['parent_id'];
 
 			// to normalize so we can do a strict comparison
-			if ($active_parent AND ctype_digit($active_parent))
+			if ($active_parent AND ctype_digit((string) $active_parent))
 			{
 				$active_parent = (int) $active_parent;
 			}
@@ -1071,7 +1071,7 @@ class Menu {
 		foreach($this->_items as $key => $val)
 		{
 			// to normalize so we can do a strict comparison
-			if (ctype_digit($key))
+			if (ctype_digit((string) $key))
 			{
 				$key = (int) $key;
 			}

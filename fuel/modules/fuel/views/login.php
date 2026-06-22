@@ -4,6 +4,10 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
  	<title><?=$page_title?></title>
+   <?php
+      echo header('X-Frame-Options: SAMEORIGIN');
+      echo header("Content-Security-Policy: img-src https://*; child-src 'none'; frame-ancestors 'none';");
+   ?>
 	<?=css('fuel.min', FUEL_FOLDER)?>
 	<?php if (!empty($css)) : ?>
 	<?=$css?>
@@ -21,7 +25,7 @@
 </head>
 <body>
 <div id="login">
-		
+
 		<div class="login_logo">
 			<span class="hidden">FUEL CMS</span>
 		</div>

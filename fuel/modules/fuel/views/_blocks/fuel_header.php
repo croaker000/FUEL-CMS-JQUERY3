@@ -5,6 +5,11 @@
  	<title><?=$page_title?></title>
 
  	<meta name="viewport" content="width=device-width">
+   <?php
+      echo header('X-Frame-Options: SAMEORIGIN');
+      //echo header("Content-Security-Policy: img-src https://*; child-src 'self'; frame-ancestors 'self';");
+      echo header("Content-Security-Policy: img-src * data:; child-src 'self'; frame-ancestors 'self';");
+   ?>
 
 	<?=css('fuel.min', 'fuel')?>
 

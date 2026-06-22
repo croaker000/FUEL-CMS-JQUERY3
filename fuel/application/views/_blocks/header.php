@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
  	<title>
-		<?php 
+		<?php
 			if (!empty($is_blog)) :
 				echo $CI->fuel->blog->page_title($page_title, ' : ', 'right');
 			else:
@@ -14,6 +14,10 @@
 
 	<meta name="keywords" content="<?php echo fuel_var('meta_keywords')?>">
 	<meta name="description" content="<?php echo fuel_var('meta_description')?>">
+   <?php
+      echo header('X-Frame-Options: SAMEORIGIN');
+      echo header("Content-Security-Policy: img-src https://*; child-src 'none'; frame-ancestors 'none';");
+   ?>
 
 	<link href='http://fonts.googleapis.com/css?family=Raleway:400,700' rel='stylesheet' type='text/css'>
 	<?php
@@ -66,4 +70,4 @@
 					<svg width="160px" height="145px" viewBox="0 0 126.962 115.395" preserveAspectRatio="xMidYMid"><use xlink:href="#fuel"></use></svg>
 				</div>
 				<h1><?php echo fuel_var('heading')?></h1>
-			</header>		
+			</header>

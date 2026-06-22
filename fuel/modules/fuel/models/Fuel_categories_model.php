@@ -184,7 +184,7 @@ class Fuel_category_model extends Base_module_record {
 	 * @param	array	field names
 	 * @return	array
 	 */	
-	public function initialize(&$parent, $fields = array())
+	public function initialize($parent, $fields = array())
 	{
 		parent::initialize($parent, $fields);
 

@@ -3,7 +3,7 @@
  * FUEL CMS
  * http://www.getfuelcms.com
  *
- * An open source Content Management System based on the 
+ * An open source Content Management System based on the
  * Codeigniter framework (http://codeigniter.com)
  *
  * @package		FUEL CMS
@@ -31,17 +31,17 @@
 //require_once('Fuel_blocks.php');
 
 class Fuel_layouts extends Fuel_base_library {
-	
+
 	public $default_layout = 'main'; // default layout folder
-	public $layouts_folder = '_layouts'; // layout folder 
+	public $layouts_folder = '_layouts'; // layout folder
 	public $layouts = array(); // layout object initialization parameters
 	public $blocks = array(); // block object initialization parameters
 	public $hidden = array(); // an array of layouts to not display in the CMS dropdown
 
 	protected $_layouts = array(); // layout objects
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Constructor
 	 *
@@ -50,13 +50,13 @@ class Fuel_layouts extends Fuel_base_library {
 	 * @access	public
 	 * @param	array	config preferences
 	 * @return	void
-	 */	
+	 */
 	public function __construct($params = array())
 	{
 		parent::__construct();
-		
+
 		@include(FUEL_PATH.'config/fuel_layouts'.EXT);
-		
+
 		$this->CI->load->library('form_builder');
 
 		if (!empty($config)) $params = $config;
@@ -64,9 +64,9 @@ class Fuel_layouts extends Fuel_base_library {
 
 		$this->initialize($params);
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Initialize the user preferences
 	 *
@@ -75,7 +75,7 @@ class Fuel_layouts extends Fuel_base_library {
 	 * @access	public
 	 * @param	array	config preferences
 	 * @return	void
-	 */	
+	 */
 	public function initialize($config = array())
 	{
 		// setup any initialized variables
@@ -92,7 +92,7 @@ class Fuel_layouts extends Fuel_base_library {
 		$this->CI->load->helper('directory');
 		$layout_path = APPPATH.'views/'.$this->layouts_folder;
 		$layouts = get_filenames($layout_path);
-		
+
 		$layout_files = directory_to_array($layout_path, TRUE);
 
 		if (!empty($layout_files))
@@ -103,7 +103,7 @@ class Fuel_layouts extends Fuel_base_library {
 				$layout = end($file_parts);
 				$layout = substr($layout, 0, -4);
 				$file_dir = ltrim(dirname($file), '/');
-				
+
 				if ($file_dir != ltrim($layout_path, '/'))
 				{
 					$file_dir_parts = explode('/', $file_dir);
@@ -113,7 +113,7 @@ class Fuel_layouts extends Fuel_base_library {
 				{
 					$group = '';
 				}
-				
+
 				// we won't show those that have underscores in front of them'
 				if (substr($group, 0, 1) != '_')
 				{
@@ -163,7 +163,7 @@ class Fuel_layouts extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Adds a layout object
 	 *
@@ -171,7 +171,7 @@ class Fuel_layouts extends Fuel_base_library {
 	 * @param	string	The name of the layout
 	 * @param	object	A layout object or an array of initialization parameters
 	 * @return	mixed 	Returns the Fuel_layouts object instance for method chaining
-	 */	
+	 */
 	public function add($name, $layout, $type = NULL)
 	{
 		if (is_array($layout))
@@ -186,25 +186,25 @@ class Fuel_layouts extends Fuel_base_library {
 		{
 			if ($type == 'block')
 			{
-				$this->blocks[$name] = $layout;		
+				$this->blocks[$name] = $layout;
 			}
 			else
 			{
-				$this->_layouts[$name] = $layout;		
+				$this->_layouts[$name] = $layout;
 			}
 		}
 		return $this;
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Removes a layout object
 	 *
 	 * @access	public
 	 * @param	string	The name of the layout
 	 * @return	void
-	 */	
+	 */
 	public function remove($name)
 	{
 		unset($this->_layouts[$name]);
@@ -212,7 +212,7 @@ class Fuel_layouts extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns a layout object
 	 *
@@ -220,7 +220,7 @@ class Fuel_layouts extends Fuel_base_library {
 	 * @param	string	The name of the layout
 	 * @param	string	The type of layout to return. Options are "page" or "block"
 	 * @return	mixed 	Returns either an array of Fuel_Layout objects or a single Fuel_layout object
-	 */	
+	 */
 	public function get($layout = NULL, $type = 'page')
 	{
 		if (isset($layout))
@@ -260,9 +260,9 @@ class Fuel_layouts extends Fuel_base_library {
 			return $this->_layouts;
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns a key/value array good for creating form select options
 	 *
@@ -270,7 +270,7 @@ class Fuel_layouts extends Fuel_base_library {
 	 * @param	boolean use block layouts or page (optional)
 	 * @param	string the name of the group to filter the options by (optional)
 	 * @return	array
-	 */	
+	 */
 	public function options_list($blocks = FALSE, $group = '')
 	{
 		$options = array();
@@ -287,7 +287,7 @@ class Fuel_layouts extends Fuel_base_library {
 		{
 			$layouts = $this->_layouts;
 		}
-		
+
 		// add all layouts without a group first
 		if (empty($group))
 		{
@@ -341,9 +341,9 @@ class Fuel_layouts extends Fuel_base_library {
 		}
 		return $options;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Creates a new layout object
 	 *
@@ -351,7 +351,7 @@ class Fuel_layouts extends Fuel_base_library {
 	 * @param	string	The name of the layout
 	 * @param	array	Layout object initialization parameters (optional)
 	 * @return	object
-	 */	
+	 */
 	public function create($name, $init = array())
 	{
 		$default_class = 'Fuel_layout';
@@ -441,7 +441,7 @@ class Fuel_layouts extends Fuel_base_library {
  * @prefix		$layout->
  */
 class Fuel_layout extends Fuel_base_library {
-	
+
 	public $name = ''; // The name of the layout
 	public $label = ''; // The label to display with the layout in the select list as seen in the CMS
 	public $description = ''; // A description of the layout which will be rendered as a copy field in the form
@@ -458,9 +458,9 @@ class Fuel_layout extends Fuel_base_library {
 	public $double_parse = NULL; // Double parse pages created in the CMS to allow for variables set in the CMS to cascade up to the layout. Valid options are TRUE/FALSE (AUTO only applies to the global FUEL configuration)
 	public $hidden = FALSE; // Determines if the layout should be hidden from the layout dropdown select in the CMS
 	public $parser = NULL; // The parsing engine to use
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Constructor
 	 *
@@ -469,15 +469,15 @@ class Fuel_layout extends Fuel_base_library {
 	 * @access	public
 	 * @param	array	config preferences
 	 * @return	void
-	 */	
+	 */
 	public function __construct($params = array())
 	{
 		parent::__construct();
 		$this->initialize($params);
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Initialize the user preferences
 	 *
@@ -486,14 +486,14 @@ class Fuel_layout extends Fuel_base_library {
 	 * @access	public
 	 * @param	array	config preferences
 	 * @return	void
-	 */	
+	 */
 	public function initialize($params = array())
 	{
 		if (!isset($this->CI->form_builder))
 		{
 			$this->CI->load->library('form_builder');
 		}
-		
+
 		if (is_string($params))
 		{
 			$params = array('name' => $params);
@@ -507,78 +507,78 @@ class Fuel_layout extends Fuel_base_library {
 				$this->$key = $val;
 			}
 		}
-		
+
 		if (empty($this->file))
 		{
 			$this->file = $this->name;
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the layout view file. Do not include the '_layout' folder with the name
 	 *
 	 * @access	public
 	 * @param	string	The name of the layout view file
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_file($layout)
 	{
 		$this->file = $layout;
 		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the view file path to the layout
 	 *
 	 * @access	public
 	 * @return	string
-	 */	
+	 */
 	public function view_path()
 	{
 		return $this->folder.'/'.$this->file;
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the layout name. Usually the same as the layout view file.
 	 *
 	 * @access	public
 	 * @param	string	The name of the layout.
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_name($name)
 	{
 		$this->name = $name;
-		return $this;		
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the layout name.
 	 *
 	 * @access	public
 	 * @return	string
-	 */	
+	 */
 	public function name()
 	{
 		return $this->name;
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the layout label which is usually a friendlier version of the name (e.g. if the layout's name is "main", the layout may be "Main")
 	 *
 	 * @access	public
 	 * @param	string	The name of the layout.
 	 * @return	void
-	 */	
+	 */
 	public function set_label($label)
 	{
 		$this->label = $label;
@@ -586,27 +586,27 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the layout label
 	 *
 	 * @access	public
 	 * @return	string
-	 */	
+	 */
 	public function label()
 	{
 		return $this->label;
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the layouts description which will be displayed when editing a page in the CMS
 	 *
 	 * @access	public
 	 * @param	string	The layout's description
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_description($description)
 	{
 		$this->description = $description;
@@ -614,27 +614,27 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the layouts description
 	 *
 	 * @access	public
 	 * @return	string
-	 */	
+	 */
 	public function description()
 	{
 		return $this->description;
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the layout's fields
 	 *
 	 * @access	public
 	 * @param	string	The name of the layout
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_fields($fields)
 	{
 		$this->fields = $fields;
@@ -642,7 +642,7 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the layout's fields
 	 *
@@ -663,7 +663,7 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Processes the layout's fields
 	 *
@@ -683,7 +683,7 @@ class Fuel_layout extends Fuel_base_library {
 			{
 				$fields[$key]['name'] = $key;
 			}
-			
+
 			if (!isset($fields[$key]['order']))
 			{
 				$fields[$key]['order'] = $order;
@@ -697,14 +697,14 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the views folder the layout exists in. Default is the views/_layouts folder
 	 *
 	 * @access	public
 	 * @param	string	The name of the folder
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_folder($folder)
 	{
 		$this->folder = $folder;
@@ -712,7 +712,7 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the views folder the layout exists in
 	 *
@@ -723,16 +723,16 @@ class Fuel_layout extends Fuel_base_library {
 	{
 		return $this->folder;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the module the layout belongs to
 	 *
 	 * @access	public
 	 * @param	string	The name of the folder
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_module($module)
 	{
 		$this->module = $module;
@@ -740,7 +740,7 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the module the layout belongs to
 	 *
@@ -757,14 +757,14 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the group the layout belongs to
 	 *
 	 * @access	public
 	 * @param	string	The name of the folder
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_group($group)
 	{
 		$this->group = $group;
@@ -772,7 +772,7 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the group the layout is associated with
 	 *
@@ -783,29 +783,29 @@ class Fuel_layout extends Fuel_base_library {
 	{
 		return $this->group;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the field to import the main content of the page into
 	 *
 	 * @access	public
 	 * @return	string
-	 */	
+	 */
 	public function import_field()
 	{
 		return $this->import_field;
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the field to import the main content of the page into
 	 *
 	 * @access	public
 	 * @param	string	The name of the field to use
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_import_field($key)
 	{
 		$this->import_field = $key;
@@ -813,35 +813,35 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns a boolean value as to whether to include the $pagevar object when rendering a page
 	 *
 	 * @access	public
 	 * @return	boolean
-	 */	
+	 */
 	public function include_pagevar_object()
 	{
 		return (bool) $this->include_pagevar_object;
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets a boolean value as to whether to include the $pagevar object when rendering a page
 	 *
 	 * @access	public
 	 * @param	boolean Determines whether to include the pagevar object or not
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_include_pagevar_object($bool)
 	{
 		$this->include_pagevar_object = (bool) $bool;
 		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Adds a single field to the layout (See the <a href="[user_guide_url]libraries/form_builder">Form_builder</a>) class for more info
 	 *
@@ -854,7 +854,7 @@ class Fuel_layout extends Fuel_base_library {
 	{
 		static $fb;
 
-		if (is_null($fb)) 
+		if (is_null($fb))
 		{
 			$fb = new Form_builder();
 		}
@@ -871,7 +871,7 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Adds multiple form fields to the layout (See the <a href="[user_guide_url]libraries/form_builder">Form_builder</a>) class for more info
 	 *
@@ -890,7 +890,7 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the field values for the fields
 	 *
@@ -905,7 +905,7 @@ class Fuel_layout extends Fuel_base_library {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets a field value
 	 *
@@ -919,9 +919,9 @@ class Fuel_layout extends Fuel_base_library {
 		$this->field_values[$key] = $value;
 		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns layout's field values
 	 *
@@ -932,9 +932,9 @@ class Fuel_layout extends Fuel_base_library {
 	{
 		return $this->field_values;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns a single field value
 	 *
@@ -946,9 +946,9 @@ class Fuel_layout extends Fuel_base_library {
 	{
 		return $this->field_value[$key];
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets a callback hook to be run via "pre" or "post" rendering of the page
 	 *
@@ -962,9 +962,9 @@ class Fuel_layout extends Fuel_base_library {
 		$this->hooks[$type] = $hook;
 		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Calls a specified hook to be run
 	 *
@@ -977,7 +977,7 @@ class Fuel_layout extends Fuel_base_library {
 	{
 		// call hooks set in hooks file
 		$hook_name = $hook.'_'.$this->name;
-	
+
 		// run any hooks set on the object
 		if (!empty($this->hooks[$hook]))
 		{
@@ -988,14 +988,14 @@ class Fuel_layout extends Fuel_base_library {
 			$GLOBALS['EXT']->hooks[$hook_name][] = $this->hooks[$hook];
 		}
 		$hook_vars = $GLOBALS['EXT']->_call_hook($hook_name, $params);
-	
+
 		// load variables
 		if (!empty($hook_vars))
 		{
 			$CI->load->vars($hook_vars);
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -1004,7 +1004,7 @@ class Fuel_layout extends Fuel_base_library {
 	 * @access	public
 	 * @param	array	variables for the view
 	 * @return	array
-	 */	
+	 */
 	public function pre_process($vars)
 	{
 		return $vars;
@@ -1018,7 +1018,7 @@ class Fuel_layout extends Fuel_base_library {
 	 * @access	public
 	 * @param	string	final processed output
 	 * @return	string
-	 */	
+	 */
 	public function post_process($output)
 	{
 		return $output;
@@ -1032,7 +1032,7 @@ class Fuel_layout extends Fuel_base_library {
 	 * @access	public
 	 * @param	array	process values array
 	 * @return	array
-	 */	
+	 */
 	public function process_saved_values($values)
 	{
 		return $values;
@@ -1046,7 +1046,7 @@ class Fuel_layout extends Fuel_base_library {
 	 * @access	public
 	 * @param	array	process values array
 	 * @return	array
-	 */	
+	 */
 	public function post_process_saved_values($values)
 	{
 		return $values;
@@ -1059,7 +1059,7 @@ class Fuel_layout extends Fuel_base_library {
 	 * @access	public
 	 * @param	array	variables to validate
 	 * @return	boolean
-	 */	
+	 */
 	public function validate($vars)
 	{
 		return TRUE;
@@ -1072,7 +1072,7 @@ class Fuel_layout extends Fuel_base_library {
 	 *
 	 * @access	public
 	 * @return	string
-	 */	
+	 */
 	public function preview_image()
 	{
 		return $this->preview_image;
@@ -1084,9 +1084,9 @@ class Fuel_layout extends Fuel_base_library {
 	 * Sets the preview image for the layout
 	 *
 	 * @access	public
-	 * @param	string	the preview image
+	 * @param	string $image	the preview image
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_preview_image($image)
 	{
 		$this->preview_image = $image;
@@ -1100,14 +1100,14 @@ class Fuel_layout extends Fuel_base_library {
 	 *
 	 * @access	public
 	 * @return	boolean
-	 */	
+	 */
 	public function is_double_parse()
 	{
 		if (is_null($this->double_parse))
 		{
 			return $this->fuel->config('double_parse');
 		}
-		return (boolean) $this->double_parse;
+		return (bool) $this->double_parse;
 	}
 
 	// --------------------------------------------------------------------
@@ -1116,12 +1116,12 @@ class Fuel_layout extends Fuel_base_library {
 	 * Sets whether CMS pages should be double parsed to allow for variables set in the CMS fields to bubble up to the layout
 	 *
 	 * @access	public
-	 * @param	boolean	
+	 * @param	bool $parse
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_double_parse($parse)
 	{
-		$this->double_parse = (boolean) $parse;
+		$this->double_parse =  (bool) $parse;
 		return $this;
 	}
 
@@ -1132,7 +1132,7 @@ class Fuel_layout extends Fuel_base_library {
 	 *
 	 * @access	public
 	 * @return	boolean
-	 */	
+	 */
 	public function is_hidden()
 	{
 		if ($this->hidden == TRUE OR in_array($this->name, $this->fuel->layouts->hidden))
@@ -1148,12 +1148,12 @@ class Fuel_layout extends Fuel_base_library {
 	 * Sets whether this layout should be hidden from the layout dropdown select
 	 *
 	 * @access	public
-	 * @param	boolean	
+	 * @param	boolean
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_hidden($hidden)
 	{
-		$this->hidden = (boolean) $hidden;
+		$this->hidden =  (bool) $hidden;
 		return $this;
 	}
 
@@ -1164,7 +1164,7 @@ class Fuel_layout extends Fuel_base_library {
 	 *
 	 * @access	public
 	 * @return	string
-	 */	
+	 */
 	public function parser()
 	{
 		if ($this->parser !== FALSE && is_null($this->parser))
@@ -1182,7 +1182,7 @@ class Fuel_layout extends Fuel_base_library {
 	 * @access	public
 	 * @param	string	the parser type of either "dwoo" or "twig"
 	 * @return	object 	reference to this Fuel_layout object
-	 */	
+	 */
 	public function set_parser($parser = NULL)
 	{
 		$valid = array('dwoo', 'twig');
@@ -1202,12 +1202,12 @@ class Fuel_layout extends Fuel_base_library {
 	 * @access	public
 	 * @param	string	the string to parse
 	 * @return	void
-	 */	
+	 */
 	public function parse($str, $vars = array())
 	{
 		if ($this->parser() !== FALSE)
 		{
-			return $this->fuel->parser->set_engine($this->parser())->parse_string($str, $vars);	
+			return $this->fuel->parser->set_engine($this->parser())->parse_string($str, $vars);
 		}
 		return $str;
 	}
@@ -1229,18 +1229,18 @@ class Fuel_layout extends Fuel_base_library {
  * @prefix		$layout->
  */
 class Fuel_module_layout extends Fuel_layout {
-	
+
 	public $model = NULL; // the model to use for retrieving data
 	public $list_block = NULL; // the block name to use for the list view
 	public $item_block = NULL; // the block name for the detailed item view
 	public $key_field = 'slug'; // the key field to use for querying a single record
 	public $segment = 3; // the segment to use as the parameter to query
-	public $item_where = array(); // additional item query where parameters 
+	public $item_where = array(); // additional item query where parameters
 	public $list_where = array(); // additional list query where parameters
-	
-	
+
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets a model value
 	 *
@@ -1253,9 +1253,9 @@ class Fuel_module_layout extends Fuel_layout {
 		$this->model = $model;
 		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the list block
 	 *
@@ -1268,9 +1268,9 @@ class Fuel_module_layout extends Fuel_layout {
 		$this->list_block = $block;
 		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the item block
 	 *
@@ -1283,9 +1283,9 @@ class Fuel_module_layout extends Fuel_layout {
 		$this->item_block = $block;
 		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the key field for querying
 	 *
@@ -1296,11 +1296,11 @@ class Fuel_module_layout extends Fuel_layout {
 	public function set_key_field($field)
 	{
 		$this->key_field = $field;
-		return $this;		
+		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the segment index that will contain the URI slug value
 	 *
@@ -1313,12 +1313,12 @@ class Fuel_module_layout extends Fuel_layout {
 		$this->segment = (int) $segment;
 		return $this;
 	}
-	
-	
+
+
 	// --------------------------------------------------------------------
-	
+
 	/**
-	 * Sets additional item query where parameters 
+	 * Sets additional item query where parameters
 	 *
 	 * @access	public
 	 * @param	int	The index that will contain the slug value
@@ -1329,12 +1329,12 @@ class Fuel_module_layout extends Fuel_layout {
 		$this->item_where = $where;
 		return $this;
 	}
-	
-	
+
+
 	// --------------------------------------------------------------------
-	
+
 	/**
-	 * Sets additional list query where parameters 
+	 * Sets additional list query where parameters
 	 *
 	 * @access	public
 	 * @param	int	The index that will contain the slug value
@@ -1345,7 +1345,7 @@ class Fuel_module_layout extends Fuel_layout {
 		$this->list_where = $where;
 		return $this;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -1354,7 +1354,7 @@ class Fuel_module_layout extends Fuel_layout {
 	 * @access	public
 	 * @param	array	variables for the view
 	 * @return	array
-	 */	
+	 */
 	public function pre_process($vars)
 	{
 		$_vars = array('model', 'list_block', 'item_block', 'key_field', 'segment', 'item_where', 'list_where');
@@ -1367,7 +1367,7 @@ class Fuel_module_layout extends Fuel_layout {
 		}
 		return $vars;
 	}
-	
+
 }
 
 // ------------------------------------------------------------------------
@@ -1383,7 +1383,7 @@ class Fuel_module_layout extends Fuel_layout {
  * @author		David McReynolds @ Daylight Studio
  * @prefix		$layout->
  */
-class Fuel_block_layout extends Fuel_layout 
+class Fuel_block_layout extends Fuel_layout
 {
 
 	public $context = NULL;
@@ -1392,7 +1392,7 @@ class Fuel_block_layout extends Fuel_layout
 	public $field = '';
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the context of the form fields (e.g. $block[0])
 	 *
@@ -1406,7 +1406,7 @@ class Fuel_block_layout extends Fuel_layout
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the context of the form fields (e.g. $block[0])
 	 *
@@ -1419,7 +1419,7 @@ class Fuel_block_layout extends Fuel_layout
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the model o retrieve the value data
 	 *
@@ -1433,7 +1433,7 @@ class Fuel_block_layout extends Fuel_layout
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the model used to retrieve the value data
 	 *
@@ -1446,7 +1446,7 @@ class Fuel_block_layout extends Fuel_layout
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Sets the method used retrieve the data from the model
 	 *
@@ -1460,7 +1460,7 @@ class Fuel_block_layout extends Fuel_layout
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the method used to retrieve the data from the model
 	 *
@@ -1473,7 +1473,7 @@ class Fuel_block_layout extends Fuel_layout
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the layout's fields
 	 *
@@ -1488,7 +1488,7 @@ class Fuel_block_layout extends Fuel_layout
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Processes the layout's fields
 	 *
