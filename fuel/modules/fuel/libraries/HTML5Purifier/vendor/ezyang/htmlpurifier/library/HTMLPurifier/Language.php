@@ -4,6 +4,7 @@
  * Represents a language and defines localizable string formatting and
  * other functions, as well as the localized messages for HTML Purifier.
  */
+#[AllowDynamicProperties]
 class HTMLPurifier_Language
 {
 

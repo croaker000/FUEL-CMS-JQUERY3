@@ -40,6 +40,7 @@
  * @link		http://docs.getfuelcms.com/libraries/form_builder
  */
 
+#[AllowDynamicProperties]
 class Form_builder {
 
 	public $form; // form object used to create the form fields and associate errors with
@@ -4267,6 +4268,7 @@ class Form_builder {
  * @autodoc		FALSE
  */
 
+#[AllowDynamicProperties]
 class Form_builder_field {
 
 	public $type = ''; // the type value of the field (e.g. textare, enum, datetime)

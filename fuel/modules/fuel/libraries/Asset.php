@@ -35,6 +35,7 @@
  * @link      http://docs.getfuelcms.com/libraries/asset
  */
 
+#[AllowDynamicProperties]
 class Asset {
 
    // relative to web_root
@@ -659,7 +660,7 @@ class Asset {
          curl_setopt($ch, CURLOPT_URL, $jquery_url);
          curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
          $result = curl_exec($ch);
-         curl_close($ch);
+         //curl_close($ch);
          $scriptHash = hash('sha256', $result, TRUE);
          $base64 = base64_encode($scriptHash);
          $CI->fuel->cache->save($cache_id, $base64);

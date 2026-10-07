@@ -42,6 +42,7 @@
 
 // --------------------------------------------------------------------
 
+#[AllowDynamicProperties]
 class Inspection {
 	
 	public $file = ''; // path to the file to inspect
@@ -801,6 +802,7 @@ class Inspection_param extends Inspection_base {
  * @author		David McReynolds @ Daylight Studio
  * @autodoc		TRUE
  */
+#[AllowDynamicProperties]
 class Inspection_comment {
 	
 	protected $_text = ''; // the comment raw text

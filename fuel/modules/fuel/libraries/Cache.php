@@ -13,6 +13,7 @@
  * @link		http://docs.getfuelcms.com/libraries/cache
  */
 
+#[AllowDynamicProperties]
 class Cache
 {
 	

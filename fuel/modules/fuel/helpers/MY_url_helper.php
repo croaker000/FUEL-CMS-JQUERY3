@@ -45,7 +45,7 @@ if (!function_exists('url_to'))
 	function url_to($uri = '', $https = NULL, $language = NULL)
 	{
 		if (is_http_path($uri)) return $uri;
-		if ($uri == '#' OR (strncmp('mailto:', $uri, 7) === 0) OR (strncmp('javascript:', $uri, 11) === 0) OR (strncmp('tel:', $uri, 4) === 0))
+		if ($uri == '#' OR (strncmp('mailto:', $uri ?? '', 7) === 0) OR (strncmp('javascript:', $uri ?? '', 11) === 0) OR (strncmp('tel:', $uri ?? '', 4) === 0))
 		{
 			return $uri;
 		}
@@ -210,7 +210,7 @@ if (!function_exists('is_http_path'))
 	 */
 	function is_http_path($path)
 	{
-		return (preg_match('!^\w+://! i', $path));
+		return (preg_match('!^\w+://! i', $path ?? ''));
 	}
 }
 

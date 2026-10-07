@@ -33,6 +33,7 @@
  * @link		http://docs.getfuelcms.com/libraries/menu
  */
 
+#[AllowDynamicProperties]
 class Menu {
 
 	public $active_class = 'active'; // the active css class
@@ -603,8 +604,7 @@ class Menu {
 		{
 			if (is_array($this->home_link))
 			{
-				$home_link = each($this->home_link);
-				$home_anchor = anchor(key($this->home_link), current($this->home_link));
+				$home_anchor = anchor(key($this->home_link), reset($this->home_link));
 			}
 			else
 			{

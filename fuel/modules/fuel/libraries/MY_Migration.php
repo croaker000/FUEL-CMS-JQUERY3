@@ -30,6 +30,7 @@
 
 // Includes change for a subset version (e.g. for modules)
 
+#[AllowDynamicProperties]
 class MY_Migration extends CI_Migration{
 
 	protected $_module = '';

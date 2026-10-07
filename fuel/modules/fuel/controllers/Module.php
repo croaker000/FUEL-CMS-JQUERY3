@@ -280,7 +280,7 @@ class Module extends Fuel_base_controller {
 			$config['last_tag_close'] = NULL;
 			$this->pagination->initialize($config);
 
-			$this->fuel->admin->set_notification(number_format($item_total).' '.pluralize($item_total, lang('num_items')), 'info');
+			$this->fuel->admin->set_notification(number_format((int) $item_total).' '.pluralize($item_total, lang('num_items')), 'info');
 
 			if (method_exists($this->model, 'tree'))
 			{
@@ -676,7 +676,7 @@ class Module extends Fuel_base_controller {
 		// create search filter
 		$search_key = !empty($this->search_field) ? $this->search_field : $this->display_field;
 		$filters[$search_key] = trim((string) $params['search_term']);
-		
+
 		// sort of hacky here... to make it easy for the model to just filter on the search term (like the users model)
 		$this->model->filter_value = trim((string) $params['search_term']);
 
@@ -1638,7 +1638,7 @@ class Module extends Fuel_base_controller {
 			}
 			else
 			{
-				$posted = explode('|', $this->input->post('id', TRUE));
+				$posted = explode('|', $this->input->post('id', TRUE) ?? '');
 			}
 
 			// run before_delete hook

@@ -30,6 +30,7 @@
  * @author		David McReynolds @ Daylight Studio
  * @link		http://docs.getfuelcms.com/libraries/form
  */
+#[AllowDynamicProperties]
 class Form {
 	
 	public $attrs = 'method="post" action=""'; // form html attributes

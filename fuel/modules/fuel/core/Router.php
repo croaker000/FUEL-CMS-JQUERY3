@@ -60,11 +60,12 @@
 
 require_once(APPPATH.'third_party/MX/Router.php');
 
+#[AllowDynamicProperties]
 class Fuel_Router extends MX_Router
 {
 	// --------------------------------------------------------------------
 
-	private $located;
+	protected $located;
 
 	/**
 	 * Parse Routes

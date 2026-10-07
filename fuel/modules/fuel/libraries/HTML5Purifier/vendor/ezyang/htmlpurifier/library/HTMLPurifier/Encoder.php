@@ -399,7 +399,7 @@ class HTMLPurifier_Encoder
             $str = strtr($str, self::testEncodingSupportsASCII($encoding));
             return $str;
         } elseif ($encoding === 'iso-8859-1') {
-            $str = utf8_encode($str);
+            $str = HTMLPurifier_Encoder::convertLatin1ToUTF8($str);
             return $str;
         }
         $bug = HTMLPurifier_Encoder::testIconvTruncateBug();
@@ -451,7 +451,7 @@ class HTMLPurifier_Encoder
             $str = self::iconv('utf-8', $encoding . '//IGNORE', $str);
             return $str;
         } elseif ($encoding === 'iso-8859-1') {
-            $str = utf8_decode($str);
+            $str = HTMLPurifier_Encoder::convertUTF8ToLatin1($str);
             return $str;
         }
         trigger_error('Encoding not supported', E_USER_ERROR);
@@ -459,6 +459,90 @@ class HTMLPurifier_Encoder
         // might be OK, however, this is *not* universally true over all
         // encodings.  So we take the conservative route here, rather
         // than forcibly turn on %Core.EscapeNonASCIICharacters
+    }
+
+    /**
+     * Converts a ISO-8859-1 string to UTF-8.
+     *
+     * Replacement for the deprecated utf8_encode().
+     *
+     * @param string $str The string to convert
+     * @return string
+     */
+    public static function convertLatin1ToUTF8($str)
+    {
+        $ret = '';
+        $len = strlen($str);
+        for ($i = 0; $i < $len; $i++) {
+            $c = ord($str[$i]);
+            if ($c < 0x80) {
+                $ret .= $str[$i];
+            } elseif ($c < 0xC0) {
+                $ret .= chr(0xC2) . chr($c);
+            } else {
+                $ret .= chr(0xC3) . chr($c - 0x40);
+            }
+        }
+        return $ret;
+    }
+
+    /**
+     * Converts a UTF-8 string to ISO-8859-1.
+     *
+     * Replacement for the deprecated utf8_decode(). Sequences that are not
+     * representable in ISO-8859-1 are replaced with "?".
+     *
+     * @param string $str The string to convert
+     * @return string
+     */
+    public static function convertUTF8ToLatin1($str)
+    {
+        $ret = '';
+        $len = strlen($str);
+        for ($i = 0; $i < $len; $i++) {
+            $c = ord($str[$i]);
+            if ($c < 0x80) {
+                $ret .= $str[$i];
+                continue;
+            }
+            if ($c >= 0xC2 && $c <= 0xDF) {
+                $length = 2;
+                $cp = $c & 0x1F;
+            } elseif ($c >= 0xE0 && $c <= 0xEF) {
+                $length = 3;
+                $cp = $c & 0x0F;
+            } elseif ($c >= 0xF0 && $c <= 0xF4) {
+                $length = 4;
+                $cp = $c & 0x07;
+            } else {
+                // invalid lead byte
+                $ret .= '?';
+                continue;
+            }
+            $j = 1;
+            while ($j < $length && $i + $j < $len && (ord($str[$i + $j]) & 0xC0) === 0x80) {
+                $cp = ($cp << 6) | (ord($str[$i + $j]) & 0x3F);
+                $j++;
+            }
+            $consumed = $j - 1;
+            if ($consumed < $length - 1) {
+                // incomplete sequence: consume what was there and emit a single "?"
+                $ret .= '?';
+                $i += $consumed;
+                continue;
+            }
+            if (($length === 2 && $cp < 0x80) || ($length === 3 && $cp < 0x800) || ($length === 4 && $cp < 0x10000)) {
+                // overlong sequence
+                $ret .= '?';
+            } elseif ($cp < 0x100) {
+                $ret .= chr($cp);
+            } else {
+                // not representable in ISO-8859-1
+                $ret .= '?';
+            }
+            $i += $consumed;
+        }
+        return $ret;
     }
 
     /**

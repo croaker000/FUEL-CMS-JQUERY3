@@ -3,7 +3,7 @@
  * FUEL CMS
  * http://www.getfuelcms.com
  *
- * An open source Content Management System based on the 
+ * An open source Content Management System based on the
  * Codeigniter framework (http://codeigniter.com)
  *
  * @package		FUEL CMS
@@ -29,23 +29,24 @@
  */
 // --------------------------------------------------------------------
 
+#[AllowDynamicProperties]
 class Curl {
-	
+
 	public $user_agent = ''; // The user agent CURL should use
 	public $timeout = 10; // The maximum number of seconds to allow cURL functions to execute.
 	public $connect_timeout = 10; // The number of seconds to wait while trying to connect. Use 0 to wait indefinitely.
 	public $dns_cache_timeout = 3600; // The number of seconds to keep DNS entries in memory. This option is set to 120 (2 minutes) by default.
 	public $cookie_file = 'my_cookie.txt'; // The name to be used for the cookie file
 	public $block_size = 5; // The number of CURL sessions to executed simultaneously
-	
+
 	protected $CI; // Reference to the CI super object
 	protected $_sessions = array(); // CURL sessions
 	protected $_info; // CURL session information
 	protected $_error; // CURL Session errors
 	protected $_output; // Executed CURL output
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Constructor
 	 *
@@ -54,7 +55,7 @@ class Curl {
 	 * @access	public
 	 * @param	array	config preferences
 	 * @return	void
-	 */	
+	 */
 	public function __construct($params = array())
 	{
 		if (!$this->is_enabled())
@@ -67,9 +68,9 @@ class Curl {
 		$this->cookie_file = $this->CI->config->item('cache_path').$this->cookie_file;
 		$this->initialize();
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Initialize the object and set object parameters
 	 *
@@ -79,14 +80,14 @@ class Curl {
 	 * @access	public
 	 * @param	array	config preferences
 	 * @return	void
-	 */	
+	 */
 	public function initialize($params = array())
 	{
 		$this->set_params($params);
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Set object parameters
 	 *
@@ -107,9 +108,9 @@ class Curl {
 		}
 	}
 
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Adds a CURL session.
 	 *
@@ -118,24 +119,24 @@ class Curl {
 	 * @param	array	An array of CURL options (http://www.php.net/manual/en/function.curl-setopt.php). Can be short syntax of 'get', 'post', 'head', 'none 'cookie' (optional)
 	 * @param	array	An array of additional options you can pass to your request. In particular $_POST or $_COOKIE parameters (optional)
 	 * @return	void
-	 */	
+	 */
 	public function add_session($url, $opts = array(), $opt_params = array())
 	{
 		// normalize the URL
 		$url = $this->_normalize_url($url);
-		
+
 		$this->_sessions[] = curl_init($url);
-		
+
 		$key = count($this->_sessions) - 1;
-		
+
 		// set default options
 		$default_opts = $this->_opts();
 		$this->set_options($default_opts, $key);
-		
+
 		if (!empty($opts))
 		{
 			$o = array();
-			
+
 			if (is_array($opts))
 			{
 				// make it easy to pass options
@@ -183,9 +184,9 @@ class Curl {
 			$this->set_options($o, $key);
 		}
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Adds a CURL option to a particular session.
 	 *
@@ -194,14 +195,14 @@ class Curl {
 	 * @param	mixed	The CURL value for the option
 	 * @param	int	The key value of a CURL session (optional)
 	 * @return	void
-	 */	
+	 */
 	public function set_option($opt, $val, $key = 0)
 	{
 		curl_setopt($this->_sessions[$key], $opt, $val);
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Adds CURL options to a particular session.
 	 *
@@ -209,14 +210,14 @@ class Curl {
 	 * @param	array	An array of CURL options (http://www.php.net/manual/en/function.curl-setopt.php).
 	 * @param	int	The key value of a CURL session (optional)
 	 * @return	void
-	 */	
+	 */
 	public function set_options($opts, $key = 0)
 	{
 		curl_setopt_array($this->_sessions[$key], $opts);
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Executes either a single or multiple CURL session
 	 *
@@ -224,14 +225,14 @@ class Curl {
 	 * @param	string	The key value of a CURL session. If none provided, it will execute all sessions in the stack (optional)
 	 * @param	boolean	Whether to clear out the sessions after execution. Default is TRUE (optional)
 	 * @return	string
-	 */	
+	 */
 	public function exec($key = FALSE, $clear = TRUE)
 	{
 		if (empty($this->_sessions))
 		{
 			return FALSE;
 		}
-		
+
 		if ($this->is_multi())
 		{
 			if ($key === FALSE)
@@ -247,13 +248,13 @@ class Curl {
 		{
 			$this->exec_single($key, $clear);
 		}
-		
+
 		// set by exec_single/exec_multi
 		return $this->_output;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Executes a single
 	 *
@@ -261,7 +262,7 @@ class Curl {
 	 * @param	int	The key value of a CURL session. If none provided, it will execute all sessions in the stack (optional)
 	 * @param	boolean	Whether to clear out the sessions after execution. Default is TRUE (optional)
 	 * @return	string
-	 */	
+	 */
 	public function exec_single($key = 0, $clear = TRUE)
 	{
 		// in case it' set to FALSE
@@ -293,9 +294,9 @@ class Curl {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
-	 * Executes multiple sessions at once. 
+	 * Executes multiple sessions at once.
 	 *
 	 * Can be more efficient when doing a lot of CURL requests at once.
 	 *
@@ -303,24 +304,24 @@ class Curl {
 	 * @param	boolean	Whether to clear out the sessions after execution. Default is TRUE (optional)
 	 * @param	int	The number to execute simultaneously. Default is 5 (optional)
 	 * @return	string
-	 */	
+	 */
 	public function exec_multi($clear = TRUE, $block_size = NULL)
 	{
 		$mh = curl_multi_init();
-		
+
 		if (empty($block_size)) $block_size = $this->block_size;
-		
+
 		// partially from http://stackoverflow.com/questions/2874845/whats-the-fastest-way-to-scrape-a-lot-of-pages-in-php/2874903#2874903
-		
+
 		$i = 0;  // count where we are in the list so we can break up the runs into smaller blocks
 		$block = array(); // to accumulate the curl_handles for each group we'll run simultaneously
-	
+
 		// reset arrays
-		$this->_output = array(); 
+		$this->_output = array();
 		$this->_error = array();
 		$this->_info = array();
 
-		
+
 
 		foreach ($this->_sessions as $key => $session)
 		{
@@ -333,7 +334,7 @@ class Curl {
 			// -- check to see if we've got a "full block" to run or if we're at the end of out list of handles
 			if (($i % $block_size == 0) or ($i == count($this->_sessions)))
 			{
-				
+
 				// -- run the block
 				$running = NULL;
 				do {
@@ -349,12 +350,12 @@ class Curl {
 				{
 					return FALSE;
 				}
-				
+
 				// get content foreach session, retry if applied
 				foreach ($block as $b)
 				{
 					$this->_error[]  = curl_error($b);
-					
+
 					$info = curl_getinfo($b);
 					$this->_info[] = $info;
 
@@ -373,35 +374,35 @@ class Curl {
 				$block = array();
 			}
 		}
-	
-		
-		
+
+
+
 		// clear and close all sessions
 		if ($clear)
 		{
 			curl_multi_close($mh);
 			$this->clear();
 		}
-		
+
 		return $this->_output;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Determines if their are multiple sessions in the stack to execute.
 	 *
 	 * @access	public
 	 * @return	boolean
-	 */	
+	 */
 	public function is_multi()
 	{
 		$cnt = count($this->_sessions);
 		return $cnt > 1;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns information of an executed session.
 	 *
@@ -409,7 +410,7 @@ class Curl {
 	 * @param	string	The name of the parameter to return. If no value is provided, then all values will be returned (optional)
 	 * @param	mixed	The key value of a CURL session. If set to TRUE, then it will return all the infos from a mult-session (optional)
 	 * @return	mixed
-	 */	
+	 */
 	public function info($opt = NULL, $key = 0)
 	{
 		$info = array();
@@ -438,19 +439,19 @@ class Curl {
 				$info = $this->_info[$key];
 			}
 		}
-		
+
 		return $info;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns an array of CURL resource objects.
 	 *
 	 * @access	public
 	 * @param	int	The key value of a CURL session (optional)
 	 * @return	array
-	 */	
+	 */
 	public function sessions($key = FALSE)
 	{
 		if ($key === TRUE)
@@ -461,7 +462,7 @@ class Curl {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the output of an executed CURL session.
 	 *
@@ -470,7 +471,7 @@ class Curl {
 	 * @access	public
 	 * @param	int	The key value of a CURL session (optional)
 	 * @return	mixed
-	 */	
+	 */
 	public function output($key = FALSE)
 	{
 		if ($key === TRUE AND is_array($this->_output))
@@ -481,7 +482,7 @@ class Curl {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Closes CURL session(s).
 	 *
@@ -490,24 +491,24 @@ class Curl {
 	 * @access	public
 	 * @param	int	The key value of a CURL session (optional)
 	 * @return	void
-	 */	
+	 */
 	public function close($key = FALSE)
 	{
 		if($key === FALSE)
 		{
-			foreach($this->_sessions as $session)
-			{
-				curl_close($session);
-			}
+			// foreach($this->_sessions as $session)
+			// {
+			// 	curl_close($session);
+			// }
 		}
-		else if (isset($this->_session[$key]))
-		{
-			curl_close($this->_session[$key]);
-		}
+		// else if (isset($this->_session[$key]))
+		// {
+		// 	curl_close($this->_session[$key]);
+		// }
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Clears CURL session(s) from the stack.
 	 *
@@ -516,42 +517,42 @@ class Curl {
 	 * @access	public
 	 * @param	int	The key value of a CURL session (optional)
 	 * @return	void
-	 */	
+	 */
 	public function clear($key = FALSE)
 	{
 		if($key === FALSE)
 		{
-			foreach($this->_sessions as $session)
-			{
-				curl_close($session);
-			}
+			// foreach($this->_sessions as $session)
+			// {
+			// 	curl_close($session);
+			// }
 			$this->_sessions = array();
 		}
 		else if (isset($this->_session[$key]))
 		{
-			curl_close($this->_session[$key]);
+			//curl_close($this->_session[$key]);
 			unset($this->_session[$key]);
 		}
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Shorthand for a simple GET CURL request
 	 *
 	 * @access	public
 	 * @param	string	The URL to use for the CURL session
 	 * @return	string
-	 */	
+	 */
 	public function get($url)
 	{
 		$opts = $this->_opts('get');
 		$this->add_session($url, $opts);
 		return $this->exec();
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Shorthand for a simple POST CURL request
 	 *
@@ -559,7 +560,7 @@ class Curl {
 	 * @param	string	The URL to use for the CURL session
 	 * @param	array	An array of $_POST parameter to pass to the URL (optional)
 	 * @return	string
-	 */	
+	 */
 	public function post($url, $post = array())
 	{
 		// NOTE TO SELF: to add a file to upload, you can do the following as a value:
@@ -568,25 +569,25 @@ class Curl {
 		$this->add_session($url, $opts);
 		return $this->exec_single();
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Shorthand for a simple HEAD CURL request
 	 *
 	 * @access	public
 	 * @param	string	The URL to use for the CURL session
 	 * @return	string
-	 */	
+	 */
 	public function head($url)
 	{
 		$opts = $this->_opts('head');
 		$this->add_session($url, $opts);
 		return $this->exec_single();
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Shorthand for a simple POST CURL request
 	 *
@@ -595,7 +596,7 @@ class Curl {
 	 * @param	array	An array of parameter to set on the cookie
 	 * @param	boolean	Whether to cleanup the cookie crumbs left behind (optional)
 	 * @return	string
-	 */	
+	 */
 	public function cookie($url, $cookie, $cleanup = TRUE)
 	{
 		if (is_array($cookie))
@@ -605,7 +606,7 @@ class Curl {
 		$opts = $this->_opts('cookie', $cookie);
 		$this->add_session($url, $opts);
 		$result = $this->exec_single();
-		
+
 		// remove the cookie file
 		if (file_exists($this->cookie_file) AND $cleanup)
 		{
@@ -615,14 +616,14 @@ class Curl {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns error(s) from the CURL request
 	 *
 	 * @access	public
 	 * @param	string	An index value of an error message (optional)
 	 * @return	mixed
-	 */	
+	 */
 	public function error($key = FALSE)
 	{
 		if ($key === FALSE)
@@ -631,16 +632,16 @@ class Curl {
 		}
 		return $this->_error[$key];
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Returns TRUE if there are errors detected and FALSE if not
 	 *
 	 * @access	public
 	 * @param	string	An index value of an error message (optional)
 	 * @return	boolean
-	 */	
+	 */
 	public function has_error($key = FALSE)
 	{
 		if ($key === FALSE)
@@ -651,28 +652,28 @@ class Curl {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Shorthand for a simple POST CURL request
 	 *
 	 * @access	public
 	 * @param	string	The URL to use for the CURL session
 	 * @return	boolean
-	 */	
+	 */
 	public function is_valid($url)
 	{
 		$opts = $this->_opts('head');
-		
+
 		$key = 0;
 		$this->add_session($url, $opts);
 		$result = $this->exec_single();
 		$retval = $this->info('http_code') < 400 AND $this->info('http_code') != 0;// check if HTTP OK
-		
+
 		return $retval;
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Convenience method that returns an array of CURL options provided a specific "type" parameter
 	 *
@@ -680,7 +681,7 @@ class Curl {
 	 * @param	string	A type of CURL request. (optional)
 	 * @param	array	Additional options to pass to the CURL option (e.g. $_POST or cookie parameters)  (optional)
 	 * @return	array
-	 */	
+	 */
 	protected function _opts($type = NULL, $opt_params = NULL)
 	{
 		switch($type)
@@ -692,7 +693,7 @@ class Curl {
 								CURLOPT_FOLLOWLOCATION => TRUE, // follow redirects
 							);
 				break;
-				
+
 			case 'post':
 				$opts = array(
 								CURLOPT_POST => TRUE,
@@ -700,7 +701,7 @@ class Curl {
 								CURLOPT_HTTPGET => FALSE,
 							);
 				break;
-				
+
 			case 'head':
 				$opts = array(
 								CURLOPT_HEADER => TRUE, // just http header
@@ -708,7 +709,7 @@ class Curl {
 								CURLOPT_FOLLOWLOCATION => TRUE, // follow redirects
 							);
 				break;
-				
+
 			case 'none':
 				$opts = array(
 								CURLOPT_HEADER => FALSE, // just http header
@@ -716,7 +717,7 @@ class Curl {
 								CURLOPT_FOLLOWLOCATION => TRUE, // follow redirects
 							);
 				break;
-				
+
 			case 'cookie':
 				$opts = array(
 								CURLOPT_COOKIEFILE => $this->cookie_file, // no http header
@@ -724,7 +725,7 @@ class Curl {
 								CURLOPT_COOKIE => $opt_params,
 							);
 				break;
-				
+
 			default:
 				$opts = array(
 								CURLOPT_HEADER => 0,
@@ -732,37 +733,37 @@ class Curl {
 								CURLOPT_TIMEOUT => $this->timeout,
 								CURLOPT_CONNECTTIMEOUT => $this->connect_timeout,
 								CURLOPT_DNS_CACHE_TIMEOUT => $this->dns_cache_timeout,
-								CURLOPT_BINARYTRANSFER => TRUE,
+								//CURLOPT_BINARYTRANSFER => TRUE,
 								CURLOPT_USERAGENT => $this->user_agent,
-								
+
 							);
 		}
 		return $opts;
-		
+
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Determines whether or not CURL can run based on the system's settings
 	 *
 	 * @access	public
 	 * @return	boolean
-	 */	
+	 */
 	public function is_enabled()
 	{
 		return function_exists('curl_init');
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Convenience method to normalize a URL path
 	 *
 	 * @access	protected
 	 * @param	string	The URL to use for the CURL session
 	 * @return	string
-	 */	
+	 */
 	protected function _normalize_url($url)
 	{
 		if (is_http_path($url))

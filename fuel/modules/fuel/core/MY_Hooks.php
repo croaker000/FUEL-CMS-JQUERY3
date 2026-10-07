@@ -24,6 +24,7 @@
  * @author		David McReynolds @ Daylight Studio
  * @link		http://docs.getfuelcms.com/modules/hooks
  */
+#[AllowDynamicProperties]
 class MY_Hooks extends CI_Hooks {
 
 	// --------------------------------------------------------------------

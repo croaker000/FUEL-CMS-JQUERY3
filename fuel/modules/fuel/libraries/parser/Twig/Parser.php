@@ -15,6 +15,7 @@
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
+#[AllowDynamicProperties]
 class Twig_Parser implements Twig_ParserInterface
 {
     protected $stack = array();

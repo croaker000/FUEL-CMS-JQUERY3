@@ -3,3 +3,4 @@
 fuel/application/cache/
 !fuel/application/cache/.htaccess
 !fuel/application/cache/index.html
+!_ide_helper.php

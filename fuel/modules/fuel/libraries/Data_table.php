@@ -30,6 +30,7 @@
  */
 // ------------------------------------------------------------------------
 
+#[AllowDynamicProperties]
 class Data_table {
 
    public $id = 'data_table'; // id to be used for the form

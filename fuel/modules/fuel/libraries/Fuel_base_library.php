@@ -30,6 +30,7 @@
 
 // --------------------------------------------------------------------
 
+#[AllowDynamicProperties]
 class Fuel_base_library {
 	
 	protected $CI = NULL; // reference to the CI super object

@@ -16,6 +16,7 @@ class CI_DB_result {}
 /**
  * @method void module_language(string $module, string $langfile, string $idiom = '', bool $return = FALSE, bool $add_suffix = TRUE, string $alt_path = '')
  * @method void module_model(string $module, string $model, string $object_name = NULL)
+ * @method string|void module_view(string $module, string $view, array $vars = [], bool $return = FALSE)
  */
 class CI_Loader {}
 
@@ -65,6 +66,7 @@ class CI_Model {
  * @method mixed insert_ignore($table, $values, $primary_key = 'id')
  * @method void debug_query($hidden = FALSE, $exit = FALSE, $return = FALSE)
  * @method int|string insert_id($name = NULL)
+ * @method void load_sql(string $sql, bool $is_path = TRUE)
  */
 class CI_DB_query_builder extends CI_DB_driver {}
 

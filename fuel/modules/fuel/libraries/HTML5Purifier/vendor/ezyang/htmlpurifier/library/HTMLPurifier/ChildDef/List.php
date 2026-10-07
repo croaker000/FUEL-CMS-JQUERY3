@@ -9,6 +9,7 @@
  * see other disallowed elements, because the autoclose behavior
  * in MakeWellFormed handles it.
  */
+#[AllowDynamicProperties]
 class HTMLPurifier_ChildDef_List extends HTMLPurifier_ChildDef
 {
     /**

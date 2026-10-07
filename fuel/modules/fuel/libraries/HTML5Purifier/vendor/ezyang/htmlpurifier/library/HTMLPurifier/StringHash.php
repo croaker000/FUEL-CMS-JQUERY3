@@ -20,7 +20,7 @@ class HTMLPurifier_StringHash extends ArrayObject
      * @param mixed $index
      * @return mixed
      */
-    public function offsetGet($index)
+    public function offsetGet($index): mixed
     {
         $this->accessed[$index] = true;
         return parent::offsetGet($index);

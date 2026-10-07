@@ -29,6 +29,7 @@
 
 // --------------------------------------------------------------------
 
+#[AllowDynamicProperties]
 class Social {
 
 	public $share_urls = array(); // an array of URLs

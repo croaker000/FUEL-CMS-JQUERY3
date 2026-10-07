@@ -1,8 +1,8 @@
-// requires the jquery.fillin, the sortables jquery ui plugin and the selso sorting plugin and jquery.disable.text.select.pack
-/*
- * FoM: 2024-10-19: JQMigrate from 1.x to 3.x
- * v24.1
+/** requires the jquery.fillin, the sortables jquery ui plugin and the selso sorting plugin and jquery.disable.text.select.pack
  *
+ * v26.1
+ * FoM: 2024-10-19: JQMigrate from 1.x to 3.x
+ * FoM: 2026-10-06: mouse-click fix
  */
 
 (function($){
@@ -123,10 +123,17 @@
          $('#' + rightID + ' li').off();
 
 			$(document).on('dblclick', '#' + leftID + ' li[class!="option_disabled"]', function(e){
+				// a dblclick is preceded by two clicks which will have toggled the item off again
+				if ($(this).hasClass('optgrp') === false && $(this).hasClass(settings.selectedClass) === false){
+					$(this).addClass(settings.selectedClass);
+				}
 				addSelectedToRight();
 			});
 
 			$(document).on('dblclick', '#' + rightID + ' li', function(e){
+				if ($(this).hasClass(settings.selectedClass) === false){
+					$(this).addClass(settings.selectedClass);
+				}
 				removeSelectedFromRight();
 			});
 
@@ -134,8 +141,12 @@
 				if ($(this).hasClass('optgrp') === false){
 					if (isCtrlDown) {
 						$(this).removeClass(settings.selectedClass);
-					} else {
+					} else if (isShiftDown || $(this).hasClass(settings.selectedClass) === false) {
 						markForMove(this, leftID);
+					} else {
+						// second click on an already marked item unselects it
+						$(this).removeClass(settings.selectedClass);
+						lastSelected = this;
 					}
 				}
 			});
@@ -143,8 +154,12 @@
 			$(document).on('click', '#' + rightID + ' li', function(e){
 				if (isCtrlDown) {
 					$(this).removeClass(settings.selectedClass);
-				} else {
+				} else if (isShiftDown || $(this).hasClass(settings.selectedClass) === false) {
 					markForMove(this, rightID);
+				} else {
+					// second click on an already marked item unselects it
+					$(this).removeClass(settings.selectedClass);
+					lastSelected = this;
 				}
 			});
 

@@ -10800,10 +10800,228 @@ class Item implements RegistryAware
 
             return $this->sanitize($raw_date, \SimplePie\SimplePie::CONSTRUCT_TEXT);
         } elseif (($date = $this->get_date('U')) !== null && $date !== false) {
-            return strftime($date_format, $date);
+            return self::formatStrftimeDate($date_format, $date);
         }
 
         return null;
+    }
+
+    /**
+     * Formats a timestamp with a strftime()-style format using IntlDateFormatter.
+     *
+     * The PHP strftime() function is deprecated as of PHP 8.1, so localized
+     * output is produced through IntlDateFormatter instead. If the intl
+     * extension is unavailable, a date()-based approximation is used.
+     *
+     * @param string $format A strftime()-style format string
+     * @param int    $date   A unix timestamp
+     * @return string|false
+     */
+    private static function formatStrftimeDate(string $format, int $date)
+    {
+        if (class_exists('\IntlDateFormatter')) {
+            try {
+                $locale = setlocale(LC_TIME, 0);
+                $formatter = new \IntlDateFormatter(
+                    ($locale === false || $locale === '') ? null : (string) $locale,
+                    \IntlDateFormatter::NONE,
+                    \IntlDateFormatter::NONE,
+                    null,
+                    null,
+                    self::convertStrftimeToIcuPattern($format)
+                );
+                return $formatter->format($date);
+            } catch (\Exception $e) {
+                // fall through to the date()-based approximation
+            }
+        }
+
+        return date(self::convertStrftimeToDatePattern($format), $date);
+    }
+
+    /**
+     * Converts a strftime()-style format to an IntlDateFormatter ICU pattern.
+     *
+     * @param string $format A strftime()-style format string
+     * @return string The equivalent ICU pattern
+     */
+    private static function convertStrftimeToIcuPattern(string $format): string
+    {
+        $map = array(
+            '%a' => 'EEE',
+            '%A' => 'EEEE',
+            '%b' => 'MMM',
+            '%B' => 'MMMM',
+            '%c' => 'EEE MMM d HH:mm:ss y',
+            '%C' => 'yy',
+            '%d' => 'dd',
+            '%D' => 'MM/dd/yy',
+            '%e' => 'd',
+            '%F' => 'yyyy-MM-dd',
+            '%g' => 'yy',
+            '%G' => 'yyyy',
+            '%h' => 'MMM',
+            '%H' => 'HH',
+            '%I' => 'hh',
+            '%j' => 'DDD',
+            '%k' => 'H',
+            '%l' => 'h',
+            '%m' => 'MM',
+            '%M' => 'mm',
+            '%n' => "'\n'",
+            '%p' => 'a',
+            '%P' => 'a',
+            '%r' => 'hh:mm:ss a',
+            '%R' => 'HH:mm',
+            '%s' => 'U',
+            '%S' => 'ss',
+            '%t' => "'\t'",
+            '%T' => 'HH:mm:ss',
+            '%u' => 'e',
+            '%U' => 'w',
+            '%v' => 'd-MMM-yyyy',
+            '%V' => 'w',
+            '%w' => 'e',
+            '%W' => 'w',
+            '%x' => 'y-MM-dd',
+            '%X' => 'HH:mm:ss',
+            '%y' => 'yy',
+            '%Y' => 'yyyy',
+            '%z' => 'Z',
+            '%Z' => 'zzzz',
+        );
+
+        $result = '';
+        $literal = '';
+        $length = strlen($format);
+        for ($i = 0; $i < $length; $i++) {
+            $char = $format[$i];
+            if ($char === '%' && $i + 1 < $length) {
+                $token = '%' . $format[$i + 1];
+                if ($token === '%%') {
+                    $literal .= '%';
+                } elseif (isset($map[$token])) {
+                    if ($literal !== '') {
+                        $result .= "'" . str_replace("'", "''", $literal) . "'";
+                        $literal = '';
+                    }
+                    $result .= $map[$token];
+                } else {
+                    // Unknown tokens are kept as literal text
+                    $literal .= $token;
+                }
+                $i++;
+            } else {
+                $literal .= $char;
+            }
+        }
+        if ($literal !== '') {
+            $result .= "'" . str_replace("'", "''", $literal) . "'";
+        }
+
+        return $result;
+    }
+
+    /**
+     * Converts a strftime()-style format to a date()-style format.
+     *
+     * @param string $format A strftime()-style format string
+     * @return string The equivalent date() format
+     */
+    private static function convertStrftimeToDatePattern(string $format): string
+    {
+        $map = array(
+            '%a' => 'D',
+            '%A' => 'l',
+            '%b' => 'M',
+            '%B' => 'F',
+            '%c' => 'D M j H:i:s Y',
+            '%C' => 'y',
+            '%d' => 'd',
+            '%D' => 'm/d/y',
+            '%e' => 'j',
+            '%F' => 'Y-m-d',
+            '%g' => 'y',
+            '%G' => 'Y',
+            '%h' => 'M',
+            '%H' => 'H',
+            '%I' => 'h',
+            '%j' => 'z',
+            '%k' => 'G',
+            '%l' => 'g',
+            '%m' => 'm',
+            '%M' => 'i',
+            '%n' => "\n",
+            '%p' => 'A',
+            '%P' => 'a',
+            '%r' => 'h:i:s A',
+            '%R' => 'H:i',
+            '%s' => 'U',
+            '%S' => 's',
+            '%t' => "\t",
+            '%T' => 'H:i:s',
+            '%u' => 'N',
+            '%U' => 'W',
+            '%v' => 'j-M-Y',
+            '%V' => 'W',
+            '%w' => 'w',
+            '%W' => 'W',
+            '%x' => 'Y-m-d',
+            '%X' => 'H:i:s',
+            '%y' => 'y',
+            '%Y' => 'Y',
+            '%z' => 'O',
+            '%Z' => 'T',
+        );
+
+        $result = '';
+        $literal = '';
+        $length = strlen($format);
+        for ($i = 0; $i < $length; $i++) {
+            $char = $format[$i];
+            if ($char === '%' && $i + 1 < $length) {
+                $token = '%' . $format[$i + 1];
+                if ($token === '%%') {
+                    $literal .= '%';
+                } elseif (isset($map[$token])) {
+                    if ($literal !== '') {
+                        $result .= self::escapeDatePatternLiteral($literal);
+                        $literal = '';
+                    }
+                    $result .= $map[$token];
+                } else {
+                    // Unknown tokens are kept as literal text
+                    $literal .= $token;
+                }
+                $i++;
+            } else {
+                $literal .= $char;
+            }
+        }
+        if ($literal !== '') {
+            $result .= self::escapeDatePatternLiteral($literal);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Escapes literal text for use in a date() format string.
+     *
+     * date() characters that are also format tokens (e.g. "t", "n", "l") are
+     * escaped with a backslash so they are output verbatim.
+     *
+     * @param string $literal The literal text to escape
+     * @return string
+     */
+    private static function escapeDatePatternLiteral(string $literal): string
+    {
+        $out = '';
+        $len = strlen($literal);
+        for ($i = 0; $i < $len; $i++) {
+            $out .= '\\' . $literal[$i];
+        }
+        return $out;
     }
 
     /**

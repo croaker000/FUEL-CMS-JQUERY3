@@ -30,6 +30,7 @@
  * @link		http://docs.getfuelcms.com/libraries/validator
  */
 
+#[AllowDynamicProperties]
 class Validator {
 	
 	public $field_error_delimiter = "\n"; // delimiter for rendering multiple errors for a field

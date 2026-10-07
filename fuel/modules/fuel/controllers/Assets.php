@@ -34,7 +34,7 @@ class Assets extends Module {
          {
 
             // cleanup $dir name with any trailing slashes
-            $dir = trim($this->input->post_get('asset_folder', TRUE), '/');
+            $dir = trim($this->input->post_get('asset_folder', TRUE) ?? '', '/');
 
             $this->model->on_before_post();
 
@@ -46,7 +46,7 @@ class Assets extends Module {
                }
             }
 
-            $subfolder = ($this->config->item('assets_allow_subfolder_creation', 'fuel')) ? str_replace('..'.DIRECTORY_SEPARATOR, '', $this->input->get_post('subfolder', TRUE)) : ''; // remove any going down the folder structure for protections
+            $subfolder = ($this->config->item('assets_allow_subfolder_creation', 'fuel')) ? str_replace('..'.DIRECTORY_SEPARATOR, '', $this->input->get_post('subfolder', TRUE) ?? '') : ''; // remove any going down the folder structure for protections
             $upload_path = $this->config->item('assets_server_path').$this->fuel->assets->dir($dir).DIRECTORY_SEPARATOR.$subfolder; //assets_server_path is in assets config
 
             $posted['upload_path'] = $upload_path;

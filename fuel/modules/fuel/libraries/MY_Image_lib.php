@@ -26,6 +26,7 @@
  */
 
 
+#[AllowDynamicProperties]
 class MY_Image_lib extends CI_Image_lib {
 	
 	protected $_width;

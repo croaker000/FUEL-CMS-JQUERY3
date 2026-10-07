@@ -116,6 +116,45 @@ class Fuel_twig_parser extends Fuel_abstract_parser {
 			return $key;
 		}, $string);
 
+		// auto-quote unquoted path arguments to site_url()
+		// e.g. {site_url(sensitivity/sensitivitybenchmarksdetailed)} → {site_url('sensitivity/sensitivitybenchmarksdetailed')}
+		// Prevents Twig from interpreting '/' as the division operator
+		$string = preg_replace(
+			'/\{site_url\(([a-zA-Z_][a-zA-Z0-9_\/-]*\/[a-zA-Z_][a-zA-Z0-9_\/-]*)\)\}/',
+			"{site_url('$1')}",
+			$string
+		);
+
+		// auto-quote unquoted filename arguments to pdf_path()
+		// Prevents Twig from misinterpreting leading digits, hyphens, and dots as operators
+		$string = preg_replace(
+			'/\{pdf_path\(([a-zA-Z0-9_][a-zA-Z0-9_\/.\-]*)\)\}/',
+			"{pdf_path('$1')}",
+			$string
+		);
+
+		// auto-quote unquoted identifier arguments to the MarLIN content hook functions
+		// e.g. {minorglossary_hook(glossary_speciesinformation_growthform,55)} -> {minorglossary_hook('glossary_speciesinformation_growthform',55)}
+		// Prevents Twig from treating the bare word as an (undefined) variable
+		$string = preg_replace_callback(
+			'/\{(minorglossary_hook|glossary_hook|species_hook|habitat_hook|reference_hook)\(([a-zA-Z_][a-zA-Z0-9_]*)\s*([,)])/',
+			function($m) use ($data) {
+
+				// leave genuine template variables alone
+				if (isset($data[$m[2]]))
+				{
+					return $m[0];
+				}
+
+				return '{'.$m[1]."('".$m[2]."'".$m[3];
+			},
+			$string
+		);
+
+		// convert legacy Dwoo style array() arguments to Twig hash literals
+		// e.g. {fuel_nav(array(group_id='main' container_tag='span'))} -> {fuel_nav({'group_id':'main','container_tag':'span'})}
+		$string = $this->_legacy_array_to_hash($string);
+
 		// start benchmark
 		$this->CI->benchmark->mark('twig_parse_start');
 
@@ -183,6 +222,70 @@ class Fuel_twig_parser extends Fuel_abstract_parser {
 		}
 		$str = $matches[1].$var_l_delim.' '.$str.' '.$var_r_delim.$matches[4];
 		return $str;
+	}
+
+	/**
+	 * Converts legacy Dwoo/PHP style array() arguments found in templates to
+	 * Twig hash literals. Twig has no array() function, so shortcodes such as
+	 * {fuel_nav(array(group_id='main' container_tag='span'))} must become
+	 * {fuel_nav({'group_id':'main','container_tag':'span'})}. Arguments that
+	 * are not a simple list of quoted key/value pairs are left untouched.
+	 *
+	 * @param string
+	 * @return string
+	 */
+	protected function _legacy_array_to_hash($string)
+	{
+		// PHP blocks are executed as-is so their array() syntax must be preserved
+		$masked = array();
+
+		$string = preg_replace_callback('#<\?(?:php|=).*?\?>#is', function($m) use (&$masked) {
+			$key = '<!--LEGACY_ARRAY_'.count($masked).'-->';
+			$masked[$key] = $m[0];
+			return $key;
+		}, $string);
+
+		$string = preg_replace_callback(
+			'#([\(,])(\s*)array\(((?:[^()\'"]|\'[^\']*\'|"[^"]*")*)\)#',
+			array($this, '_legacy_array_callback'),
+			$string
+		);
+
+		return str_replace(array_keys($masked), array_values($masked), $string);
+	}
+
+	/**
+	 * Converts the argument list of a legacy array() call to a Twig hash
+	 * literal. Returns the original array() call if the arguments are not a
+	 * simple list of quoted key/value pairs.
+	 *
+	 * @param array
+	 * @return string
+	 */
+	protected function _legacy_array_callback($matches)
+	{
+		$prefix = $matches[1].$matches[2];
+		$args = isset($matches[3]) ? trim($matches[3]) : '';
+
+		if ($args === '')
+		{
+			return $matches[0];
+		}
+
+		$pairs = preg_split('/\s*,\s*|\s+(?=\'?"?[a-zA-Z_][a-zA-Z0-9_]*\'?"?\s*(?:=>|=)\s*[\'"])/', $args);
+		$hash = array();
+
+		foreach ($pairs as $pair)
+		{
+			if (!preg_match('/^(\'?)([a-zA-Z_][a-zA-Z0-9_]*)\1\s*(?:=>|=)\s*(\'[^\']*\'|"[^"]*"|-?\d+(?:\.\d+)?|true|false|null)$/', trim($pair), $match))
+			{
+				return $matches[0];
+			}
+
+			$hash[] = $match[2].':'.$match[3];
+		}
+
+		return $prefix.'{'.implode(',', $hash).'}';
 	}
 
 	protected function _php_to_syntax_block_callback($matches)

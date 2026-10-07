@@ -276,6 +276,10 @@ class Fuel_language extends Fuel_base_library {
 	 */	
 	public function is_valid($lang)
 	{
+		if ($lang === NULL OR $lang === '')
+		{
+			return FALSE;
+		}
 		return isset($this->options[$lang]);
 	}
 

@@ -734,7 +734,7 @@ class Pages extends Module {
          if ( ! $does_it_exist_already)
          {
             // determine parent based off of location
-            $location_arr = explode('/', $this->input->post('location', TRUE));
+            $location_arr = explode('/', $this->input->post('location', TRUE) ?? '');
             $parent_location = implode('/', array_slice($location_arr, 0, (count($location_arr) -1)));
 
             if ( ! empty($parent_location)) $parent = $this->fuel_navigation_model->find_by_location($parent_location);
@@ -897,7 +897,7 @@ class Pages extends Module {
       $this->load->library('session');
 
       $value = $this->input->get_post('selected', TRUE);
-      $filter = str_replace(array('(', ')', '$', '{', '}', '.', '[', ']', "'", '+', '='), '', rawurldecode($this->input->get_post('filter', TRUE)));
+      $filter = str_replace(array('(', ')', '$', '{', '}', '.', '[', ']', "'", '+', '='), '', rawurldecode($this->input->get_post('filter', TRUE) ?? ''));
 
       // Convert wild-cards to RegEx
       $filter = str_replace(':any', '.+', str_replace(':num', '[0-9]+', $filter));

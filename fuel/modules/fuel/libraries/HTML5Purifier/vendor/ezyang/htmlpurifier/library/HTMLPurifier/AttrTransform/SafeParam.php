@@ -12,6 +12,7 @@
  * @warning
  *      This class expects an injector to add the necessary parameters tags.
  */
+#[AllowDynamicProperties]
 class HTMLPurifier_AttrTransform_SafeParam extends HTMLPurifier_AttrTransform
 {
     /**
