@@ -37,12 +37,23 @@ CKEDITOR.editorConfig = function( config ) {
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
 
-   //FOM Tweaks
-	//config.protectedSource.push(/<i[^>]*><\/i>/g);
-	//CKEDITOR.dtd.$removeEmpty['i'] = false;
-	//CKEDITOR.config.autoParagraph = false;
 };
-//FOM Tweaks for v4.5
-$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) {
+//FOM Tweaks for v4.22
+CKEDITOR.on('instanceReady', function (ev) {
+   ev.editor.on('afterPasteFromWord', function (evt) {
+      //console.log('ON afterPasteFromWord');
+      let tempDiv = document.createElement('div'); // Parse the pasted HTML string into a temporary DOM structure
+      tempDiv.innerHTML = evt.data.dataValue;
+      let elementList = tempDiv.querySelectorAll('[style], [class]');  // Target all elements with a style attribute
+      elementList.forEach(function (element) {
+         element.removeAttribute('style');
+         element.removeAttribute('class');
+      });
+      evt.data.dataValue = tempDiv.innerHTML;
+      tempDiv.remove();   // Push the clean HTML back into the editor data pipeline
+   });
+});
+
+$.each(CKEDITOR.dtd.$removeEmpty, function (i, value) { // stop removing empty tags - like those used for FontAwesome
    CKEDITOR.dtd.$removeEmpty[i] = false;
 });

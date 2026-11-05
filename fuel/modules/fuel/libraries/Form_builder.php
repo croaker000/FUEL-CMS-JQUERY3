@@ -2916,9 +2916,24 @@ class Form_builder {
 		$params = $this->normalize_params($params);
 		$id = isset($params['id']) ? ' id="'.$params['id'].'"' : '';
 		$class = isset($params['class']) ? ' class="'.$params['class'].'"' : '';
+		$style = (!empty($params['style'])) ? ' style="'.$params['style'].'"' : '';
+
+		// support the universal "data" attribute array (e.g. array('foo' => 'bar') => data-foo="bar")
+		$data = '';
+		if (!empty($params['data']) AND is_array($params['data']))
+		{
+			foreach($params['data'] as $key => $val)
+			{
+				$data .= ' data-'.$key.'="'.htmlspecialchars((string) $val, ENT_QUOTES).'"';
+			}
+		}
+
+		// support the generic "attributes" string (e.g. 'class="myclass" data-x="1"')
+		$attributes = (!empty($params['attributes'])) ? ' '.$params['attributes'] : '';
+
 		$copy = $this->simple_field_value($params);
 		$tag = (empty($params['tag'])) ? $this->copy_tag : $params['tag'];
-		return '<'.$tag.$id.$class.'>'.$copy.'</'.$tag.'>';
+		return '<'.$tag.$id.$class.$style.$data.$attributes.'>'.$copy.'</'.$tag.'>';
 	}
 
 	// --------------------------------------------------------------------

@@ -62,7 +62,7 @@ abstract class Dwoo_Plugin
 	 * @param Dwoo_Compiler $compiler the compiler instance (optional for BC, but recommended to pass it for proper escaping behavior)
 	 * @return string
 	 */
-	public static function paramsToAttributes(array $params, $delim = '\'', Dwoo_Compiler $compiler = null)
+	public static function paramsToAttributes(array $params, $delim = '\'', ?Dwoo_Compiler $compiler = null)
 	{
 		if (isset($params['*'])) {
 			$params = array_merge($params, $params['*']);
